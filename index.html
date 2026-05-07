@@ -3,25 +3,34 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Icon International — User Access Provisioning</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<title>Icon International — New User Setup</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0a0d14;
-    --surface: #10141f;
-    --surface2: #161b2a;
-    --border: #1e2538;
-    --accent: #2e7de9;
-    --accent2: #5ba3f5;
-    --green: #22c55e;
-    --orange: #f59e0b;
-    --red: #ef4444;
-    --text: #e8eaf0;
-    --text-dim: #6b7394;
-    --text-mid: #a0a8c4;
-    --mono: 'DM Mono', monospace;
-    --sans: 'DM Sans', sans-serif;
-    --display: 'Syne', sans-serif;
+    --bg: #f5f3f0;
+    --surface: #ffffff;
+    --surface2: #faf9f7;
+    --border: #e5e0d8;
+    --border2: #d4cec4;
+    --blue: #2563eb;
+    --blue-light: #eff6ff;
+    --blue-mid: #bfdbfe;
+    --green: #16a34a;
+    --green-light: #f0fdf4;
+    --green-mid: #bbf7d0;
+    --orange: #d97706;
+    --orange-light: #fffbeb;
+    --purple: #7c3aed;
+    --purple-light: #f5f3ff;
+    --text: #1c1917;
+    --text-mid: #57534e;
+    --text-dim: #a8a29e;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+    --shadow: 0 4px 12px rgba(0,0,0,0.06), 0 2px 4px rgba(0,0,0,0.04);
+    --radius: 14px;
+    --radius-sm: 8px;
+    --sans: 'Plus Jakarta Sans', sans-serif;
+    --mono: 'JetBrains Mono', monospace;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -31,602 +40,438 @@
     color: var(--text);
     font-family: var(--sans);
     min-height: 100vh;
-    overflow-x: hidden;
+    font-size: 15px;
+    line-height: 1.6;
   }
 
-  /* Grid background */
   body::before {
     content: '';
     position: fixed;
     inset: 0;
-    background-image:
-      linear-gradient(rgba(46,125,233,0.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(46,125,233,0.04) 1px, transparent 1px);
-    background-size: 40px 40px;
+    background-image: radial-gradient(circle at 1px 1px, rgba(0,0,0,0.04) 1px, transparent 0);
+    background-size: 24px 24px;
     pointer-events: none;
     z-index: 0;
   }
 
-  .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+  .container { max-width: 820px; margin: 0 auto; padding: 0 20px; position: relative; z-index: 1; }
 
   /* Header */
   header {
+    background: var(--surface);
     border-bottom: 1px solid var(--border);
-    padding: 20px 0;
-    background: rgba(10,13,20,0.9);
-    backdrop-filter: blur(12px);
     position: sticky;
     top: 0;
     z-index: 100;
+    box-shadow: var(--shadow-sm);
   }
   .header-inner {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    padding: 14px 20px;
+    max-width: 820px;
+    margin: 0 auto;
   }
   .logo {
-    font-family: var(--display);
-    font-size: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 16px;
     font-weight: 800;
-    letter-spacing: -0.5px;
+    color: var(--text);
   }
-  .logo span { color: var(--accent); }
-  .badge {
+  .logo-icon {
+    width: 32px; height: 32px;
+    background: var(--blue);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px;
+    color: white;
+  }
+  .version-badge {
     font-family: var(--mono);
     font-size: 11px;
     color: var(--text-dim);
+    background: var(--surface2);
     border: 1px solid var(--border);
-    padding: 4px 10px;
-    border-radius: 4px;
+    padding: 3px 10px;
+    border-radius: 20px;
   }
 
-  /* Hero */
-  .hero {
-    padding: 56px 0 36px;
+  /* Stepper */
+  .stepper-wrap {
+    background: var(--surface);
     border-bottom: 1px solid var(--border);
+    padding: 12px 20px;
   }
-  .hero-label {
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--accent);
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    margin-bottom: 12px;
-  }
-  .hero h1 {
-    font-family: var(--display);
-    font-size: clamp(28px, 5vw, 44px);
-    font-weight: 800;
-    line-height: 1.1;
-    margin-bottom: 12px;
-    letter-spacing: -1px;
-  }
-  .hero p {
-    color: var(--text-mid);
-    font-size: 15px;
-    max-width: 500px;
-    line-height: 1.6;
-  }
-
-  /* Steps */
-  .steps {
+  .stepper {
     display: flex;
-    gap: 0;
-    margin: 36px 0 0;
+    align-items: center;
+    max-width: 820px;
+    margin: 0 auto;
   }
-  .step {
+  .step-item {
     display: flex;
     align-items: center;
     gap: 8px;
-    font-family: var(--mono);
-    font-size: 12px;
-    color: var(--text-dim);
-    cursor: pointer;
-    padding: 8px 16px 8px 0;
-    transition: color 0.2s;
-    position: relative;
+    flex: 1;
   }
-  .step::after {
-    content: '→';
-    margin-left: 8px;
-    color: var(--border);
+  .step-item::after {
+    content: '';
+    flex: 1;
+    height: 2px;
+    background: var(--border);
+    border-radius: 2px;
+    margin: 0 6px;
+    transition: background 0.3s;
   }
-  .step:last-child::after { display: none; }
-  .step.active { color: var(--accent2); }
-  .step.done { color: var(--green); }
-  .step-num {
-    width: 22px; height: 22px;
+  .step-item:last-child::after { display: none; }
+  .step-item.done::after { background: var(--green-mid); }
+  .step-item.active::after { background: var(--blue-mid); }
+  .step-bubble {
+    width: 28px; height: 28px;
     border-radius: 50%;
-    border: 1px solid currentColor;
     display: flex; align-items: center; justify-content: center;
-    font-size: 10px;
+    font-size: 12px; font-weight: 700;
     flex-shrink: 0;
+    border: 2px solid var(--border);
+    background: var(--surface);
+    color: var(--text-dim);
+    transition: all 0.2s;
   }
-  .step.done .step-num { background: var(--green); border-color: var(--green); color: #000; }
-  .step.active .step-num { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .step-item.active .step-bubble { background: var(--blue); border-color: var(--blue); color: white; box-shadow: 0 0 0 4px var(--blue-light); }
+  .step-item.done .step-bubble { background: var(--green); border-color: var(--green); color: white; }
+  .step-name { font-size: 12px; font-weight: 600; color: var(--text-dim); white-space: nowrap; display: none; }
+  @media (min-width: 500px) { .step-name { display: block; } }
+  .step-item.active .step-name { color: var(--blue); }
+  .step-item.done .step-name { color: var(--green); }
 
-  /* Main layout */
-  .main { padding: 40px 0 80px; }
+  /* Page */
+  .page { padding: 32px 0 80px; }
   .section { display: none; }
-  .section.active { display: block; animation: fadeUp 0.3s ease; }
+  .section.active { display: block; animation: slideIn 0.25s ease; }
+  @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(12px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
+  .page-title { margin-bottom: 20px; }
+  .page-title h2 { font-size: 22px; font-weight: 800; letter-spacing: -0.4px; }
+  .page-title p { font-size: 14px; color: var(--text-mid); margin-top: 4px; }
 
-  /* Section header */
-  .section-head {
-    display: flex;
-    align-items: baseline;
-    gap: 12px;
-    margin-bottom: 28px;
-  }
-  .section-head h2 {
-    font-family: var(--display);
-    font-size: 22px;
-    font-weight: 700;
-    letter-spacing: -0.5px;
-  }
-  .section-head p {
-    color: var(--text-dim);
-    font-size: 13px;
-  }
+  /* Card */
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-sm); overflow: hidden; margin-bottom: 16px; }
+  .card-body { padding: 22px; }
 
-  /* Form fields */
-  .field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-  .field { display: flex; flex-direction: column; gap: 6px; }
+  /* Form */
+  .field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .field { display: flex; flex-direction: column; gap: 5px; }
   .field.full { grid-column: 1 / -1; }
-  label {
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--text-dim);
-    letter-spacing: 1px;
-    text-transform: uppercase;
-  }
+  label { font-size: 12px; font-weight: 600; color: var(--text-mid); }
+  .label-hint { font-family: var(--mono); font-size: 10px; font-weight: 400; color: var(--text-dim); margin-left: 5px; }
   input, select {
     background: var(--surface);
-    border: 1px solid var(--border);
+    border: 1.5px solid var(--border);
     color: var(--text);
     font-family: var(--sans);
     font-size: 14px;
     padding: 10px 14px;
-    border-radius: 6px;
+    border-radius: var(--radius-sm);
     outline: none;
-    transition: border-color 0.2s, box-shadow 0.2s;
+    transition: border-color 0.15s, box-shadow 0.15s;
     width: 100%;
     -webkit-appearance: none;
   }
-  input:focus, select:focus {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px rgba(46,125,233,0.15);
-  }
-  select option { background: var(--surface2); }
+  input:focus, select:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
+  input[readonly] { background: var(--blue-light); border-color: var(--blue-mid); color: var(--blue); cursor: default; font-family: var(--mono); font-size: 13px; }
 
-  /* Role cards */
-  .role-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
-  .role-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 14px 16px;
-    cursor: pointer;
-    transition: all 0.2s;
-    position: relative;
+  /* Toggle */
+  .toggle-row {
+    display: flex; align-items: center; gap: 14px;
+    background: var(--surface2); border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm); padding: 13px 16px;
+    cursor: pointer; transition: all 0.2s; user-select: none;
   }
-  .role-card:hover { border-color: var(--accent); background: var(--surface2); }
-  .role-card.selected {
-    border-color: var(--accent);
-    background: rgba(46,125,233,0.08);
-    box-shadow: 0 0 0 1px var(--accent);
-  }
-  .role-card .dept-tag {
-    font-family: var(--mono);
-    font-size: 10px;
-    color: var(--accent2);
-    margin-bottom: 6px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-  }
-  .role-card .role-title {
-    font-size: 13px;
-    font-weight: 500;
-    line-height: 1.3;
-  }
-  .role-card .check {
-    position: absolute;
-    top: 10px; right: 10px;
-    width: 18px; height: 18px;
-    border-radius: 50%;
-    background: var(--accent);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    font-size: 10px;
-  }
+  .toggle-row:hover { border-color: var(--border2); background: var(--surface); }
+  .toggle-row.on { border-color: var(--purple); background: var(--purple-light); }
+  .toggle-track { width: 42px; height: 24px; border-radius: 12px; background: var(--border2); position: relative; flex-shrink: 0; transition: background 0.2s; }
+  .toggle-row.on .toggle-track { background: var(--purple); }
+  .toggle-thumb { width: 18px; height: 18px; border-radius: 50%; background: #fff; position: absolute; top: 3px; left: 3px; transition: left 0.2s; box-shadow: 0 1px 4px rgba(0,0,0,0.2); }
+  .toggle-row.on .toggle-thumb { left: 21px; }
+  .toggle-label-text { display: flex; flex-direction: column; gap: 2px; }
+  .toggle-label-text span:first-child { font-size: 14px; font-weight: 600; }
+  .toggle-row.on .toggle-label-text span:first-child { color: var(--purple); }
+  .toggle-sub { font-size: 11px; color: var(--text-dim); }
+
+  /* Role grid */
+  .role-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(195px, 1fr)); gap: 10px; }
+  .role-card { background: var(--surface); border: 1.5px solid var(--border); border-radius: 12px; padding: 14px 16px; cursor: pointer; transition: all 0.15s; position: relative; }
+  .role-card:hover { border-color: var(--blue); box-shadow: var(--shadow-sm); transform: translateY(-1px); }
+  .role-card.selected { border-color: var(--blue); background: var(--blue-light); box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
+  .role-card .dept-tag { font-size: 10px; font-weight: 700; color: var(--blue); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 4px; }
+  .role-card .role-title { font-size: 13px; font-weight: 600; line-height: 1.3; }
+  .role-card .check { position: absolute; top: 10px; right: 10px; width: 20px; height: 20px; border-radius: 50%; background: var(--blue); display: none; align-items: center; justify-content: center; font-size: 10px; color: white; }
   .role-card.selected .check { display: flex; }
 
   /* Access panel */
-  .access-panel {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    overflow: hidden;
-  }
-  .panel-section {
-    border-bottom: 1px solid var(--border);
-    padding: 20px 24px;
-  }
+  .access-panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-sm); overflow: hidden; }
+  .panel-section { padding: 14px 18px; border-bottom: 1px solid var(--border); }
   .panel-section:last-child { border-bottom: none; }
-  .panel-title {
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--accent2);
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    margin-bottom: 14px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .panel-title::before {
-    content: '';
-    width: 6px; height: 6px;
-    background: var(--accent);
-    border-radius: 50%;
-  }
-  .tag-list { display: flex; flex-wrap: wrap; gap: 6px; }
-  .tag {
-    font-family: var(--mono);
-    font-size: 11px;
-    padding: 4px 10px;
-    border-radius: 4px;
-    border: 1px solid;
-  }
-  .tag.ad { border-color: rgba(91,163,245,0.3); color: var(--accent2); background: rgba(46,125,233,0.08); }
-  .tag.azure { border-color: rgba(34,197,94,0.3); color: var(--green); background: rgba(34,197,94,0.08); }
-  .tag.role-specific { border-color: rgba(245,158,11,0.3); color: var(--orange); background: rgba(245,158,11,0.08); }
+  .panel-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text-dim); margin-bottom: 9px; display: flex; align-items: center; gap: 6px; }
+  .panel-title::before { content: ''; width: 5px; height: 5px; background: currentColor; border-radius: 50%; }
+  .tag-list { display: flex; flex-wrap: wrap; gap: 5px; }
+  .tag { font-family: var(--mono); font-size: 11px; padding: 3px 9px; border-radius: 6px; border: 1px solid; }
+  .tag.ad { border-color: var(--blue-mid); color: var(--blue); background: var(--blue-light); }
+  .tag.azure { border-color: var(--green-mid); color: var(--green); background: var(--green-light); }
+  .tag.role-specific { border-color: #fcd34d; color: var(--orange); background: var(--orange-light); }
+
+  /* Progress */
+  .progress-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 22px; margin-bottom: 16px; box-shadow: var(--shadow-sm); }
+  .progress-label-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+  .progress-main-label { font-size: 13px; font-weight: 700; }
+  .progress-count { font-family: var(--mono); font-size: 13px; color: var(--text-mid); }
+  .progress-track { height: 8px; background: var(--border); border-radius: 10px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--blue), #60a5fa); border-radius: 10px; transition: width 0.4s cubic-bezier(.4,0,.2,1); }
+
+  /* Section tabs */
+  .section-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+  .sec-tab { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; padding: 7px 15px; border-radius: 30px; border: 1.5px solid var(--border); background: var(--surface); color: var(--text-mid); cursor: pointer; transition: all 0.15s; white-space: nowrap; box-shadow: var(--shadow-sm); }
+  .sec-tab:hover { border-color: var(--border2); color: var(--text); }
+  .sec-tab.active { border-color: var(--blue); color: var(--blue); background: var(--blue-light); }
+  .sec-tab.complete { border-color: var(--green-mid); color: var(--green); background: var(--green-light); }
+  .tab-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; opacity: 0.6; flex-shrink: 0; }
+  .sec-tab.active .tab-dot { opacity: 1; animation: blink 1.5s infinite; }
+  .sec-tab.complete .tab-dot { opacity: 1; }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+
+  /* Section panel */
+  .section-panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); animation: slideIn 0.2s ease; }
+  .section-panel-header { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; border-bottom: 1px solid var(--border); background: var(--surface2); }
+  .section-panel-title { display: flex; align-items: center; gap: 12px; }
+  .section-icon { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+  .section-panel-title h3 { font-size: 15px; font-weight: 700; }
+  .section-panel-title p { font-size: 12px; color: var(--text-mid); margin-top: 2px; }
+  .section-mini-progress { text-align: right; min-width: 80px; }
+  .section-mini-label { font-size: 12px; font-weight: 600; color: var(--text-mid); }
+  .section-mini-bar { height: 4px; background: var(--border); border-radius: 4px; margin-top: 6px; overflow: hidden; }
+  .section-mini-fill { height: 100%; border-radius: 4px; transition: width 0.3s ease; }
 
   /* Checklist */
-  .checklist { display: flex; flex-direction: column; gap: 8px; }
-  .check-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    padding: 12px 16px;
-    border-radius: 6px;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    font-size: 13px;
-    cursor: pointer;
-    transition: all 0.15s;
-    user-select: none;
-  }
-  .check-item:hover { border-color: rgba(46,125,233,0.4); }
-  .check-item.done { opacity: 0.6; }
-  .check-item .cb {
-    width: 18px; height: 18px;
-    border: 1px solid var(--border);
-    border-radius: 3px;
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 11px;
-    margin-top: 1px;
-    transition: all 0.15s;
-  }
-  .check-item.done .cb {
-    background: var(--green);
-    border-color: var(--green);
-    color: #000;
-  }
-  .check-item .label-text { flex: 1; line-height: 1.4; }
-  .check-item .sub { font-family: var(--mono); font-size: 10px; color: var(--text-dim); margin-top: 3px; }
-  .check-item .badge-inline {
-    font-family: var(--mono);
-    font-size: 10px;
-    color: var(--orange);
-    border: 1px solid rgba(245,158,11,0.3);
-    background: rgba(245,158,11,0.08);
-    padding: 2px 7px;
-    border-radius: 3px;
-    white-space: nowrap;
-  }
+  .checklist { display: flex; flex-direction: column; }
+  .check-item { display: flex; align-items: flex-start; gap: 13px; padding: 14px 20px; border-bottom: 1px solid var(--border); cursor: pointer; transition: background 0.1s; user-select: none; }
+  .check-item:last-child { border-bottom: none; }
+  .check-item:hover { background: var(--surface2); }
+  .check-item.done { background: var(--green-light); }
+  .check-item.done:hover { background: #dcfce7; }
+  .cb { width: 22px; height: 22px; border: 2px solid var(--border2); border-radius: 6px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 12px; margin-top: 1px; transition: all 0.15s; background: var(--surface); color: transparent; }
+  .check-item.done .cb { background: var(--green); border-color: var(--green); color: white; font-weight: 700; }
+  .label-text { flex: 1; }
+  .item-title { font-size: 14px; font-weight: 600; color: var(--text); line-height: 1.4; }
+  .check-item.done .item-title { text-decoration: line-through; color: var(--text-dim); }
+  .sub { font-size: 11px; color: var(--text-mid); margin-top: 3px; line-height: 1.5; font-family: var(--mono); }
+  .check-item.done .sub { color: var(--text-dim); }
+  .section-complete-banner { display: flex; align-items: center; gap: 10px; padding: 13px 20px; background: var(--green-light); border-top: 1px solid var(--green-mid); font-size: 13px; font-weight: 600; color: var(--green); }
 
-  /* Progress bar */
-  .progress-wrap {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 16px 20px;
-    margin-bottom: 24px;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-  }
-  .progress-bar {
-    flex: 1;
-    height: 4px;
-    background: var(--border);
-    border-radius: 2px;
-    overflow: hidden;
-  }
-  .progress-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--accent), var(--accent2));
-    border-radius: 2px;
-    transition: width 0.4s ease;
-  }
-  .progress-label {
-    font-family: var(--mono);
-    font-size: 12px;
-    color: var(--text-mid);
-    white-space: nowrap;
-  }
+  /* Summary */
+  .summary-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow-sm); margin-bottom: 20px; }
+  .summary-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 20px; border-bottom: 1px solid var(--border); font-size: 14px; gap: 16px; }
+  .summary-row:last-child { border-bottom: none; }
+  .summary-key { font-size: 12px; font-weight: 600; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap; }
+  .summary-val { font-weight: 600; color: var(--text); text-align: right; }
+
+  /* Script */
+  .script-block { background: #1e1e2e; border: 1px solid #313244; border-radius: var(--radius); padding: 20px 22px; font-family: var(--mono); font-size: 12.5px; color: #cdd6f4; line-height: 1.8; position: relative; }
+  .copy-btn { position: absolute; top: 12px; right: 12px; font-family: var(--mono); font-size: 11px; padding: 4px 12px; background: #313244; border: 1px solid #45475a; color: #cdd6f4; border-radius: 6px; cursor: pointer; transition: all 0.15s; }
+  .copy-btn:hover { background: #45475a; }
 
   /* Buttons */
-  .btn-row { display: flex; gap: 12px; margin-top: 32px; align-items: center; }
-  .btn {
-    font-family: var(--mono);
-    font-size: 13px;
-    padding: 10px 22px;
-    border-radius: 6px;
-    border: none;
-    cursor: pointer;
-    transition: all 0.2s;
-    letter-spacing: 0.5px;
-  }
-  .btn-primary {
-    background: var(--accent);
-    color: #fff;
-  }
-  .btn-primary:hover { background: var(--accent2); }
-  .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
-  .btn-ghost {
-    background: transparent;
-    border: 1px solid var(--border);
-    color: var(--text-mid);
-  }
-  .btn-ghost:hover { border-color: var(--text-mid); color: var(--text); }
-  .btn-success {
-    background: var(--green);
-    color: #000;
-  }
-
-  /* Summary box */
-  .summary-box {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 24px;
-    margin-bottom: 20px;
-  }
-  .summary-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    padding: 8px 0;
-    border-bottom: 1px solid var(--border);
-    font-size: 14px;
-  }
-  .summary-row:last-child { border-bottom: none; }
-  .summary-key {
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--text-dim);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-  }
-  .summary-val { color: var(--text); font-weight: 500; }
-
-  /* Script block */
-  .script-block {
-    background: #080b12;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 16px 20px;
-    font-family: var(--mono);
-    font-size: 12px;
-    color: #7dd3fc;
-    line-height: 1.7;
-    position: relative;
-    overflow-x: auto;
-  }
-  .script-block .copy-btn {
-    position: absolute;
-    top: 10px; right: 10px;
-    font-family: var(--mono);
-    font-size: 10px;
-    padding: 4px 10px;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    color: var(--text-dim);
-    border-radius: 4px;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-  .script-block .copy-btn:hover { color: var(--text); border-color: var(--accent); }
+  .btn-row { display: flex; gap: 10px; margin-top: 24px; align-items: center; flex-wrap: wrap; }
+  .btn { font-family: var(--sans); font-size: 14px; font-weight: 700; padding: 10px 22px; border-radius: 30px; border: none; cursor: pointer; transition: all 0.15s; display: inline-flex; align-items: center; gap: 6px; }
+  .btn-primary { background: var(--blue); color: white; box-shadow: 0 2px 8px rgba(37,99,235,0.25); }
+  .btn-primary:hover { background: #1d4ed8; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(37,99,235,0.35); }
+  .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
+  .btn-ghost { background: var(--surface); color: var(--text-mid); border: 1.5px solid var(--border); }
+  .btn-ghost:hover { border-color: var(--border2); color: var(--text); }
+  .btn-success { background: var(--green); color: white; box-shadow: 0 2px 8px rgba(22,163,74,0.25); }
+  .btn-success:hover { background: #15803d; transform: translateY(-1px); }
 
   /* Alert */
-  .alert {
-    display: flex;
-    gap: 10px;
-    padding: 12px 16px;
-    border-radius: 6px;
-    font-size: 13px;
-    margin-bottom: 16px;
-  }
-  .alert-warn { background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.3); color: var(--orange); }
-  .alert-info { background: rgba(46,125,233,0.08); border: 1px solid rgba(46,125,233,0.2); color: var(--accent2); }
+  .alert { display: flex; gap: 10px; padding: 12px 16px; border-radius: 10px; font-size: 13px; margin-bottom: 12px; font-weight: 500; }
+  .alert-warn { background: var(--orange-light); border: 1px solid #fcd34d; color: var(--orange); }
 
-  /* Completion screen */
-  .completion {
-    text-align: center;
-    padding: 60px 0;
-  }
-  .completion-icon {
-    width: 72px; height: 72px;
-    border-radius: 50%;
-    background: rgba(34,197,94,0.15);
-    border: 2px solid var(--green);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 32px;
-    margin: 0 auto 24px;
-    animation: pulse 2s infinite;
-  }
-  @keyframes pulse {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(34,197,94,0.4); }
-    50% { box-shadow: 0 0 0 12px rgba(34,197,94,0); }
-  }
-  .completion h2 {
-    font-family: var(--display);
-    font-size: 28px;
-    font-weight: 800;
-    margin-bottom: 10px;
-    letter-spacing: -0.5px;
-  }
+  /* Completion */
+  .completion { text-align: center; padding: 48px 0 32px; }
+  .completion-icon { width: 72px; height: 72px; border-radius: 50%; background: var(--green-light); border: 3px solid var(--green); display: flex; align-items: center; justify-content: center; font-size: 30px; margin: 0 auto 20px; animation: popIn 0.4s cubic-bezier(.34,1.56,.64,1); }
+  @keyframes popIn { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+  .completion h2 { font-size: 26px; font-weight: 800; margin-bottom: 8px; letter-spacing: -0.4px; }
   .completion p { color: var(--text-mid); font-size: 15px; }
 
-  /* Divider */
-  .divider {
-    height: 1px;
-    background: var(--border);
-    margin: 28px 0;
-  }
+  .divider { height: 1px; background: var(--border); margin: 22px 0; }
 
-  @media (max-width: 600px) {
+  @media (max-width: 540px) {
     .field-grid { grid-template-columns: 1fr; }
-    .role-grid { grid-template-columns: 1fr; }
-    .steps { flex-wrap: wrap; gap: 8px; }
-    .step::after { display: none; }
+    .role-grid { grid-template-columns: 1fr 1fr; }
+    .step-name { display: none; }
   }
 </style>
 </head>
 <body>
 
 <header>
-  <div class="container header-inner">
-    <div class="logo">ICON<span>INTL</span></div>
-    <div class="badge">IT Access Provisioning v1.0</div>
+  <div class="header-inner">
+    <div class="logo">
+      <div class="logo-icon">🏢</div>
+      Icon International
+    </div>
+    <div class="version-badge">IT Provisioning v1.0</div>
   </div>
 </header>
 
-<div class="container">
-  <div class="hero">
-    <div class="hero-label">New Employee Onboarding</div>
-    <h1>User Access<br>Provisioning Tool</h1>
-    <p>Step-by-step access setup for new hires — AD groups, Azure licenses, 8x8, and post-setup scripts.</p>
-    <div class="steps">
-      <div class="step active" id="nav-step-1"><div class="step-num">1</div> User Info</div>
-      <div class="step" id="nav-step-2"><div class="step-num">2</div> Role & Access</div>
-      <div class="step" id="nav-step-3"><div class="step-num">3</div> Provision</div>
-      <div class="step" id="nav-step-4"><div class="step-num">4</div> Complete</div>
+<div class="stepper-wrap">
+  <div class="stepper">
+    <div class="step-item active" id="nav-step-1">
+      <div class="step-bubble" id="nav-bubble-1">1</div>
+      <span class="step-name" id="nav-name-1">User Info</span>
+    </div>
+    <div class="step-item" id="nav-step-2">
+      <div class="step-bubble" id="nav-bubble-2">2</div>
+      <span class="step-name" id="nav-name-2">Role & Access</span>
+    </div>
+    <div class="step-item" id="nav-step-3">
+      <div class="step-bubble" id="nav-bubble-3">3</div>
+      <span class="step-name" id="nav-name-3">Provision</span>
+    </div>
+    <div class="step-item" id="nav-step-4">
+      <div class="step-bubble" id="nav-bubble-4">4</div>
+      <span class="step-name" id="nav-name-4">Done!</span>
     </div>
   </div>
+</div>
 
-  <div class="main">
+<div class="container">
+  <div class="page">
 
-    <!-- STEP 1: User Info -->
+    <!-- STEP 1 -->
     <div class="section active" id="section-1">
-      <div class="section-head">
-        <h2>User Information</h2>
-        <p>Enter the new hire's details</p>
+      <div class="page-title">
+        <h2>👋 Let's get started</h2>
+        <p>Fill in the new hire's basic information to begin.</p>
       </div>
-      <div class="field-grid">
-        <div class="field">
-          <label>First Name</label>
-          <input type="text" id="firstName" placeholder="Jennifer" />
-        </div>
-        <div class="field">
-          <label>Last Name</label>
-          <input type="text" id="lastName" placeholder="Stephens" />
-        </div>
-        <div class="field">
-          <label>Email Address</label>
-          <input type="email" id="email" placeholder="j.stephens@iconinternational.com" />
-        </div>
-        <div class="field">
-          <label>Start Date</label>
-          <input type="date" id="startDate" />
-        </div>
-        <div class="field">
-          <label>Manager</label>
-          <input type="text" id="manager" placeholder="Manager name" />
-        </div>
-        <div class="field">
-          <label>Office Location</label>
-          <select id="office">
-            <option value="">Select office...</option>
-            <option value="stamford">Stamford</option>
-            <option value="florida">Florida</option>
-            <option value="remote">Remote</option>
-          </select>
+      <div class="card">
+        <div class="card-body">
+          <div class="field-grid">
+            <div class="field">
+              <label>First Name</label>
+              <input type="text" id="firstName" placeholder="e.g. Jennifer" oninput="autoEmail()" />
+            </div>
+            <div class="field">
+              <label>Last Name</label>
+              <input type="text" id="lastName" placeholder="e.g. Stephens" oninput="autoEmail()" />
+            </div>
+            <div class="field full">
+              <label>Email Address <span class="label-hint">auto-generated</span></label>
+              <input type="email" id="email" placeholder="first.last@iconinternational.com" readonly />
+            </div>
+            <div class="field">
+              <label>Start Date</label>
+              <input type="date" id="startDate" />
+            </div>
+            <div class="field">
+              <label>Manager</label>
+              <input type="text" id="manager" placeholder="Manager's name" />
+            </div>
+            <div class="field full">
+              <label>Office Location</label>
+              <select id="office">
+                <option value="">Select an office...</option>
+                <option value="stamford">📍 Stamford</option>
+                <option value="florida">📍 Florida</option>
+                <option value="remote">🌐 Remote</option>
+              </select>
+            </div>
+            <div class="field full">
+              <label>iWomen Membership</label>
+              <div class="toggle-row" onclick="toggleIwomen()">
+                <div class="toggle-track" id="iwomenTrack">
+                  <div class="toggle-thumb" id="iwomenThumb"></div>
+                </div>
+                <div class="toggle-label-text">
+                  <span id="iwomenLabel">Not a member</span>
+                  <span class="toggle-sub">Adds iWomen CT Announcements_43952db37578 AD group</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <div class="btn-row">
-        <button class="btn btn-primary" onclick="goTo(2)">Continue →</button>
+        <button class="btn btn-primary" onclick="goTo(2)">Choose a Role →</button>
       </div>
     </div>
 
-    <!-- STEP 2: Role Selection -->
+    <!-- STEP 2 -->
     <div class="section" id="section-2">
-      <div class="section-head">
-        <h2>Select Role</h2>
-        <p>Choose the user's job title to load their access groups</p>
+      <div class="page-title">
+        <h2>🗂 Select their role</h2>
+        <p>Pick the job title — the right AD and Azure groups will load automatically.</p>
       </div>
       <div class="role-grid" id="roleGrid"></div>
-      <div id="accessPreview" style="display:none; margin-top:28px;">
+      <div id="accessPreview" style="display:none; margin-top:22px;">
         <div class="divider"></div>
-        <div class="section-head">
-          <h2>Access Preview</h2>
-          <p>Groups that will be assigned</p>
+        <div class="page-title">
+          <h2>🔑 Access preview</h2>
+          <p>These groups will be assigned during provisioning.</p>
         </div>
         <div class="access-panel" id="accessPanel"></div>
       </div>
       <div class="btn-row">
         <button class="btn btn-ghost" onclick="goTo(1)">← Back</button>
-        <button class="btn btn-primary" id="btn-step2" onclick="goTo(3)" disabled>Continue →</button>
+        <button class="btn btn-primary" id="btn-step2" onclick="goTo(3)" disabled>Start Provisioning →</button>
       </div>
     </div>
 
-    <!-- STEP 3: Provisioning Checklist -->
+    <!-- STEP 3 -->
     <div class="section" id="section-3">
-      <div class="section-head">
-        <h2>Provisioning Checklist</h2>
-        <p>Check off each task as you complete it</p>
+      <div class="page-title">
+        <h2>⚙️ Provisioning walkthrough</h2>
+        <p>Work through each section and check off tasks as you go.</p>
       </div>
-      <div class="progress-wrap">
-        <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
-        <div class="progress-label" id="progressLabel">0 / 0 complete</div>
+      <div class="progress-card">
+        <div class="progress-label-row">
+          <span class="progress-main-label">Overall progress</span>
+          <span class="progress-count" id="overallCount">0 / 0 tasks</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" id="progressFill" style="width:0%"></div>
+        </div>
       </div>
-      <div class="checklist" id="checklist"></div>
+      <div class="section-tabs" id="sectionTabs"></div>
+      <div id="activeSectionPanel"></div>
       <div class="btn-row">
         <button class="btn btn-ghost" onclick="goTo(2)">← Back</button>
-        <button class="btn btn-primary" id="btn-finish" onclick="goTo(4)" disabled>Mark Complete →</button>
+        <button class="btn btn-ghost" id="btn-prev-section" onclick="prevSection()" style="display:none;">← Prev</button>
+        <button class="btn btn-primary" id="btn-next-section" onclick="nextSection()">Next Section →</button>
+        <button class="btn btn-primary" id="btn-finish" onclick="goTo(4)" style="display:none;" disabled>All Done! →</button>
       </div>
     </div>
 
-    <!-- STEP 4: Complete -->
+    <!-- STEP 4 -->
     <div class="section" id="section-4">
       <div class="completion">
-        <div class="completion-icon">✓</div>
-        <h2>Provisioning Complete</h2>
-        <p id="completionMsg">Access has been configured successfully.</p>
+        <div class="completion-icon">🎉</div>
+        <h2>All set!</h2>
+        <p id="completionMsg">The user has been fully provisioned.</p>
       </div>
-      <div class="summary-box" id="finalSummary"></div>
-      <div class="section-head" style="margin-top:28px;">
-        <h2>Post-Setup Script</h2>
-        <p>Run this on the machine after setup</p>
+      <div class="page-title" style="margin-bottom:12px;"><h2>📋 Provisioning summary</h2></div>
+      <div class="summary-card" id="finalSummary"></div>
+      <div class="page-title" style="margin-top:24px; margin-bottom:12px;">
+        <h2>💻 Post-setup script</h2>
+        <p>Run this on the machine after setup is complete.</p>
       </div>
-      <div class="script-block" id="scriptBlock">
+      <div class="script-block">
         <button class="copy-btn" onclick="copyScript()">Copy</button>
         <div id="scriptContent"></div>
       </div>
-      <div class="btn-row" style="margin-top:28px;">
-        <button class="btn btn-success" onclick="resetAll()">+ New User</button>
+      <div class="btn-row">
+        <button class="btn btn-success" onclick="resetAll()">+ Provision Another User</button>
       </div>
     </div>
 
@@ -635,91 +480,22 @@
 
 <script>
 const ROLES = [
-  {
-    title: "President of Travel Services",
-    dept: "Travel",
-    adGroups: ["Domain Users","Everyone","IconIntl_7212181d39b7","Inventory Folder MOD","Marketing Folder MOD","Marketing Share MOD","Merchandise Folder MOD","MerchTravel Billing Folder","Point of Purchase SG","SPS Folder","Trade Credits Folder","Travel Folder MOD"],
-    roleSpecific: ["Travel Folder MOD","Point of Purchase SG","Trade Credits Folder"]
-  },
-  {
-    title: "Media Investment Associate",
-    dept: "Performance Media",
-    adGroups: ["Domain Users","Everyone","II iconurl_7212181d39b7","iWomen CT Announcements_43952db37578","Printer-Mediainvestment-14thFloor","Direct Response Folder MOD"],
-    roleSpecific: ["Direct Response Folder MOD","Printer-Mediainvestment-14thFloor"],
-    extraAzure: ["Media Investment"]
-  },
-  {
-    title: "Sr. Media Investment Lead",
-    dept: "Performance Media",
-    adGroups: ["Domain Users","DRLocalShared","DRNationalShared","Everyone","II iconurl_7212181d39b7","iWomen CT Announcements_43952db37578","Direct Response Folder MOD"],
-    roleSpecific: ["DRLocalShared","DRNationalShared","Direct Response Folder MOD"],
-    extraAzure: ["Media Investment"]
-  },
-  {
-    title: "Billing Analyst",
-    dept: "Accounting",
-    adGroups: ["Accounting Folder MOD","Billing (Local)_b33079d06102","Domain Users","Everyone","II icon billing","ICON Communications_fe5e67f5ba5"],
-    roleSpecific: ["Accounting Folder MOD","Billing (Local)_b33079d06102","II icon billing"]
-  },
-  {
-    title: "Financial Credit Analyst",
-    dept: "Credit",
-    adGroups: ["Domain Users","Everyone","II ICON Communications_fe5e67f5ba5","Icon Credit Group_9a88e9c5088","IconInt_7212181d39b7","Inventory Folder MOD","iWomen CT Announcements_43952db37578","MAFs","Pentaho_Credit","Pentaho_Users"],
-    roleSpecific: ["Icon Credit Group_9a88e9c5088","Pentaho_Credit","Pentaho_Users","MAFs"]
-  },
-  {
-    title: "Front Office Administrator",
-    dept: "Human Resources",
-    adGroups: ["Domain Users","Everyone"],
-    roleSpecific: [],
-    note: "Confirm AD and Azure groups with HR manager — not fully specified."
-  },
-  {
-    title: "Media Investment Associate (Print/OOH)",
-    dept: "Print/OOH",
-    adGroups: ["Domain Users","Everyone","II ICON Communications_fe5e67f5ba5","IconInt_7212181d39b7","Print-OOH Dept._b9df28125db5","Print-OOH Folder MOD"],
-    roleSpecific: ["Print-OOH Dept._b9df28125db5","Print-OOH Folder MOD"],
-    extraAzure: ["Comcast IDP"]
-  },
-  {
-    title: "New Business Director",
-    dept: "Sales",
-    adGroups: ["Domain Users","Everyone","II ICON Communications_fe5e67f5ba5","IconInt_7212181d39b7","Sales Folder RO","SALES TEAM_a6f66db4ae4b"],
-    roleSpecific: ["Sales Folder RO","SALES TEAM_a6f66db4ae4b"]
-  },
-  {
-    title: "Programmatic Supply Lead",
-    dept: "Ad Platforms",
-    adGroups: ["Ad Platforms MOD","Digital Media Operations","Digital Media PMs RO","Domain Users","Everyone","II ICON Communications_fe5e67f5ba5","IconInt_7212181d39b7","RPM Team_b3289e4544"],
-    roleSpecific: ["Ad Platforms MOD","Digital Media Operations","Digital Media PMs RO","RPM Team_b3289e4544"]
-  },
-  {
-    title: "Affiliate Marketing Lead",
-    dept: "Ad Platforms",
-    adGroups: ["Ad Platforms MOD","Affiliate Team_d5585afc475","David's Bridal_5455dc1497d","Domain Users","Everyone","II ICON Communications_fe5e67f5ba5","IconInt_7212181d39b7"],
-    roleSpecific: ["Ad Platforms MOD","Affiliate Team_d5585afc475","David's Bridal_5455dc1497d"]
-  },
-  {
-    title: "Account Service Specialist",
-    dept: "Performance Media",
-    adGroups: ["Direct Response Folder MOD","Domain Users","Everyone","II ICON Communications_fe5e67f5ba5","IconInt_7212181d39b7"],
-    roleSpecific: ["Direct Response Folder MOD"]
-  }
+  { title:"President of Travel Services", dept:"Travel", adGroups:["Domain Users","Everyone","IconIntl_7212181d39b7","Inventory Folder MOD","Marketing Folder MOD","Marketing Share MOD","Merchandise Folder MOD","MerchTravel Billing Folder","Point of Purchase SG","SPS Folder","Trade Credits Folder","Travel Folder MOD"], roleSpecific:["Travel Folder MOD","Point of Purchase SG","Trade Credits Folder"] },
+  { title:"Media Investment Associate", dept:"Performance Media", adGroups:["Domain Users","Everyone","II iconurl_7212181d39b7","iWomen CT Announcements_43952db37578","Printer-Mediainvestment-14thFloor","Direct Response Folder MOD"], roleSpecific:["Direct Response Folder MOD","Printer-Mediainvestment-14thFloor"], extraAzure:["Media Investment"] },
+  { title:"Sr. Media Investment Lead", dept:"Performance Media", adGroups:["Domain Users","DRLocalShared","DRNationalShared","Everyone","II iconurl_7212181d39b7","iWomen CT Announcements_43952db37578","Direct Response Folder MOD"], roleSpecific:["DRLocalShared","DRNationalShared","Direct Response Folder MOD"], extraAzure:["Media Investment"] },
+  { title:"Billing Analyst", dept:"Accounting", adGroups:["Accounting Folder MOD","Billing (Local)_b33079d06102","Domain Users","Everyone","II icon billing","ICON Communications_fe5e67f5ba5"], roleSpecific:["Accounting Folder MOD","Billing (Local)_b33079d06102","II icon billing"] },
+  { title:"Financial Credit Analyst", dept:"Credit", adGroups:["Domain Users","Everyone","II ICON Communications_fe5e67f5ba5","Icon Credit Group_9a88e9c5088","IconInt_7212181d39b7","Inventory Folder MOD","iWomen CT Announcements_43952db37578","MAFs","Pentaho_Credit","Pentaho_Users"], roleSpecific:["Icon Credit Group_9a88e9c5088","Pentaho_Credit","Pentaho_Users","MAFs"] },
+  { title:"Front Office Administrator", dept:"Human Resources", adGroups:["Domain Users","Everyone"], roleSpecific:[], note:"Confirm AD and Azure groups with HR manager — not fully specified." },
+  { title:"Media Investment Associate (Print/OOH)", dept:"Print/OOH", adGroups:["Domain Users","Everyone","II ICON Communications_fe5e67f5ba5","IconInt_7212181d39b7","Print-OOH Dept._b9df28125db5","Print-OOH Folder MOD"], roleSpecific:["Print-OOH Dept._b9df28125db5","Print-OOH Folder MOD"], extraAzure:["Comcast IDP"] },
+  { title:"New Business Director", dept:"Sales", adGroups:["Domain Users","Everyone","II ICON Communications_fe5e67f5ba5","IconInt_7212181d39b7","Sales Folder RO","SALES TEAM_a6f66db4ae4b"], roleSpecific:["Sales Folder RO","SALES TEAM_a6f66db4ae4b"] },
+  { title:"Programmatic Supply Lead", dept:"Ad Platforms", adGroups:["Ad Platforms MOD","Digital Media Operations","Digital Media PMs RO","Domain Users","Everyone","II ICON Communications_fe5e67f5ba5","IconInt_7212181d39b7","RPM Team_b3289e4544"], roleSpecific:["Ad Platforms MOD","Digital Media Operations","Digital Media PMs RO","RPM Team_b3289e4544"] },
+  { title:"Affiliate Marketing Lead", dept:"Ad Platforms", adGroups:["Ad Platforms MOD","Affiliate Team_d5585afc475","David's Bridal_5455dc1497d","Domain Users","Everyone","II ICON Communications_fe5e67f5ba5","IconInt_7212181d39b7"], roleSpecific:["Ad Platforms MOD","Affiliate Team_d5585afc475","David's Bridal_5455dc1497d"] },
+  { title:"Account Service Specialist", dept:"Performance Media", adGroups:["Direct Response Folder MOD","Domain Users","Everyone","II ICON Communications_fe5e67f5ba5","IconInt_7212181d39b7"], roleSpecific:["Direct Response Folder MOD"] }
 ];
 
-const AZURE_BASE = [
-  "8x8 Phone Licenses",
-  "ConditionalAccessTest",
-  "Conditional Access: Risky sign-in MFA",
-  "Netskope Pilot Policy Assignment",
-  "Netskope Private Access - All Users",
-  "Icon Intl-Everyone",
-  "Icon Intl-Stamford/Florida Office"
-];
+const AZURE_BASE = ["8x8 Phone Licenses","ConditionalAccessTest","Conditional Access: Risky sign-in MFA","Netskope Pilot Policy Assignment","Netskope Private Access - All Users","Icon Intl-Everyone","Icon Intl-Stamford/Florida Office"];
 
-let selectedRole = null;
-let currentStep = 1;
-let checkStates = {};
+let selectedRole = null, currentStep = 1, checkStates = {}, provSections = [], currentSection = 0, iwomenMember = false;
 
 function buildRoleGrid() {
   const grid = document.getElementById('roleGrid');
@@ -727,11 +503,7 @@ function buildRoleGrid() {
   ROLES.forEach((r, i) => {
     const card = document.createElement('div');
     card.className = 'role-card';
-    card.innerHTML = `
-      <div class="dept-tag">${r.dept}</div>
-      <div class="role-title">${r.title}</div>
-      <div class="check">✓</div>
-    `;
+    card.innerHTML = `<div class="dept-tag">${r.dept}</div><div class="role-title">${r.title}</div><div class="check">✓</div>`;
     card.onclick = () => selectRole(i, card);
     grid.appendChild(card);
   });
@@ -747,141 +519,162 @@ function selectRole(idx, card) {
 
 function showAccessPreview() {
   const r = selectedRole;
-  const preview = document.getElementById('accessPreview');
-  const panel = document.getElementById('accessPanel');
-  preview.style.display = 'block';
-
-  const baseGroups = r.adGroups.filter(g => !r.roleSpecific.includes(g));
-  const roleGroups = r.roleSpecific;
+  document.getElementById('accessPreview').style.display = 'block';
+  const IWOMEN_GROUP = 'iWomen CT Announcements_43952db37578';
+  const baseGroups = r.adGroups.filter(g => !r.roleSpecific.includes(g) && g !== IWOMEN_GROUP);
   const azureGroups = [...AZURE_BASE, ...(r.extraAzure || [])];
-
+  const iwomenNote = iwomenMember
+    ? `<span class="tag role-specific" style="border-color:#d8b4fe;color:#7c3aed;background:#f5f3ff;">iWomen CT Announcements_43952db37578 ★</span>`
+    : `<span style="color:var(--text-dim);font-size:12px;">Not a member — skipped</span>`;
   let html = `
-    <div class="panel-section">
-      <div class="panel-title">AD Base Groups</div>
-      <div class="tag-list">
-        ${baseGroups.map(g => `<span class="tag ad">${g}</span>`).join('')}
-      </div>
-    </div>
-    <div class="panel-section">
-      <div class="panel-title">Role-Specific AD Groups</div>
-      <div class="tag-list">
-        ${roleGroups.length ? roleGroups.map(g => `<span class="tag role-specific">${g}</span>`).join('') : '<span style="color:var(--text-dim);font-size:13px;">None</span>'}
-      </div>
-    </div>
-    <div class="panel-section">
-      <div class="panel-title">Azure / M365 Groups</div>
-      <div class="tag-list">
-        ${azureGroups.map(g => `<span class="tag azure">${g}</span>`).join('')}
-      </div>
-    </div>
+    <div class="panel-section"><div class="panel-title">AD Base Groups</div><div class="tag-list">${baseGroups.map(g=>`<span class="tag ad">${g}</span>`).join('')}</div></div>
+    <div class="panel-section"><div class="panel-title">Role-Specific AD Groups</div><div class="tag-list">${r.roleSpecific.length ? r.roleSpecific.map(g=>`<span class="tag role-specific">${g}</span>`).join('') : '<span style="color:var(--text-dim);font-size:13px;">None</span>'}</div></div>
+    <div class="panel-section"><div class="panel-title">iWomen</div><div class="tag-list">${iwomenNote}</div></div>
+    <div class="panel-section"><div class="panel-title">Azure / M365 Groups</div><div class="tag-list">${azureGroups.map(g=>`<span class="tag azure">${g}</span>`).join('')}</div></div>
   `;
-  if (r.note) {
-    html = `<div class="alert alert-warn" style="margin:16px 16px 0;">⚠ ${r.note}</div>` + html;
-  }
-  panel.innerHTML = html;
+  if (r.note) html = `<div class="alert alert-warn">⚠️ ${r.note}</div>` + html;
+  document.getElementById('accessPanel').innerHTML = html;
 }
 
 function buildChecklist() {
   const r = selectedRole;
-  const fn = document.getElementById('firstName').value || 'User';
-  const ln = document.getElementById('lastName').value || '';
   const email = document.getElementById('email').value || 'user@iconinternational.com';
   const azureGroups = [...AZURE_BASE, ...(r.extraAzure || [])];
+  const IWOMEN_GROUP = 'iWomen CT Announcements_43952db37578';
+  const baseADGroups = r.adGroups.filter(g => !r.roleSpecific.includes(g) && g !== IWOMEN_GROUP);
 
-  const tasks = [
-    { id:'ad_account', label:'Create Active Directory account', sub:'Name, email, UPN, OU placement', badge:'AD' },
-    { id:'ad_base', label:`Add to base AD groups`, sub:r.adGroups.filter(g=>!r.roleSpecific.includes(g)).join(', '), badge:'AD' },
-    ...(r.roleSpecific.length ? [{ id:'ad_role', label:'Add role-specific AD groups', sub:r.roleSpecific.join(', '), badge:'AD' }] : []),
-    { id:'mfa_enable', label:'Enable Multi-Factor Authentication in M365 Admin', sub:'admin.microsoft.com → Users → Active users → MFA', badge:'Azure' },
-    { id:'mfa_enforce', label:'Enforce MFA', sub:'Set state to Enforced after enabling', badge:'Azure' },
-    ...azureGroups.map((g,i) => ({ id:`azure_${i}`, label:`Add to: ${g}`, sub:'Microsoft 365 admin center → Groups', badge:'Azure' })),
-    { id:'8x8', label:'Assign 8x8 license: X Series X2-VOSVC0216-02-US', sub:`Enable MS Teams integration for ${email}`, badge:'8x8' },
-    { id:'intranet', label:'Configure Internet Options → Local Intranet', sub:'Advanced → Add https://intranet.iconinternational.com → Require HTTPS', badge:'IE/Edge' },
-    { id:'script', label:'Run PullIIUserInfo.ps1 PowerShell script', sub:'powershell.exe -ExecutionPolicy Bypass -File .\\PullIIUserInfo.ps1', badge:'PS' },
-    { id:'verify', label:'Verify user can log in and access their role folders', sub:'Test SSO, intranet, and shared drives', badge:'QA' },
+  provSections = [
+    { id:'ad', label:'Active Directory', icon:'🖥️', color:'#2563eb', bg:'#eff6ff', desc:'Create account and assign AD security groups', tasks:[
+      { id:'ad_account', label:'Create Active Directory account', sub:'Set Name, email, UPN, and place in correct OU' },
+      { id:'ad_base', label:'Add to base AD groups', sub: baseADGroups.join(' · ') },
+      ...(r.roleSpecific.length ? [{ id:'ad_role', label:'Add role-specific AD groups', sub: r.roleSpecific.join(' · ') }] : []),
+      ...(iwomenMember ? [{ id:'ad_iwomen', label:'Add to iWomen CT Announcements_43952db37578', sub:'User confirmed as iWomen member' }] : []),
+    ]},
+    { id:'azure', label:'Azure / M365', icon:'☁️', color:'#16a34a', bg:'#f0fdf4', desc:'Microsoft 365 Admin Center — admin.microsoft.com', tasks:[
+      { id:'mfa_enable', label:'Enable Multi-Factor Authentication', sub:'M365 Admin → Users → Active users → MFA → Enable' },
+      { id:'mfa_enforce', label:'Enforce MFA', sub:'Set MFA state to Enforced after enabling' },
+      ...azureGroups.map((g,i) => ({ id:`azure_${i}`, label:`Add to group: ${g}`, sub:'M365 Admin Center → Groups → Add members' })),
+      { id:'mail_imap_pop', label:'Mail tab → Disable IMAP and POP', sub:'M365 Admin → Users → Active users → [User] → Mail tab → Manage email apps → Uncheck IMAP and POP' },
+    ]},
+    { id:'8x8', label:'8x8 Setup', icon:'📞', color:'#d97706', bg:'#fffbeb', desc:'Services & Permissions, then General settings', tasks:[
+      { id:'8x8_policy', label:'Services & Permissions → Assign profile policy', sub:'Set to: 8×8 Master User Template' },
+      { id:'8x8_license', label:'Services & Permissions → Assign service to user', sub:'Select: X Series - X2-VOSVC0216-02-US' },
+      { id:'8x8_teams', label:'Services & Permissions → Enable MS Teams integration', sub:'Toggle ON — required per user' },
+      { id:'8x8_site', label:'General → Confirm Site = Headquarters (Icon International)', sub:'Note: site changes require bulk user edit' },
+      { id:'8x8_lang', label:'General → Set Language & Time Zone', sub:'Language: English - United States  ·  Time Zone: US/Eastern' },
+      { id:'8x8_dir', label:'General → Contact Directory Scope = Company', sub:'Enable "Display contact in company directory" toggle ON' },
+    ]},
+    { id:'final', label:'Intranet & Scripts', icon:'⚙️', color:'#7c3aed', bg:'#f5f3ff', desc:'Browser config and post-setup PowerShell', tasks:[
+      { id:'intranet', label:'Internet Options → Local Intranet → Sites → Advanced', sub:'Add https://intranet.iconinternational.com  ·  Require server verification (HTTPS)' },
+      { id:'script', label:'Run PullIIUserInfo.ps1', sub:'powershell.exe -ExecutionPolicy Bypass -File .\\PullIIUserInfo.ps1' },
+      { id:'verify', label:'Verify login, folder access, and SSO', sub:'Test intranet, shared drives, and application sign-in' },
+    ]},
   ];
 
   checkStates = {};
-  tasks.forEach(t => checkStates[t.id] = false);
+  provSections.forEach(sec => sec.tasks.forEach(t => checkStates[t.id] = false));
+  currentSection = 0;
+  renderSectionTabs();
+  renderActiveSection();
+  updateOverallProgress();
+}
 
-  const list = document.getElementById('checklist');
-  list.innerHTML = tasks.map(t => `
-    <div class="check-item" id="ci_${t.id}" onclick="toggleCheck('${t.id}')">
-      <div class="cb" id="cb_${t.id}"></div>
+function renderSectionTabs() {
+  document.getElementById('sectionTabs').innerHTML = provSections.map((sec, i) => {
+    const total = sec.tasks.length, done = sec.tasks.filter(t => checkStates[t.id]).length;
+    const isComplete = done === total, isActive = i === currentSection;
+    return `<div class="sec-tab ${isActive?'active':''} ${isComplete?'complete':''}" onclick="jumpSection(${i})">
+      <div class="tab-dot"></div>${sec.icon} ${sec.label}${isComplete?' ✓':` (${done}/${total})`}
+    </div>`;
+  }).join('');
+}
+
+function renderActiveSection() {
+  const sec = provSections[currentSection];
+  const total = sec.tasks.length, done = sec.tasks.filter(t => checkStates[t.id]).length;
+  const pct = total ? Math.round((done/total)*100) : 0, isComplete = done === total;
+
+  const itemsHTML = sec.tasks.map(t => `
+    <div class="check-item ${checkStates[t.id]?'done':''}" id="ci_${t.id}" onclick="toggleCheck('${t.id}')">
+      <div class="cb" id="cb_${t.id}">${checkStates[t.id]?'✓':''}</div>
       <div class="label-text">
-        <div>${t.label}</div>
+        <div class="item-title">${t.label}</div>
         <div class="sub">${t.sub}</div>
       </div>
-      <div class="badge-inline">${t.badge}</div>
-    </div>
-  `).join('');
+    </div>`).join('');
 
-  updateProgress();
+  const banner = isComplete ? `<div class="section-complete-banner">🎉 All ${sec.label} tasks done — nice work!</div>` : '';
+
+  document.getElementById('activeSectionPanel').innerHTML = `
+    <div class="section-panel">
+      <div class="section-panel-header">
+        <div class="section-panel-title">
+          <div class="section-icon" style="background:${sec.bg};">${sec.icon}</div>
+          <div><h3>${sec.label}</h3><p>${sec.desc}</p></div>
+        </div>
+        <div class="section-mini-progress">
+          <div class="section-mini-label">${done} / ${total} done</div>
+          <div class="section-mini-bar"><div class="section-mini-fill" style="width:${pct}%;background:${sec.color};"></div></div>
+        </div>
+      </div>
+      <div class="checklist">${itemsHTML}</div>
+      ${banner}
+    </div>`;
+
+  const isFirst = currentSection === 0, isLast = currentSection === provSections.length-1;
+  const allDone = Object.values(checkStates).every(Boolean);
+  document.getElementById('btn-prev-section').style.display = isFirst ? 'none' : 'inline-flex';
+  document.getElementById('btn-next-section').style.display = isLast ? 'none' : 'inline-flex';
+  const fin = document.getElementById('btn-finish');
+  fin.style.display = isLast ? 'inline-flex' : 'none';
+  fin.disabled = !allDone;
 }
 
 function toggleCheck(id) {
   checkStates[id] = !checkStates[id];
-  const item = document.getElementById(`ci_${id}`);
-  const cb = document.getElementById(`cb_${id}`);
-  if (checkStates[id]) {
-    item.classList.add('done');
-    cb.textContent = '✓';
-  } else {
-    item.classList.remove('done');
-    cb.textContent = '';
-  }
-  updateProgress();
+  updateOverallProgress(); renderSectionTabs(); renderActiveSection();
 }
 
-function updateProgress() {
-  const total = Object.keys(checkStates).length;
-  const done = Object.values(checkStates).filter(Boolean).length;
+function updateOverallProgress() {
+  const total = Object.keys(checkStates).length, done = Object.values(checkStates).filter(Boolean).length;
   const pct = total ? Math.round((done/total)*100) : 0;
-  document.getElementById('progressFill').style.width = pct + '%';
-  document.getElementById('progressLabel').textContent = `${done} / ${total} complete`;
-  document.getElementById('btn-finish').disabled = done < total;
+  document.getElementById('progressFill').style.width = pct+'%';
+  document.getElementById('overallCount').textContent = `${done} / ${total} tasks`;
 }
+
+function nextSection() { if (currentSection < provSections.length-1) { currentSection++; renderSectionTabs(); renderActiveSection(); window.scrollTo({top:document.getElementById('sectionTabs').offsetTop-80,behavior:'smooth'}); } }
+function prevSection() { if (currentSection > 0) { currentSection--; renderSectionTabs(); renderActiveSection(); window.scrollTo({top:document.getElementById('sectionTabs').offsetTop-80,behavior:'smooth'}); } }
+function jumpSection(i) { currentSection=i; renderSectionTabs(); renderActiveSection(); }
 
 function buildSummary() {
-  const fn = document.getElementById('firstName').value;
-  const ln = document.getElementById('lastName').value;
-  const email = document.getElementById('email').value;
-  const start = document.getElementById('startDate').value;
-  const manager = document.getElementById('manager').value;
-  const office = document.getElementById('office').value;
-
-  document.getElementById('completionMsg').textContent = `${fn} ${ln} has been fully provisioned.`;
-
-  const r = selectedRole;
-  const azureCount = AZURE_BASE.length + (r.extraAzure ? r.extraAzure.length : 0);
-
+  const fn = document.getElementById('firstName').value, ln = document.getElementById('lastName').value;
+  const email = document.getElementById('email').value, start = document.getElementById('startDate').value;
+  const manager = document.getElementById('manager').value, office = document.getElementById('office').value;
+  document.getElementById('completionMsg').textContent = `${fn} ${ln} has been fully provisioned and is ready to go.`;
+  const r = selectedRole, azureCount = AZURE_BASE.length + (r.extraAzure ? r.extraAzure.length : 0);
   document.getElementById('finalSummary').innerHTML = `
     <div class="summary-row"><span class="summary-key">Full Name</span><span class="summary-val">${fn} ${ln}</span></div>
     <div class="summary-row"><span class="summary-key">Email</span><span class="summary-val">${email}</span></div>
-    <div class="summary-row"><span class="summary-key">Start Date</span><span class="summary-val">${start}</span></div>
-    <div class="summary-row"><span class="summary-key">Manager</span><span class="summary-val">${manager}</span></div>
-    <div class="summary-row"><span class="summary-key">Office</span><span class="summary-val">${office}</span></div>
+    <div class="summary-row"><span class="summary-key">Start Date</span><span class="summary-val">${start||'—'}</span></div>
+    <div class="summary-row"><span class="summary-key">Manager</span><span class="summary-val">${manager||'—'}</span></div>
+    <div class="summary-row"><span class="summary-key">Office</span><span class="summary-val">${office||'—'}</span></div>
     <div class="summary-row"><span class="summary-key">Role</span><span class="summary-val">${r.title}</span></div>
     <div class="summary-row"><span class="summary-key">Department</span><span class="summary-val">${r.dept}</span></div>
-    <div class="summary-row"><span class="summary-key">AD Groups Assigned</span><span class="summary-val">${r.adGroups.length}</span></div>
-    <div class="summary-row"><span class="summary-key">Azure Groups Assigned</span><span class="summary-val">${azureCount}</span></div>
+    <div class="summary-row"><span class="summary-key">iWomen</span><span class="summary-val">${iwomenMember?'✅ Member':'Not a member'}</span></div>
+    <div class="summary-row"><span class="summary-key">AD Groups</span><span class="summary-val">${r.adGroups.length} assigned</span></div>
+    <div class="summary-row"><span class="summary-key">Azure Groups</span><span class="summary-val">${azureCount} assigned</span></div>
     <div class="summary-row"><span class="summary-key">8x8 License</span><span class="summary-val">X Series X2-VOSVC0216-02-US</span></div>
-    <div class="summary-row"><span class="summary-key">Provisioned By</span><span class="summary-val">IT Admin — ${new Date().toLocaleDateString()}</span></div>
-  `;
-
+    <div class="summary-row"><span class="summary-key">Provisioned</span><span class="summary-val">${new Date().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'})}</span></div>`;
   document.getElementById('scriptContent').innerHTML = `
-    <span style="color:#a78bfa"># Run after account creation</span><br>
-    <span style="color:#6ee7b7">powershell.exe</span> -ExecutionPolicy Bypass -File .\\PullIIUserInfo.ps1<br><br>
-    <span style="color:#a78bfa"># Intranet setup — run in elevated browser or GPO</span><br>
-    <span style="color:#6ee7b7">INTERNET OPTIONS</span> → Security → Local Intranet → Sites → Advanced<br>
-    Add: <span style="color:#fbbf24">https://intranet.iconinternational.com</span><br>
-    ☑ Require server verification (HTTPS)
-  `;
+    <span style="color:#a6e3a1"># Run after account creation</span><br>
+    <span style="color:#89dceb">powershell.exe</span> -ExecutionPolicy Bypass -File .\\PullIIUserInfo.ps1<br><br>
+    <span style="color:#a6e3a1"># Intranet — Internet Options → Security → Local Intranet → Sites → Advanced</span><br>
+    Add: <span style="color:#f9e2af">https://intranet.iconinternational.com</span><br>
+    ☑ Require server verification (HTTPS)`;
 }
 
 function copyScript() {
-  const text = `powershell.exe -ExecutionPolicy Bypass -File .\\PullIIUserInfo.ps1\n\n# Intranet: Internet Options → Security → Local Intranet → Sites → Advanced\n# Add: https://intranet.iconinternational.com (Require HTTPS)`;
-  navigator.clipboard.writeText(text).then(() => {
+  navigator.clipboard.writeText(`powershell.exe -ExecutionPolicy Bypass -File .\\PullIIUserInfo.ps1\n\n# Intranet: Internet Options → Security → Local Intranet → Sites → Advanced\n# Add: https://intranet.iconinternational.com (Require HTTPS)`).then(() => {
     const btn = document.querySelector('.copy-btn');
     btn.textContent = 'Copied!';
     setTimeout(() => btn.textContent = 'Copy', 2000);
@@ -892,50 +685,50 @@ function goTo(step) {
   if (step === 2 && !validate1()) return;
   if (step === 3) buildChecklist();
   if (step === 4) buildSummary();
-
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.getElementById(`section-${step}`).classList.add('active');
-
-  // Update nav
   for (let i = 1; i <= 4; i++) {
-    const nav = document.getElementById(`nav-step-${i}`);
-    nav.className = 'step';
-    if (i < step) nav.classList.add('done');
-    else if (i === step) nav.classList.add('active');
-    const num = nav.querySelector('.step-num');
-    num.textContent = i < step ? '✓' : i;
+    const item = document.getElementById(`nav-step-${i}`), bubble = document.getElementById(`nav-bubble-${i}`);
+    item.className = 'step-item';
+    if (i < step) { item.classList.add('done'); bubble.textContent = '✓'; }
+    else if (i === step) { item.classList.add('active'); bubble.textContent = i; }
+    else { bubble.textContent = i; }
   }
   currentStep = step;
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function validate1() {
-  const fn = document.getElementById('firstName').value.trim();
-  const ln = document.getElementById('lastName').value.trim();
-  const email = document.getElementById('email').value.trim();
-  if (!fn || !ln || !email) {
-    alert('Please fill in First Name, Last Name, and Email before continuing.');
-    return false;
-  }
+  const fn = document.getElementById('firstName').value.trim(), ln = document.getElementById('lastName').value.trim(), email = document.getElementById('email').value.trim();
+  if (!fn || !ln || !email) { alert('Please fill in First Name, Last Name, and Email to continue.'); return false; }
   return true;
 }
 
 function resetAll() {
-  selectedRole = null;
-  checkStates = {};
-  document.getElementById('firstName').value = '';
-  document.getElementById('lastName').value = '';
-  document.getElementById('email').value = '';
-  document.getElementById('startDate').value = '';
-  document.getElementById('manager').value = '';
+  selectedRole = null; checkStates = {}; iwomenMember = false;
+  ['firstName','lastName','email','startDate','manager'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('office').value = '';
   document.getElementById('accessPreview').style.display = 'none';
   document.getElementById('btn-step2').disabled = true;
   document.querySelectorAll('.role-card').forEach(c => c.classList.remove('selected'));
+  const row = document.querySelector('.toggle-row');
+  if (row) row.classList.remove('on');
+  document.getElementById('iwomenLabel').textContent = 'Not a member';
   goTo(1);
 }
 
-// Init
+function toggleIwomen() {
+  iwomenMember = !iwomenMember;
+  document.querySelector('.toggle-row').classList.toggle('on', iwomenMember);
+  document.getElementById('iwomenLabel').textContent = iwomenMember ? '✨ iWomen member' : 'Not a member';
+}
+
+function autoEmail() {
+  const fn = document.getElementById('firstName').value.trim().toLowerCase().replace(/\s+/g,'');
+  const ln = document.getElementById('lastName').value.trim().toLowerCase().replace(/\s+/g,'');
+  document.getElementById('email').value = fn && ln ? `${fn}.${ln}@iconinternational.com` : fn ? `${fn}@iconinternational.com` : '';
+}
+
 buildRoleGrid();
 </script>
 </body>
