@@ -270,39 +270,84 @@
   .check-item.done .sub { color: var(--text-dim); }
   .section-complete-banner { display: flex; align-items: center; gap: 10px; padding: 13px 20px; background: var(--green-light); border-top: 1px solid var(--green-mid); font-size: 13px; font-weight: 600; color: var(--green); }
 
-  /* Section details briefing */
-  .section-details {
-    display: flex;
-    gap: 0;
-    flex-wrap: wrap;
+  /* Dropbox-style preflight card */
+  .preflight-card {
+    margin: 0;
+    background: #fafaf9;
     border-bottom: 1px solid var(--border);
-    background: var(--surface2);
+    padding: 16px 20px;
   }
-  .detail-group {
-    flex: 1;
-    min-width: 220px;
-    padding: 14px 20px;
-    border-right: 1px solid var(--border);
-  }
-  .detail-group:last-child { border-right: none; }
-  .detail-group-label {
-    font-size: 10px;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
-    color: var(--text-dim);
-    margin-bottom: 8px;
-  }
-  .detail-list { list-style: none; display: flex; flex-direction: column; gap: 4px; }
-  .detail-list li {
+  .preflight-heading {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
     font-size: 12px;
+    font-weight: 700;
     color: var(--text-mid);
-    padding-left: 14px;
-    position: relative;
-    line-height: 1.5;
-    font-family: var(--mono);
+    margin-bottom: 14px;
+    line-height: 1.4;
   }
-  .detail-list li::before { content: '→'; position: absolute; left: 0; color: var(--text-dim); font-size: 10px; top: 2px; }
+  .preflight-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+
+  .preflight-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 12px;
+    background: var(--border);
+  }
+  .preflight-field {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    background: var(--surface);
+    padding: 0;
+  }
+  .preflight-field-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 10px 14px;
+    min-width: 120px;
+    background: var(--surface2);
+    border-right: 1px solid var(--border);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .preflight-field-value {
+    flex: 1;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text);
+    padding: 10px 14px;
+    word-break: break-all;
+    line-height: 1.4;
+  }
+  .preflight-copy-btn {
+    padding: 8px 12px;
+    background: none;
+    border: none;
+    border-left: 1px solid var(--border);
+    color: var(--text-dim);
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.15s;
+    flex-shrink: 0;
+    height: 100%;
+    align-self: stretch;
+    display: flex;
+    align-items: center;
+  }
+  .preflight-copy-btn:hover { background: var(--blue-light); color: var(--blue); }
+  .preflight-copy-btn.copied { background: var(--green-light); color: var(--green); }
+
+  .preflight-notes { display: flex; flex-direction: column; gap: 5px; }
+  .preflight-note { font-size: 12px; color: var(--text-mid); line-height: 1.5; padding: 2px 0; }
 
   .checklist-label {
     font-size: 10px;
@@ -555,16 +600,16 @@
 <script>
 const ROLES = [
   { title:"President of Travel Services", dept:"Travel", adGroups:["Domain Users","Everyone","IconIntl_7212181d39b7","Inventory Folder MOD","Marketing Folder MOD","Marketing Share MOD","Merchandise Folder MOD","MerchTravel Billing Folder","Point of Purchase SG","SPS Folder","Trade Credits Folder","Travel Folder MOD"], roleSpecific:["Travel Folder MOD","Point of Purchase SG","Trade Credits Folder"] },
-  { title:"Media Investment Associate", dept:"Performance Media", adGroups:["Domain Users","Everyone","II iconurl_7212181d39b7","iWomen CT Announcements_43952db37578","Printer-Mediainvestment-14thFloor","Direct Response Folder MOD"], roleSpecific:["Direct Response Folder MOD","Printer-Mediainvestment-14thFloor"], extraAzure:["Media Investment"] },
-  { title:"Sr. Media Investment Lead", dept:"Performance Media", adGroups:["Domain Users","DRLocalShared","DRNationalShared","Everyone","II iconurl_7212181d39b7","iWomen CT Announcements_43952db37578","Direct Response Folder MOD"], roleSpecific:["DRLocalShared","DRNationalShared","Direct Response Folder MOD"], extraAzure:["Media Investment"] },
+  { title:"Media Investment Associate", dept:"Performance Media", adGroups:["Domain Users","Everyone","II iconurl_7212181d39b7","iWomen CT Announcements_43952db37578","Printer-Mediainvestment-14thFloor","Direct Response Folder MOD"], roleSpecific:["Direct Response Folder MOD","Printer-Mediainvestment-14thFloor"], extraAzure:["Media Investment"], needsMediaOps:true },
+  { title:"Sr. Media Investment Lead", dept:"Performance Media", adGroups:["Domain Users","DRLocalShared","DRNationalShared","Everyone","II iconurl_7212181d39b7","iWomen CT Announcements_43952db37578","Direct Response Folder MOD"], roleSpecific:["DRLocalShared","DRNationalShared","Direct Response Folder MOD"], extraAzure:["Media Investment"], needsMediaOps:true },
   { title:"Billing Analyst", dept:"Accounting", adGroups:["Accounting Folder MOD","Billing (Local)_b33079d06102","Domain Users","Everyone","II icon billing","ICON Communications_fe5e67f5ba5"], roleSpecific:["Accounting Folder MOD","Billing (Local)_b33079d06102","II icon billing"] },
   { title:"Financial Credit Analyst", dept:"Credit", adGroups:["Domain Users","Everyone","II ICON Communications_fe5e67f5ba5","Icon Credit Group_9a88e9c5088","IconInt_7212181d39b7","Inventory Folder MOD","iWomen CT Announcements_43952db37578","MAFs","Pentaho_Credit","Pentaho_Users"], roleSpecific:["Icon Credit Group_9a88e9c5088","Pentaho_Credit","Pentaho_Users","MAFs"] },
   { title:"Front Office Administrator", dept:"Human Resources", adGroups:["Domain Users","Everyone"], roleSpecific:[], note:"Confirm AD and Azure groups with HR manager — not fully specified." },
-  { title:"Media Investment Associate (Print/OOH)", dept:"Print/OOH", adGroups:["Domain Users","Everyone","II ICON Communications_fe5e67f5ba5","IconInt_7212181d39b7","Print-OOH Dept._b9df28125db5","Print-OOH Folder MOD"], roleSpecific:["Print-OOH Dept._b9df28125db5","Print-OOH Folder MOD"], extraAzure:["Comcast IDP"] },
+  { title:"Media Investment Associate (Print/OOH)", dept:"Print/OOH", adGroups:["Domain Users","Everyone","II ICON Communications_fe5e67f5ba5","IconInt_7212181d39b7","Print-OOH Dept._b9df28125db5","Print-OOH Folder MOD"], roleSpecific:["Print-OOH Dept._b9df28125db5","Print-OOH Folder MOD"], extraAzure:["Comcast IDP"], needsMediaOps:true },
   { title:"New Business Director", dept:"Sales", adGroups:["Domain Users","Everyone","II ICON Communications_fe5e67f5ba5","IconInt_7212181d39b7","Sales Folder RO","SALES TEAM_a6f66db4ae4b"], roleSpecific:["Sales Folder RO","SALES TEAM_a6f66db4ae4b"] },
-  { title:"Programmatic Supply Lead", dept:"Ad Platforms", adGroups:["Ad Platforms MOD","Digital Media Operations","Digital Media PMs RO","Domain Users","Everyone","II ICON Communications_fe5e67f5ba5","IconInt_7212181d39b7","RPM Team_b3289e4544"], roleSpecific:["Ad Platforms MOD","Digital Media Operations","Digital Media PMs RO","RPM Team_b3289e4544"] },
-  { title:"Affiliate Marketing Lead", dept:"Ad Platforms", adGroups:["Ad Platforms MOD","Affiliate Team_d5585afc475","David's Bridal_5455dc1497d","Domain Users","Everyone","II ICON Communications_fe5e67f5ba5","IconInt_7212181d39b7"], roleSpecific:["Ad Platforms MOD","Affiliate Team_d5585afc475","David's Bridal_5455dc1497d"] },
-  { title:"Account Service Specialist", dept:"Performance Media", adGroups:["Direct Response Folder MOD","Domain Users","Everyone","II ICON Communications_fe5e67f5ba5","IconInt_7212181d39b7"], roleSpecific:["Direct Response Folder MOD"] }
+  { title:"Programmatic Supply Lead", dept:"Ad Platforms", adGroups:["Ad Platforms MOD","Digital Media Operations","Digital Media PMs RO","Domain Users","Everyone","II ICON Communications_fe5e67f5ba5","IconInt_7212181d39b7","RPM Team_b3289e4544"], roleSpecific:["Ad Platforms MOD","Digital Media Operations","Digital Media PMs RO","RPM Team_b3289e4544"], needsMediaOps:true },
+  { title:"Affiliate Marketing Lead", dept:"Ad Platforms", adGroups:["Ad Platforms MOD","Affiliate Team_d5585afc475","David's Bridal_5455dc1497d","Domain Users","Everyone","II ICON Communications_fe5e67f5ba5","IconInt_7212181d39b7"], roleSpecific:["Ad Platforms MOD","Affiliate Team_d5585afc475","David's Bridal_5455dc1497d"], needsMediaOps:true },
+  { title:"Account Service Specialist", dept:"Performance Media", adGroups:["Direct Response Folder MOD","Domain Users","Everyone","II ICON Communications_fe5e67f5ba5","IconInt_7212181d39b7"], roleSpecific:["Direct Response Folder MOD"], needsMediaOps:true }
 ];
 
 const AZURE_BASE = ["8x8 Phone Licenses","ConditionalAccessTest","Conditional Access: Risky sign-in MFA","Netskope Pilot Policy Assignment","Netskope Private Access - All Users","Icon Intl-Everyone","Icon Intl-Stamford/Florida Office"];
@@ -617,16 +662,26 @@ function buildChecklist() {
   const email = document.getElementById('email').value || 'user@iconinternational.com';
   const displayName = document.getElementById('displayName').value || `${fn} ${ln} (ICON)`;
   const startDate = document.getElementById('startDate').value || 'TBD';
+  const manager = document.getElementById('manager').value || '—';
   const azureGroups = [...AZURE_BASE, ...(r.extraAzure || [])];
   const IWOMEN_GROUP = 'iWomen CT Announcements_43952db37578';
   const baseADGroups = r.adGroups.filter(g => !r.roleSpecific.includes(g) && g !== IWOMEN_GROUP);
 
+  // Copyable field rows for the dropbox-style detail panel
+  // Each section gets a preflight card with labeled copyable values
   provSections = [
     { id:'ad', label:'Active Directory', icon:'🖥️', color:'#2563eb', bg:'#eff6ff', desc:'Create account and assign AD security groups',
-      details: [
-        { label: 'What you need', items: ['Active Directory Users and Computers (ADUC) open', 'Manager name and OU placement confirmed'] },
-        { label: 'User details to enter', items: [`Full Name: ${fn} ${ln}`, `Display Name: ${displayName}`, `Email / UPN: ${email}`, `Start Date: ${startDate}`] },
-      ],
+      preflight: {
+        heading: 'Before you start — open Active Directory Users and Computers (ADUC)',
+        copyFields: [
+          { label:'Full Name',     value: `${fn} ${ln}` },
+          { label:'Display Name',  value: displayName },
+          { label:'Email / UPN',   value: email },
+          { label:'Start Date',    value: startDate },
+          { label:'Manager',       value: manager },
+        ],
+        notes: ['Place user in the correct OU for their department', 'Password should be set to temporary and force-change at next login']
+      },
       tasks:[
         { id:'ad_account', label:'Create Active Directory account', sub:`Name: ${fn} ${ln}  ·  UPN: ${email}  ·  Display: ${displayName}` },
         { id:'ad_base', label:'Add to base AD groups', sub: baseADGroups.join(' · ') },
@@ -635,10 +690,14 @@ function buildChecklist() {
       ]
     },
     { id:'azure', label:'Azure / M365', icon:'☁️', color:'#16a34a', bg:'#f0fdf4', desc:'Microsoft 365 Admin Center — admin.microsoft.com',
-      details: [
-        { label: 'Where to go', items: ['admin.microsoft.com → Users → Active users', 'Search for the user by email once AD sync completes (allow ~15–30 min)'] },
-        { label: 'Have ready', items: [`User email: ${email}`, 'Groups list from Access Preview', 'MFA enforcement policy confirmed with manager'] },
-      ],
+      preflight: {
+        heading: 'Before you start — go to admin.microsoft.com → Users → Active users',
+        copyFields: [
+          { label:'Email',        value: email },
+          { label:'Display Name', value: displayName },
+        ],
+        notes: ['Wait ~15–30 min after AD account creation for sync to complete', 'Search by email to find the user', 'Groups are added one at a time under the Groups tab']
+      },
       tasks:[
         { id:'mfa_enable', label:'Enable Multi-Factor Authentication', sub:'M365 Admin → Users → Active users → MFA → Enable' },
         { id:'mfa_enforce', label:'Enforce MFA', sub:'Set MFA state to Enforced after enabling' },
@@ -647,10 +706,17 @@ function buildChecklist() {
       ]
     },
     { id:'8x8', label:'8x8 Setup', icon:'📞', color:'#d97706', bg:'#fffbeb', desc:'Services & Permissions, then General settings',
-      details: [
-        { label: 'Where to go', items: ['8x8 Admin Console → Users → Find or create user', 'If new: create user first with email matching AD'] },
-        { label: 'Settings to apply', items: ['Profile Policy: 8×8 Master User Template', 'Service: X Series - X2-VOSVC0216-02-US', 'MS Teams Integration: ON', 'Site: Headquarters (Icon International)', 'Language: English - United States', 'Timezone: US/Eastern', 'Directory Scope: Company + Display toggle ON'] },
-      ],
+      preflight: {
+        heading: 'Before you start — open 8x8 Admin Console → Users',
+        copyFields: [
+          { label:'Email',          value: email },
+          { label:'Profile Policy', value: '8×8 Master User Template' },
+          { label:'Service',        value: 'X Series - X2-VOSVC0216-02-US' },
+          { label:'Site',           value: 'Headquarters (Icon International)' },
+          { label:'Time Zone',      value: 'US/Eastern' },
+        ],
+        notes: ['Create the user first if they don\'t exist yet — use the email as the username', 'MS Teams Integration toggle must be enabled per user, not just per policy', 'All roles must be added to the 8x8 User Group — do not skip']
+      },
       tasks:[
         { id:'8x8_policy', label:'Services & Permissions → Assign profile policy', sub:'Set to: 8×8 Master User Template' },
         { id:'8x8_license', label:'Services & Permissions → Assign service to user', sub:'Select: X Series - X2-VOSVC0216-02-US' },
@@ -658,23 +724,38 @@ function buildChecklist() {
         { id:'8x8_site', label:'General → Confirm Site = Headquarters (Icon International)', sub:'Note: site changes require bulk user edit' },
         { id:'8x8_lang', label:'General → Set Language & Time Zone', sub:'Language: English - United States  ·  Time Zone: US/Eastern' },
         { id:'8x8_dir', label:'General → Contact Directory Scope = Company', sub:'Enable "Display contact in company directory" toggle ON' },
+        { id:'8x8_usergroup', label:'Add user to 8x8 User Group', sub:'8x8 Admin Console → Groups → User Groups → Add member' },
       ]
     },
-    { id:'mediaops', label:'Media Ops Ticket', icon:'🎫', color:'#db2777', bg:'#fdf2f8', desc:'Submit new account ticket to the Media Ops team',
-      details: [
-        { label: 'What this is', items: ['A ticket must be submitted to Media Ops to create platform access and any additional system accounts for this user.'] },
-        { label: 'Include in the ticket', items: [`Name: ${fn} ${ln}`, `Display Name: ${displayName}`, `Email: ${email}`, `Role: ${r.title}`, `Department: ${r.dept}`, `Start Date: ${startDate}`, 'Request: New account setup for all applicable media platforms'] },
-      ],
+    ...(r.needsMediaOps ? [{
+      id:'mediaops', label:'Media Ops Ticket', icon:'🎫', color:'#db2777', bg:'#fdf2f8', desc:'Submit new account ticket to the Media Ops team',
+      preflight: {
+        heading: 'Before you start — this ticket gives the user access to media platforms',
+        copyFields: [
+          { label:'Name',         value: `${fn} ${ln}` },
+          { label:'Display Name', value: displayName },
+          { label:'Email',        value: email },
+          { label:'Role',         value: r.title },
+          { label:'Department',   value: r.dept },
+          { label:'Start Date',   value: startDate },
+          { label:'Request',      value: 'New account setup for all applicable media platforms' },
+        ],
+        notes: ['Copy the fields above directly into the ticket body', 'Attach the manager\'s access request form if available']
+      },
       tasks:[
-        { id:'mediaops_ticket', label:'Submit Media Ops ticket for new account creation', sub:`Include: ${fn} ${ln} · ${email} · ${r.title} · Start: ${startDate}` },
-        { id:'mediaops_confirm', label:'Confirm ticket received and assigned', sub:'Get ticket number and note it for your records' },
+        { id:'mediaops_ticket', label:'Submit Media Ops ticket for new account creation', sub:`${fn} ${ln}  ·  ${email}  ·  ${r.title}  ·  Start: ${startDate}` },
+        { id:'mediaops_confirm', label:'Confirm ticket received and assigned', sub:'Note the ticket number for your records' },
       ]
-    },
+    }] : []),
     { id:'final', label:'Intranet & Scripts', icon:'⚙️', color:'#7c3aed', bg:'#f5f3ff', desc:'Browser config and post-setup PowerShell',
-      details: [
-        { label: 'Run on the user\'s machine', items: ['Must be done while logged in as IT admin or with elevated permissions', 'Have the user\'s machine ready and connected to the domain'] },
-        { label: 'Commands to run', items: ['powershell.exe -ExecutionPolicy Bypass -File .\\PullIIUserInfo.ps1', 'IE/Edge: Internet Options → Security → Local Intranet → Sites → Advanced → Add https://intranet.iconinternational.com'] },
-      ],
+      preflight: {
+        heading: 'Before you start — must be done on the user\'s machine while you\'re logged in as IT admin',
+        copyFields: [
+          { label:'PS Command',   value: 'powershell.exe -ExecutionPolicy Bypass -File .\\PullIIUserInfo.ps1' },
+          { label:'Intranet URL', value: 'https://intranet.iconinternational.com' },
+        ],
+        notes: ['Machine must be joined to the domain and connected to the network', 'Run PowerShell as Administrator', 'Add intranet URL under IE/Edge: Internet Options → Security → Local Intranet → Sites → Advanced']
+      },
       tasks:[
         { id:'intranet', label:'Internet Options → Local Intranet → Sites → Advanced', sub:'Add https://intranet.iconinternational.com  ·  Require server verification (HTTPS)' },
         { id:'script', label:'Run PullIIUserInfo.ps1', sub:'powershell.exe -ExecutionPolicy Bypass -File .\\PullIIUserInfo.ps1' },
@@ -706,17 +787,28 @@ function renderActiveSection() {
   const total = sec.tasks.length, done = sec.tasks.filter(t => checkStates[t.id]).length;
   const pct = total ? Math.round((done/total)*100) : 0, isComplete = done === total;
 
-  // Build details panel
-  const detailsHTML = (sec.details && sec.details.length) ? `
-    <div class="section-details">
-      ${sec.details.map(d => `
-        <div class="detail-group">
-          <div class="detail-group-label">${d.label}</div>
-          <ul class="detail-list">
-            ${d.items.map(item => `<li>${item}</li>`).join('')}
-          </ul>
-        </div>
-      `).join('')}
+  // Dropbox-style preflight card
+  const pf = sec.preflight;
+  const preflightHTML = pf ? `
+    <div class="preflight-card" style="border-left: 3px solid ${sec.color};">
+      <div class="preflight-heading">
+        <span class="preflight-icon">📋</span>
+        <span>${pf.heading}</span>
+      </div>
+      ${pf.copyFields && pf.copyFields.length ? `
+        <div class="preflight-fields">
+          ${pf.copyFields.map((f, i) => `
+            <div class="preflight-field" id="pff_${sec.id}_${i}">
+              <span class="preflight-field-label">${f.label}</span>
+              <span class="preflight-field-value">${f.value}</span>
+              <button class="preflight-copy-btn" onclick="copyField('${sec.id}_${i}', '${f.value.replace(/'/g,"\\'")}', this)" title="Copy">⎘</button>
+            </div>
+          `).join('')}
+        </div>` : ''}
+      ${pf.notes && pf.notes.length ? `
+        <div class="preflight-notes">
+          ${pf.notes.map(n => `<div class="preflight-note">💡 ${n}</div>`).join('')}
+        </div>` : ''}
     </div>` : '';
 
   const itemsHTML = sec.tasks.map(t => `
@@ -742,8 +834,8 @@ function renderActiveSection() {
           <div class="section-mini-bar"><div class="section-mini-fill" style="width:${pct}%;background:${sec.color};"></div></div>
         </div>
       </div>
-      ${detailsHTML}
-      <div class="checklist-label">Checklist</div>
+      ${preflightHTML}
+      <div class="checklist-label">Tasks</div>
       <div class="checklist">${itemsHTML}</div>
       ${banner}
     </div>`;
@@ -755,6 +847,15 @@ function renderActiveSection() {
   const fin = document.getElementById('btn-finish');
   fin.style.display = isLast ? 'inline-flex' : 'none';
   fin.disabled = !allDone;
+}
+
+function copyField(id, value, btn) {
+  navigator.clipboard.writeText(value).then(() => {
+    const orig = btn.textContent;
+    btn.textContent = '✓';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = orig; btn.classList.remove('copied'); }, 1800);
+  });
 }
 
 function toggleCheck(id) {
