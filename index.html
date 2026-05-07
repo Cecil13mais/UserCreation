@@ -211,17 +211,50 @@
   .role-card .check { position: absolute; top: 10px; right: 10px; width: 20px; height: 20px; border-radius: 50%; background: var(--blue); display: none; align-items: center; justify-content: center; font-size: 10px; color: white; }
   .role-card.selected .check { display: flex; }
 
-  /* Access panel */
+  /* Access preview — clean list view */
   .access-panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-sm); overflow: hidden; }
-  .panel-section { padding: 14px 18px; border-bottom: 1px solid var(--border); }
-  .panel-section:last-child { border-bottom: none; }
-  .panel-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text-dim); margin-bottom: 9px; display: flex; align-items: center; gap: 6px; }
-  .panel-title::before { content: ''; width: 5px; height: 5px; background: currentColor; border-radius: 50%; }
-  .tag-list { display: flex; flex-wrap: wrap; gap: 5px; }
-  .tag { font-family: var(--mono); font-size: 11px; padding: 3px 9px; border-radius: 6px; border: 1px solid; }
-  .tag.ad { border-color: var(--blue-mid); color: var(--blue); background: var(--blue-light); }
-  .tag.azure { border-color: var(--green-mid); color: var(--green); background: var(--green-light); }
-  .tag.role-specific { border-color: #fcd34d; color: var(--orange); background: var(--orange-light); }
+
+  .access-list-section { border-bottom: 1px solid var(--border); }
+  .access-list-section:last-child { border-bottom: none; }
+
+  .access-list-header {
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+    padding: 10px 18px 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .access-list-header--ad     { color: var(--blue);   background: var(--blue-light); }
+  .access-list-header--role   { color: var(--orange);  background: var(--orange-light); }
+  .access-list-header--iwomen { color: var(--purple);  background: var(--purple-light); }
+  .access-list-header--azure  { color: var(--green);   background: var(--green-light); }
+
+  .access-list-body { padding: 6px 0; }
+
+  .access-list-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 18px;
+    font-size: 13px;
+    font-weight: 500;
+    transition: background 0.1s;
+  }
+  .access-list-item:hover { background: var(--surface2); }
+
+  .access-list-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .access-list-item--ad     .access-list-dot { background: var(--blue); }
+  .access-list-item--role   .access-list-dot { background: var(--orange); }
+  .access-list-item--iwomen .access-list-dot { background: var(--purple); }
+  .access-list-item--azure  .access-list-dot { background: var(--green); }
+  .access-list-item--skip   .access-list-dot { background: var(--text-dim); }
+
+  .access-list-name { color: var(--text); line-height: 1.4; }
 
   /* Progress */
   .progress-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 22px; margin-bottom: 16px; box-shadow: var(--shadow-sm); }
@@ -268,6 +301,28 @@
   .check-item.done .item-title { text-decoration: line-through; color: var(--text-dim); }
   .sub { font-size: 11px; color: var(--text-mid); margin-top: 3px; line-height: 1.5; font-family: var(--mono); }
   .check-item.done .sub { color: var(--text-dim); }
+
+  .task-list {
+    list-style: none;
+    margin-top: 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .task-list li {
+    font-size: 12px;
+    color: var(--text-mid);
+    padding-left: 14px;
+    position: relative;
+    line-height: 1.5;
+  }
+  .task-list li::before {
+    content: '–';
+    position: absolute;
+    left: 0;
+    color: var(--text-dim);
+  }
+  .check-item.done .task-list li { color: var(--text-dim); }
   .section-complete-banner { display: flex; align-items: center; gap: 10px; padding: 13px 20px; background: var(--green-light); border-top: 1px solid var(--green-mid); font-size: 13px; font-weight: 600; color: var(--green); }
 
   /* Dropbox-style preflight card */
@@ -642,14 +697,34 @@ function showAccessPreview() {
   const IWOMEN_GROUP = 'iWomen CT Announcements_43952db37578';
   const baseGroups = r.adGroups.filter(g => !r.roleSpecific.includes(g) && g !== IWOMEN_GROUP);
   const azureGroups = [...AZURE_BASE, ...(r.extraAzure || [])];
-  const iwomenNote = iwomenMember
-    ? `<span class="tag role-specific" style="border-color:#d8b4fe;color:#7c3aed;background:#f5f3ff;">iWomen CT Announcements_43952db37578 ★</span>`
-    : `<span style="color:var(--text-dim);font-size:12px;">Not a member — skipped</span>`;
+
+  const listItem = (name, variant='ad') => `
+    <div class="access-list-item access-list-item--${variant}">
+      <span class="access-list-dot"></span>
+      <span class="access-list-name">${name}</span>
+    </div>`;
+
+  const iwomenItem = iwomenMember
+    ? listItem('iWomen CT Announcements_43952db37578', 'iwomen')
+    : `<div class="access-list-item access-list-item--skip"><span class="access-list-name" style="color:var(--text-dim);font-style:italic;">Not a member — skipped</span></div>`;
+
   let html = `
-    <div class="panel-section"><div class="panel-title">AD Base Groups</div><div class="tag-list">${baseGroups.map(g=>`<span class="tag ad">${g}</span>`).join('')}</div></div>
-    <div class="panel-section"><div class="panel-title">Role-Specific AD Groups</div><div class="tag-list">${r.roleSpecific.length ? r.roleSpecific.map(g=>`<span class="tag role-specific">${g}</span>`).join('') : '<span style="color:var(--text-dim);font-size:13px;">None</span>'}</div></div>
-    <div class="panel-section"><div class="panel-title">iWomen</div><div class="tag-list">${iwomenNote}</div></div>
-    <div class="panel-section"><div class="panel-title">Azure / M365 Groups</div><div class="tag-list">${azureGroups.map(g=>`<span class="tag azure">${g}</span>`).join('')}</div></div>
+    <div class="access-list-section">
+      <div class="access-list-header access-list-header--ad">🖥️ Active Directory — Base</div>
+      <div class="access-list-body">${baseGroups.map(g => listItem(g, 'ad')).join('')}</div>
+    </div>
+    <div class="access-list-section">
+      <div class="access-list-header access-list-header--role">🔒 Active Directory — Role-Specific</div>
+      <div class="access-list-body">${r.roleSpecific.length ? r.roleSpecific.map(g => listItem(g, 'role')).join('') : '<div class="access-list-item"><span class="access-list-name" style="color:var(--text-dim);font-style:italic;">None</span></div>'}</div>
+    </div>
+    <div class="access-list-section">
+      <div class="access-list-header access-list-header--iwomen">💜 iWomen</div>
+      <div class="access-list-body">${iwomenItem}</div>
+    </div>
+    <div class="access-list-section">
+      <div class="access-list-header access-list-header--azure">☁️ Azure / M365</div>
+      <div class="access-list-body">${azureGroups.map(g => listItem(g, 'azure')).join('')}</div>
+    </div>
   `;
   if (r.note) html = `<div class="alert alert-warn">⚠️ ${r.note}</div>` + html;
   document.getElementById('accessPanel').innerHTML = html;
@@ -684,9 +759,9 @@ function buildChecklist() {
       },
       tasks:[
         { id:'ad_account', label:'Create Active Directory account', sub:`Name: ${fn} ${ln}  ·  UPN: ${email}  ·  Display: ${displayName}` },
-        { id:'ad_base', label:'Add to base AD groups', sub: baseADGroups.join(' · ') },
-        ...(r.roleSpecific.length ? [{ id:'ad_role', label:'Add role-specific AD groups', sub: r.roleSpecific.join(' · ') }] : []),
-        ...(iwomenMember ? [{ id:'ad_iwomen', label:'Add to iWomen CT Announcements_43952db37578', sub:'User confirmed as iWomen member' }] : []),
+        { id:'ad_base', label:'Add to base AD groups', sub: null, list: baseADGroups },
+        ...(r.roleSpecific.length ? [{ id:'ad_role', label:'Add to role-specific AD groups', sub: null, list: r.roleSpecific }] : []),
+        ...(iwomenMember ? [{ id:'ad_iwomen', label:'Add to iWomen', sub: null, list: ['iWomen CT Announcements_43952db37578'] }] : []),
       ]
     },
     { id:'azure', label:'Azure / M365', icon:'☁️', color:'#16a34a', bg:'#f0fdf4', desc:'Microsoft 365 Admin Center — admin.microsoft.com',
@@ -699,10 +774,9 @@ function buildChecklist() {
         notes: ['Wait ~15–30 min after AD account creation for sync to complete', 'Search by email to find the user', 'Groups are added one at a time under the Groups tab']
       },
       tasks:[
-        { id:'mfa_enable', label:'Enable Multi-Factor Authentication', sub:'M365 Admin → Users → Active users → MFA → Enable' },
-        { id:'mfa_enforce', label:'Enforce MFA', sub:'Set MFA state to Enforced after enabling' },
-        ...azureGroups.map((g,i) => ({ id:`azure_${i}`, label:`Add to group: ${g}`, sub:'M365 Admin Center → Groups → Add members' })),
-        { id:'mail_imap_pop', label:'Mail tab → Disable IMAP and POP', sub:'M365 Admin → Users → [User] → Mail tab → Manage email apps → Uncheck IMAP and POP' },
+        { id:'mfa_enable', label:'Enable MFA', sub: null, list: ['Enable → then set state to Enforced', 'M365 Admin → Users → Active users → MFA'] },
+        { id:'azure_groups', label:'Add to Azure groups', sub: null, list: azureGroups },
+        { id:'mail_imap_pop', label:'Mail tab — disable legacy protocols', sub: null, list: ['Uncheck IMAP', 'Uncheck POP', 'M365 Admin → Users → [User] → Mail tab → Manage email apps'] },
       ]
     },
     { id:'8x8', label:'8x8 Setup', icon:'📞', color:'#d97706', bg:'#fffbeb', desc:'Services & Permissions, then General settings',
@@ -718,13 +792,9 @@ function buildChecklist() {
         notes: ['Create the user first if they don\'t exist yet — use the email as the username', 'MS Teams Integration toggle must be enabled per user, not just per policy', 'All roles must be added to the 8x8 User Group — do not skip']
       },
       tasks:[
-        { id:'8x8_policy', label:'Services & Permissions → Assign profile policy', sub:'Set to: 8×8 Master User Template' },
-        { id:'8x8_license', label:'Services & Permissions → Assign service to user', sub:'Select: X Series - X2-VOSVC0216-02-US' },
-        { id:'8x8_teams', label:'Services & Permissions → Enable MS Teams integration', sub:'Toggle ON — required per user' },
-        { id:'8x8_site', label:'General → Confirm Site = Headquarters (Icon International)', sub:'Note: site changes require bulk user edit' },
-        { id:'8x8_lang', label:'General → Set Language & Time Zone', sub:'Language: English - United States  ·  Time Zone: US/Eastern' },
-        { id:'8x8_dir', label:'General → Contact Directory Scope = Company', sub:'Enable "Display contact in company directory" toggle ON' },
-        { id:'8x8_usergroup', label:'Add user to 8x8 User Group', sub:'8x8 Admin Console → Groups → User Groups → Add member' },
+        { id:'8x8_services', label:'Services & Permissions', sub: null, list: ['Assign profile policy: 8×8 Master User Template', 'Assign service: X Series - X2-VOSVC0216-02-US', 'Enable MS Teams integration: ON'] },
+        { id:'8x8_general', label:'General settings', sub: null, list: ['Confirm Site = Headquarters (Icon International)', 'Language: English - United States', 'Time Zone: US/Eastern', 'Contact Directory Scope: Company', 'Display contact in company directory: ON'] },
+        { id:'8x8_usergroup', label:'Add to 8x8 User Group', sub: null, list: ['8x8 Admin Console → Groups → User Groups → Add member'] },
       ]
     },
     ...(r.needsMediaOps ? [{
@@ -743,8 +813,8 @@ function buildChecklist() {
         notes: ['Copy the fields above directly into the ticket body', 'Attach the manager\'s access request form if available']
       },
       tasks:[
-        { id:'mediaops_ticket', label:'Submit Media Ops ticket for new account creation', sub:`${fn} ${ln}  ·  ${email}  ·  ${r.title}  ·  Start: ${startDate}` },
-        { id:'mediaops_confirm', label:'Confirm ticket received and assigned', sub:'Note the ticket number for your records' },
+        { id:'mediaops_ticket', label:'Submit Media Ops ticket', sub: null, list: [`Name: ${fn} ${ln}`, `Email: ${email}`, `Role: ${r.title}`, `Start Date: ${startDate}`, 'Request: New account setup for all applicable media platforms'] },
+        { id:'mediaops_confirm', label:'Confirm ticket received and assigned', sub: null, list: ['Get ticket number and note it for your records'] },
       ]
     }] : []),
     { id:'final', label:'Intranet & Scripts', icon:'⚙️', color:'#7c3aed', bg:'#f5f3ff', desc:'Browser config and post-setup PowerShell',
@@ -757,9 +827,9 @@ function buildChecklist() {
         notes: ['Machine must be joined to the domain and connected to the network', 'Run PowerShell as Administrator', 'Add intranet URL under IE/Edge: Internet Options → Security → Local Intranet → Sites → Advanced']
       },
       tasks:[
-        { id:'intranet', label:'Internet Options → Local Intranet → Sites → Advanced', sub:'Add https://intranet.iconinternational.com  ·  Require server verification (HTTPS)' },
-        { id:'script', label:'Run PullIIUserInfo.ps1', sub:'powershell.exe -ExecutionPolicy Bypass -File .\\PullIIUserInfo.ps1' },
-        { id:'verify', label:'Verify login, folder access, and SSO', sub:'Test intranet, shared drives, and application sign-in' },
+        { id:'intranet', label:'Configure Local Intranet', sub: null, list: ['Internet Options → Security → Local Intranet → Sites → Advanced', 'Add: https://intranet.iconinternational.com', 'Check: Require server verification (HTTPS)'] },
+        { id:'script', label:'Run post-setup script', sub: null, list: ['powershell.exe -ExecutionPolicy Bypass -File .\\PullIIUserInfo.ps1'] },
+        { id:'verify', label:'Verify access', sub: null, list: ['Test login and SSO', 'Check intranet loads correctly', 'Verify shared drive access'] },
       ]
     },
   ];
@@ -811,14 +881,22 @@ function renderActiveSection() {
         </div>` : ''}
     </div>` : '';
 
-  const itemsHTML = sec.tasks.map(t => `
+  const itemsHTML = sec.tasks.map(t => {
+    const listHTML = (t.list && t.list.length) ? `
+      <ul class="task-list">
+        ${t.list.map(item => `<li>${item}</li>`).join('')}
+      </ul>` : '';
+    const subHTML = t.sub ? `<div class="sub">${t.sub}</div>` : '';
+    return `
     <div class="check-item ${checkStates[t.id]?'done':''}" id="ci_${t.id}" onclick="toggleCheck('${t.id}')">
       <div class="cb" id="cb_${t.id}">${checkStates[t.id]?'✓':''}</div>
       <div class="label-text">
         <div class="item-title">${t.label}</div>
-        <div class="sub">${t.sub}</div>
+        ${subHTML}
+        ${listHTML}
       </div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
 
   const banner = isComplete ? `<div class="section-complete-banner">🎉 All ${sec.label} tasks done — nice work!</div>` : '';
 
