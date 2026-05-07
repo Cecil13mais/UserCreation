@@ -270,6 +270,50 @@
   .check-item.done .sub { color: var(--text-dim); }
   .section-complete-banner { display: flex; align-items: center; gap: 10px; padding: 13px 20px; background: var(--green-light); border-top: 1px solid var(--green-mid); font-size: 13px; font-weight: 600; color: var(--green); }
 
+  /* Section details briefing */
+  .section-details {
+    display: flex;
+    gap: 0;
+    flex-wrap: wrap;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface2);
+  }
+  .detail-group {
+    flex: 1;
+    min-width: 220px;
+    padding: 14px 20px;
+    border-right: 1px solid var(--border);
+  }
+  .detail-group:last-child { border-right: none; }
+  .detail-group-label {
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--text-dim);
+    margin-bottom: 8px;
+  }
+  .detail-list { list-style: none; display: flex; flex-direction: column; gap: 4px; }
+  .detail-list li {
+    font-size: 12px;
+    color: var(--text-mid);
+    padding-left: 14px;
+    position: relative;
+    line-height: 1.5;
+    font-family: var(--mono);
+  }
+  .detail-list li::before { content: '→'; position: absolute; left: 0; color: var(--text-dim); font-size: 10px; top: 2px; }
+
+  .checklist-label {
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--text-dim);
+    padding: 12px 20px 4px;
+    background: var(--surface);
+  }
+
   /* Summary */
   .summary-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow-sm); margin-bottom: 20px; }
   .summary-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 20px; border-bottom: 1px solid var(--border); font-size: 14px; gap: 16px; }
@@ -305,6 +349,21 @@
   .completion p { color: var(--text-mid); font-size: 15px; }
 
   .divider { height: 1px; background: var(--border); margin: 22px 0; }
+
+  /* User context bar */
+  .user-context-bar {
+    display: none;
+    background: var(--blue-light);
+    border-top: 1px solid var(--blue-mid);
+    padding: 8px 20px;
+  }
+  .user-context-bar.visible { display: block; }
+  .user-context-inner { max-width: 820px; margin: 0 auto; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .user-ctx-avatar { width: 28px; height: 28px; border-radius: 50%; background: var(--blue); color: white; font-size: 11px; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .user-ctx-name { font-size: 13px; font-weight: 700; color: var(--blue); }
+  .user-ctx-sep { color: var(--blue-mid); font-size: 12px; }
+  .user-ctx-email { font-family: var(--mono); font-size: 11px; color: #3b82f6; opacity: 0.9; }
+  .user-ctx-display { font-size: 12px; color: #3b82f6; opacity: 0.75; font-style: italic; }
 
   @media (max-width: 540px) {
     .field-grid { grid-template-columns: 1fr; }
@@ -346,6 +405,17 @@
   </div>
 </div>
 
+<div class="user-context-bar" id="userContextBar">
+  <div class="user-context-inner">
+    <div class="user-ctx-avatar" id="userCtxAvatar">?</div>
+    <span class="user-ctx-name" id="userCtxName">—</span>
+    <span class="user-ctx-sep">·</span>
+    <span class="user-ctx-email" id="userCtxEmail">—</span>
+    <span class="user-ctx-sep">·</span>
+    <span class="user-ctx-display" id="userCtxDisplay">—</span>
+  </div>
+</div>
+
 <div class="container">
   <div class="page">
 
@@ -369,6 +439,10 @@
             <div class="field full">
               <label>Email Address <span class="label-hint">auto-generated</span></label>
               <input type="email" id="email" placeholder="first.last@iconinternational.com" readonly />
+            </div>
+            <div class="field full">
+              <label>Display Name <span class="label-hint">auto-generated</span></label>
+              <input type="text" id="displayName" placeholder="First Last (ICON)" readonly />
             </div>
             <div class="field">
               <label>Start Date</label>
@@ -538,37 +612,75 @@ function showAccessPreview() {
 
 function buildChecklist() {
   const r = selectedRole;
+  const fn = document.getElementById('firstName').value;
+  const ln = document.getElementById('lastName').value;
   const email = document.getElementById('email').value || 'user@iconinternational.com';
+  const displayName = document.getElementById('displayName').value || `${fn} ${ln} (ICON)`;
+  const startDate = document.getElementById('startDate').value || 'TBD';
   const azureGroups = [...AZURE_BASE, ...(r.extraAzure || [])];
   const IWOMEN_GROUP = 'iWomen CT Announcements_43952db37578';
   const baseADGroups = r.adGroups.filter(g => !r.roleSpecific.includes(g) && g !== IWOMEN_GROUP);
 
   provSections = [
-    { id:'ad', label:'Active Directory', icon:'🖥️', color:'#2563eb', bg:'#eff6ff', desc:'Create account and assign AD security groups', tasks:[
-      { id:'ad_account', label:'Create Active Directory account', sub:'Set Name, email, UPN, and place in correct OU' },
-      { id:'ad_base', label:'Add to base AD groups', sub: baseADGroups.join(' · ') },
-      ...(r.roleSpecific.length ? [{ id:'ad_role', label:'Add role-specific AD groups', sub: r.roleSpecific.join(' · ') }] : []),
-      ...(iwomenMember ? [{ id:'ad_iwomen', label:'Add to iWomen CT Announcements_43952db37578', sub:'User confirmed as iWomen member' }] : []),
-    ]},
-    { id:'azure', label:'Azure / M365', icon:'☁️', color:'#16a34a', bg:'#f0fdf4', desc:'Microsoft 365 Admin Center — admin.microsoft.com', tasks:[
-      { id:'mfa_enable', label:'Enable Multi-Factor Authentication', sub:'M365 Admin → Users → Active users → MFA → Enable' },
-      { id:'mfa_enforce', label:'Enforce MFA', sub:'Set MFA state to Enforced after enabling' },
-      ...azureGroups.map((g,i) => ({ id:`azure_${i}`, label:`Add to group: ${g}`, sub:'M365 Admin Center → Groups → Add members' })),
-      { id:'mail_imap_pop', label:'Mail tab → Disable IMAP and POP', sub:'M365 Admin → Users → Active users → [User] → Mail tab → Manage email apps → Uncheck IMAP and POP' },
-    ]},
-    { id:'8x8', label:'8x8 Setup', icon:'📞', color:'#d97706', bg:'#fffbeb', desc:'Services & Permissions, then General settings', tasks:[
-      { id:'8x8_policy', label:'Services & Permissions → Assign profile policy', sub:'Set to: 8×8 Master User Template' },
-      { id:'8x8_license', label:'Services & Permissions → Assign service to user', sub:'Select: X Series - X2-VOSVC0216-02-US' },
-      { id:'8x8_teams', label:'Services & Permissions → Enable MS Teams integration', sub:'Toggle ON — required per user' },
-      { id:'8x8_site', label:'General → Confirm Site = Headquarters (Icon International)', sub:'Note: site changes require bulk user edit' },
-      { id:'8x8_lang', label:'General → Set Language & Time Zone', sub:'Language: English - United States  ·  Time Zone: US/Eastern' },
-      { id:'8x8_dir', label:'General → Contact Directory Scope = Company', sub:'Enable "Display contact in company directory" toggle ON' },
-    ]},
-    { id:'final', label:'Intranet & Scripts', icon:'⚙️', color:'#7c3aed', bg:'#f5f3ff', desc:'Browser config and post-setup PowerShell', tasks:[
-      { id:'intranet', label:'Internet Options → Local Intranet → Sites → Advanced', sub:'Add https://intranet.iconinternational.com  ·  Require server verification (HTTPS)' },
-      { id:'script', label:'Run PullIIUserInfo.ps1', sub:'powershell.exe -ExecutionPolicy Bypass -File .\\PullIIUserInfo.ps1' },
-      { id:'verify', label:'Verify login, folder access, and SSO', sub:'Test intranet, shared drives, and application sign-in' },
-    ]},
+    { id:'ad', label:'Active Directory', icon:'🖥️', color:'#2563eb', bg:'#eff6ff', desc:'Create account and assign AD security groups',
+      details: [
+        { label: 'What you need', items: ['Active Directory Users and Computers (ADUC) open', 'Manager name and OU placement confirmed'] },
+        { label: 'User details to enter', items: [`Full Name: ${fn} ${ln}`, `Display Name: ${displayName}`, `Email / UPN: ${email}`, `Start Date: ${startDate}`] },
+      ],
+      tasks:[
+        { id:'ad_account', label:'Create Active Directory account', sub:`Name: ${fn} ${ln}  ·  UPN: ${email}  ·  Display: ${displayName}` },
+        { id:'ad_base', label:'Add to base AD groups', sub: baseADGroups.join(' · ') },
+        ...(r.roleSpecific.length ? [{ id:'ad_role', label:'Add role-specific AD groups', sub: r.roleSpecific.join(' · ') }] : []),
+        ...(iwomenMember ? [{ id:'ad_iwomen', label:'Add to iWomen CT Announcements_43952db37578', sub:'User confirmed as iWomen member' }] : []),
+      ]
+    },
+    { id:'azure', label:'Azure / M365', icon:'☁️', color:'#16a34a', bg:'#f0fdf4', desc:'Microsoft 365 Admin Center — admin.microsoft.com',
+      details: [
+        { label: 'Where to go', items: ['admin.microsoft.com → Users → Active users', 'Search for the user by email once AD sync completes (allow ~15–30 min)'] },
+        { label: 'Have ready', items: [`User email: ${email}`, 'Groups list from Access Preview', 'MFA enforcement policy confirmed with manager'] },
+      ],
+      tasks:[
+        { id:'mfa_enable', label:'Enable Multi-Factor Authentication', sub:'M365 Admin → Users → Active users → MFA → Enable' },
+        { id:'mfa_enforce', label:'Enforce MFA', sub:'Set MFA state to Enforced after enabling' },
+        ...azureGroups.map((g,i) => ({ id:`azure_${i}`, label:`Add to group: ${g}`, sub:'M365 Admin Center → Groups → Add members' })),
+        { id:'mail_imap_pop', label:'Mail tab → Disable IMAP and POP', sub:'M365 Admin → Users → [User] → Mail tab → Manage email apps → Uncheck IMAP and POP' },
+      ]
+    },
+    { id:'8x8', label:'8x8 Setup', icon:'📞', color:'#d97706', bg:'#fffbeb', desc:'Services & Permissions, then General settings',
+      details: [
+        { label: 'Where to go', items: ['8x8 Admin Console → Users → Find or create user', 'If new: create user first with email matching AD'] },
+        { label: 'Settings to apply', items: ['Profile Policy: 8×8 Master User Template', 'Service: X Series - X2-VOSVC0216-02-US', 'MS Teams Integration: ON', 'Site: Headquarters (Icon International)', 'Language: English - United States', 'Timezone: US/Eastern', 'Directory Scope: Company + Display toggle ON'] },
+      ],
+      tasks:[
+        { id:'8x8_policy', label:'Services & Permissions → Assign profile policy', sub:'Set to: 8×8 Master User Template' },
+        { id:'8x8_license', label:'Services & Permissions → Assign service to user', sub:'Select: X Series - X2-VOSVC0216-02-US' },
+        { id:'8x8_teams', label:'Services & Permissions → Enable MS Teams integration', sub:'Toggle ON — required per user' },
+        { id:'8x8_site', label:'General → Confirm Site = Headquarters (Icon International)', sub:'Note: site changes require bulk user edit' },
+        { id:'8x8_lang', label:'General → Set Language & Time Zone', sub:'Language: English - United States  ·  Time Zone: US/Eastern' },
+        { id:'8x8_dir', label:'General → Contact Directory Scope = Company', sub:'Enable "Display contact in company directory" toggle ON' },
+      ]
+    },
+    { id:'mediaops', label:'Media Ops Ticket', icon:'🎫', color:'#db2777', bg:'#fdf2f8', desc:'Submit new account ticket to the Media Ops team',
+      details: [
+        { label: 'What this is', items: ['A ticket must be submitted to Media Ops to create platform access and any additional system accounts for this user.'] },
+        { label: 'Include in the ticket', items: [`Name: ${fn} ${ln}`, `Display Name: ${displayName}`, `Email: ${email}`, `Role: ${r.title}`, `Department: ${r.dept}`, `Start Date: ${startDate}`, 'Request: New account setup for all applicable media platforms'] },
+      ],
+      tasks:[
+        { id:'mediaops_ticket', label:'Submit Media Ops ticket for new account creation', sub:`Include: ${fn} ${ln} · ${email} · ${r.title} · Start: ${startDate}` },
+        { id:'mediaops_confirm', label:'Confirm ticket received and assigned', sub:'Get ticket number and note it for your records' },
+      ]
+    },
+    { id:'final', label:'Intranet & Scripts', icon:'⚙️', color:'#7c3aed', bg:'#f5f3ff', desc:'Browser config and post-setup PowerShell',
+      details: [
+        { label: 'Run on the user\'s machine', items: ['Must be done while logged in as IT admin or with elevated permissions', 'Have the user\'s machine ready and connected to the domain'] },
+        { label: 'Commands to run', items: ['powershell.exe -ExecutionPolicy Bypass -File .\\PullIIUserInfo.ps1', 'IE/Edge: Internet Options → Security → Local Intranet → Sites → Advanced → Add https://intranet.iconinternational.com'] },
+      ],
+      tasks:[
+        { id:'intranet', label:'Internet Options → Local Intranet → Sites → Advanced', sub:'Add https://intranet.iconinternational.com  ·  Require server verification (HTTPS)' },
+        { id:'script', label:'Run PullIIUserInfo.ps1', sub:'powershell.exe -ExecutionPolicy Bypass -File .\\PullIIUserInfo.ps1' },
+        { id:'verify', label:'Verify login, folder access, and SSO', sub:'Test intranet, shared drives, and application sign-in' },
+      ]
+    },
   ];
 
   checkStates = {};
@@ -594,6 +706,19 @@ function renderActiveSection() {
   const total = sec.tasks.length, done = sec.tasks.filter(t => checkStates[t.id]).length;
   const pct = total ? Math.round((done/total)*100) : 0, isComplete = done === total;
 
+  // Build details panel
+  const detailsHTML = (sec.details && sec.details.length) ? `
+    <div class="section-details">
+      ${sec.details.map(d => `
+        <div class="detail-group">
+          <div class="detail-group-label">${d.label}</div>
+          <ul class="detail-list">
+            ${d.items.map(item => `<li>${item}</li>`).join('')}
+          </ul>
+        </div>
+      `).join('')}
+    </div>` : '';
+
   const itemsHTML = sec.tasks.map(t => `
     <div class="check-item ${checkStates[t.id]?'done':''}" id="ci_${t.id}" onclick="toggleCheck('${t.id}')">
       <div class="cb" id="cb_${t.id}">${checkStates[t.id]?'✓':''}</div>
@@ -617,6 +742,8 @@ function renderActiveSection() {
           <div class="section-mini-bar"><div class="section-mini-fill" style="width:${pct}%;background:${sec.color};"></div></div>
         </div>
       </div>
+      ${detailsHTML}
+      <div class="checklist-label">Checklist</div>
       <div class="checklist">${itemsHTML}</div>
       ${banner}
     </div>`;
@@ -654,6 +781,7 @@ function buildSummary() {
   const r = selectedRole, azureCount = AZURE_BASE.length + (r.extraAzure ? r.extraAzure.length : 0);
   document.getElementById('finalSummary').innerHTML = `
     <div class="summary-row"><span class="summary-key">Full Name</span><span class="summary-val">${fn} ${ln}</span></div>
+    <div class="summary-row"><span class="summary-key">Display Name</span><span class="summary-val">${fn} ${ln} (ICON)</span></div>
     <div class="summary-row"><span class="summary-key">Email</span><span class="summary-val">${email}</span></div>
     <div class="summary-row"><span class="summary-key">Start Date</span><span class="summary-val">${start||'—'}</span></div>
     <div class="summary-row"><span class="summary-key">Manager</span><span class="summary-val">${manager||'—'}</span></div>
@@ -706,10 +834,11 @@ function validate1() {
 
 function resetAll() {
   selectedRole = null; checkStates = {}; iwomenMember = false;
-  ['firstName','lastName','email','startDate','manager'].forEach(id => document.getElementById(id).value = '');
+  ['firstName','lastName','email','displayName','startDate','manager'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('office').value = '';
   document.getElementById('accessPreview').style.display = 'none';
   document.getElementById('btn-step2').disabled = true;
+  document.getElementById('userContextBar').classList.remove('visible');
   document.querySelectorAll('.role-card').forEach(c => c.classList.remove('selected'));
   const row = document.querySelector('.toggle-row');
   if (row) row.classList.remove('on');
@@ -724,9 +853,30 @@ function toggleIwomen() {
 }
 
 function autoEmail() {
-  const fn = document.getElementById('firstName').value.trim().toLowerCase().replace(/\s+/g,'');
-  const ln = document.getElementById('lastName').value.trim().toLowerCase().replace(/\s+/g,'');
+  const fnRaw = document.getElementById('firstName').value.trim();
+  const lnRaw = document.getElementById('lastName').value.trim();
+  const fn = fnRaw.toLowerCase().replace(/\s+/g,'');
+  const ln = lnRaw.toLowerCase().replace(/\s+/g,'');
+
+  // Email
   document.getElementById('email').value = fn && ln ? `${fn}.${ln}@iconinternational.com` : fn ? `${fn}@iconinternational.com` : '';
+
+  // Display name
+  const displayName = fnRaw && lnRaw ? `${fnRaw} ${lnRaw} (ICON)` : fnRaw ? `${fnRaw} (ICON)` : '';
+  document.getElementById('displayName').value = displayName;
+
+  // Context bar
+  const bar = document.getElementById('userContextBar');
+  if (fnRaw && lnRaw) {
+    bar.classList.add('visible');
+    const initials = (fnRaw[0] + lnRaw[0]).toUpperCase();
+    document.getElementById('userCtxAvatar').textContent = initials;
+    document.getElementById('userCtxName').textContent = `${fnRaw} ${lnRaw}`;
+    document.getElementById('userCtxEmail').textContent = `${fn}.${ln}@iconinternational.com`;
+    document.getElementById('userCtxDisplay').textContent = displayName;
+  } else {
+    bar.classList.remove('visible');
+  }
 }
 
 buildRoleGrid();
