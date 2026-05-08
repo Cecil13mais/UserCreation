@@ -368,6 +368,93 @@
   .preflight-notes { display: flex; flex-direction: column; gap: 5px; }
   .preflight-note { font-size: 12px; color: var(--text-mid); line-height: 1.5; padding: 2px 0; }
 
+  /* 8x8 Admin Console reference card */
+  .admin-panel-ref {
+    border-top: 1px solid var(--border);
+    background: var(--surface2);
+    padding: 16px 20px 20px;
+  }
+  .admin-panel-ref-label {
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--text-dim);
+    margin-bottom: 14px;
+  }
+  .admin-ref-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 12px;
+  }
+  .admin-ref-section:last-child { margin-bottom: 0; }
+  .admin-ref-section-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+    padding: 12px 16px 4px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface2);
+  }
+  .admin-ref-section-sub {
+    font-size: 11px;
+    color: var(--text-dim);
+    padding: 4px 16px 10px;
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+  }
+  .admin-ref-fields { display: flex; flex-direction: column; }
+  .admin-ref-field {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+  }
+  .admin-ref-field:last-child { border-bottom: none; }
+  .admin-ref-field-label {
+    font-size: 13px;
+    color: var(--text-mid);
+    font-weight: 500;
+    flex: 1;
+    min-width: 160px;
+  }
+  .admin-req { color: #dc2626; }
+  .admin-ref-field-note {
+    font-size: 11px;
+    color: var(--text-dim);
+    width: 100%;
+    margin-top: -6px;
+    padding-bottom: 2px;
+  }
+  .admin-ref-field-value {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    text-align: right;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .admin-ref-toggle-on { color: #16a34a; }
+  .admin-toggle-pill {
+    width: 32px;
+    height: 18px;
+    background: #16a34a;
+    border-radius: 9px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 3px;
+    font-size: 12px;
+    color: white;
+    line-height: 1;
+  }
+
   .checklist-label {
     font-size: 10px;
     font-weight: 800;
@@ -444,7 +531,6 @@
       <div class="logo-icon">🏢</div>
       Icon International
     </div>
-  </div>
 </header>
 
 <div class="stepper-wrap">
@@ -484,8 +570,6 @@
 
     <!-- STEP 1 -->
     <div class="section active" id="section-1">
-      <div class="page-title">
-      </div>
       <div class="card">
         <div class="card-body">
           <div class="field-grid">
@@ -616,8 +700,8 @@
 <script>
 const ROLES = [
   { title:"President of Travel Services", dept:"Travel", adGroups:["Domain Users","Everyone","IconIntl_7212181d39b7","Inventory Folder MOD","Marketing Folder MOD","Marketing Share MOD","Merchandise Folder MOD","MerchTravel Billing Folder","Point of Purchase SG","SPS Folder","Trade Credits Folder","Travel Folder MOD"], roleSpecific:["Travel Folder MOD","Point of Purchase SG","Trade Credits Folder"] },
-  { title:"Media Investment Associate", dept:"Performance Media", adGroups:["Domain Users","Everyone","II iconurl_7212181d39b7","iWomen CT Announcements_43952db37578","Printer-Mediainvestment-14thFloor","Direct Response Folder MOD"], roleSpecific:["Direct Response Folder MOD","Printer-Mediainvestment-14thFloor"], extraAzure:["Media Investment"], needsMediaOps:true },
-  { title:"Sr. Media Investment Lead", dept:"Performance Media", adGroups:["Domain Users","DRLocalShared","DRNationalShared","Everyone","II iconurl_7212181d39b7","iWomen CT Announcements_43952db37578","Direct Response Folder MOD"], roleSpecific:["DRLocalShared","DRNationalShared","Direct Response Folder MOD"], extraAzure:["Media Investment"], needsMediaOps:true },
+  { title:"Media Investment Associate", dept:"Performance Media", adGroups:["Domain Users","Everyone","II iconurl_7212181d39b7","iWomen CT Announcements_43952db37578","Printer-Mediainvestment-14thFloor","Direct Response Folder MOD"], roleSpecific:["Direct Response Folder MOD","Printer-Mediainvestment-14thFloor"], extraAzure:["Media Investment","Comcast IDP"], needsMediaOps:true },
+  { title:"Sr. Media Investment Lead", dept:"Performance Media", adGroups:["Domain Users","DRLocalShared","DRNationalShared","Everyone","II iconurl_7212181d39b7","iWomen CT Announcements_43952db37578","Direct Response Folder MOD"], roleSpecific:["DRLocalShared","DRNationalShared","Direct Response Folder MOD"], extraAzure:["Media Investment","Comcast IDP"], needsMediaOps:true },
   { title:"Billing Analyst", dept:"Accounting", adGroups:["Accounting Folder MOD","Billing (Local)_b33079d06102","Domain Users","Everyone","II icon billing","ICON Communications_fe5e67f5ba5"], roleSpecific:["Accounting Folder MOD","Billing (Local)_b33079d06102","II icon billing"] },
   { title:"Financial Credit Analyst", dept:"Credit", adGroups:["Domain Users","Everyone","II ICON Communications_fe5e67f5ba5","Icon Credit Group_9a88e9c5088","IconInt_7212181d39b7","Inventory Folder MOD","iWomen CT Announcements_43952db37578","MAFs","Pentaho_Credit","Pentaho_Users"], roleSpecific:["Icon Credit Group_9a88e9c5088","Pentaho_Credit","Pentaho_Users","MAFs"] },
   { title:"Front Office Administrator", dept:"Human Resources", adGroups:["Domain Users","Everyone"], roleSpecific:[], note:"Confirm AD and Azure groups with HR manager — not fully specified." },
@@ -753,9 +837,9 @@ function buildChecklist() {
         { id:'mail_imap_pop', label:'Mail tab — disable legacy protocols', sub: null, list: ['Uncheck IMAP', 'Uncheck POP', 'M365 Admin → Users → [User] → Mail tab → Manage email apps'] },
       ]
     },
-    { id:'8x8', label:'8x8 Setup', icon:'📞', color:'#d97706', bg:'#fffbeb', desc:'Services & Permissions, then General settings',
+    { id:'8x8', label:'8x8 Setup', icon:'📞', color:'#d97706', bg:'#fffbeb', desc:'8x8 Admin Center — Services & Permissions + User Settings',
       preflight: {
-        heading: 'Before you start — open 8x8 Admin Console → Users',
+        heading: 'Before you start — open 8x8 Admin Console → Users → find or create the user',
         copyFields: [
           { label:'Email',          value: email },
           { label:'Profile Policy', value: '8×8 Master User Template' },
@@ -765,9 +849,34 @@ function buildChecklist() {
         ],
         notes: ['Create the user first if they don\'t exist yet — use the email as the username', 'MS Teams Integration toggle must be enabled per user, not just per policy', 'All roles must be added to the 8x8 User Group — do not skip']
       },
+      adminPanel: {
+        sections: [
+          {
+            title: 'Services and Permissions',
+            subtitle: 'Configure and modify license assignments.',
+            fields: [
+              { label: 'Assign a profile policy', value: '8×8 Master User Template', required: true },
+              { label: 'Assign one or more services to user', value: 'X Series – X2‑VOSVC0216‑02‑US', required: false },
+              { label: 'Enable MS Teams integration', value: 'On', toggle: true },
+            ]
+          },
+          {
+            title: 'User Settings',
+            subtitle: null,
+            fields: [
+              { label: 'Select site', value: 'Headquarters (Icon International)', required: false },
+              { label: 'User group', value: 'Icon International User Group', required: false },
+              { label: 'Language', value: 'English – United States', required: false },
+              { label: 'Time zone', value: 'US/Eastern', required: false },
+              { label: 'Contact directory scope', value: 'Company', note: 'User can view all contacts within the company', required: false },
+              { label: 'Display contact in company directory', value: 'On', note: 'The user will appear in the company\'s contact directory', toggle: true },
+            ]
+          }
+        ]
+      },
       tasks:[
-        { id:'8x8_services', label:'Services & Permissions', sub: null, list: ['Assign profile policy: 8×8 Master User Template', 'Assign service: X Series - X2-VOSVC0216-02-US', 'Enable MS Teams integration: ON'] },
-        { id:'8x8_general', label:'General settings', sub: null, list: ['Confirm Site = Headquarters (Icon International)', 'Language: English - United States', 'Time Zone: US/Eastern', 'Contact Directory Scope: Company', 'Display contact in company directory: ON'] },
+        { id:'8x8_services', label:'Services & Permissions', sub: null, list: ['Profile policy: 8×8 Master User Template', 'Service: X Series - X2-VOSVC0216-02-US', 'MS Teams integration: ON'] },
+        { id:'8x8_usersettings', label:'User Settings', sub: null, list: ['Site: Headquarters (Icon International)', 'User Group: Icon International User Group', 'Language: English – United States', 'Time zone: US/Eastern', 'Contact directory scope: Company', 'Display contact in company directory: ON'] },
         { id:'8x8_usergroup', label:'Add to 8x8 User Group', sub: null, list: ['8x8 Admin Console → Groups → User Groups → Add member'] },
       ]
     },
@@ -855,6 +964,29 @@ function renderActiveSection() {
         </div>` : ''}
     </div>` : '';
 
+  // Admin panel reference card (8x8 UI mirror)
+  const adminPanelHTML = (sec.adminPanel) ? `
+    <div class="admin-panel-ref">
+      <div class="admin-panel-ref-label">📋 Admin Console Reference</div>
+      ${sec.adminPanel.sections.map(s => `
+        <div class="admin-ref-section">
+          <div class="admin-ref-section-title">${s.title}</div>
+          ${s.subtitle ? `<div class="admin-ref-section-sub">${s.subtitle}</div>` : ''}
+          <div class="admin-ref-fields">
+            ${s.fields.map(f => `
+              <div class="admin-ref-field">
+                <div class="admin-ref-field-label">${f.label}${f.required ? ' <span class="admin-req">*</span>' : ''}</div>
+                ${f.note ? `<div class="admin-ref-field-note">${f.note}</div>` : ''}
+                <div class="admin-ref-field-value ${f.toggle ? 'admin-ref-toggle-on' : ''}">
+                  ${f.toggle ? '<span class="admin-toggle-pill">●</span> ' : ''}${f.value}
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `).join('')}
+    </div>` : '';
+
   const itemsHTML = sec.tasks.map(t => {
     const listHTML = (t.list && t.list.length) ? `
       <ul class="task-list">
@@ -887,6 +1019,7 @@ function renderActiveSection() {
         </div>
       </div>
       ${preflightHTML}
+      ${adminPanelHTML}
       <div class="checklist-label">Tasks</div>
       <div class="checklist">${itemsHTML}</div>
       ${banner}
