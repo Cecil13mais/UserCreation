@@ -212,49 +212,7 @@
   .role-card.selected .check { display: flex; }
 
   /* Access preview — clean list view */
-  .access-panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-sm); overflow: hidden; }
-
-  .access-list-section { border-bottom: 1px solid var(--border); }
-  .access-list-section:last-child { border-bottom: none; }
-
-  .access-list-header {
-    font-size: 11px;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 0.7px;
-    padding: 10px 18px 8px;
-    border-bottom: 1px solid var(--border);
-  }
-  .access-list-header--ad     { color: var(--blue);   background: var(--blue-light); }
-  .access-list-header--role   { color: var(--orange);  background: var(--orange-light); }
-  .access-list-header--iwomen { color: var(--purple);  background: var(--purple-light); }
-  .access-list-header--azure  { color: var(--green);   background: var(--green-light); }
-
-  .access-list-body { padding: 6px 0; }
-
-  .access-list-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 7px 18px;
-    font-size: 13px;
-    font-weight: 500;
-    transition: background 0.1s;
-  }
-  .access-list-item:hover { background: var(--surface2); }
-
-  .access-list-dot {
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
-  .access-list-item--ad     .access-list-dot { background: var(--blue); }
-  .access-list-item--role   .access-list-dot { background: var(--orange); }
-  .access-list-item--iwomen .access-list-dot { background: var(--purple); }
-  .access-list-item--azure  .access-list-dot { background: var(--green); }
-  .access-list-item--skip   .access-list-dot { background: var(--text-dim); }
-
-  .access-list-name { color: var(--text); line-height: 1.4; }
+  .access-panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-sm); overflow: hidden; padding: 20px; }
 
   /* Progress */
   .progress-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 22px; margin-bottom: 16px; box-shadow: var(--shadow-sm); }
@@ -297,32 +255,38 @@
   .cb { width: 22px; height: 22px; border: 2px solid var(--border2); border-radius: 6px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 12px; margin-top: 1px; transition: all 0.15s; background: var(--surface); color: transparent; }
   .check-item.done .cb { background: var(--green); border-color: var(--green); color: white; font-weight: 700; }
   .label-text { flex: 1; }
-  .item-title { font-size: 14px; font-weight: 600; color: var(--text); line-height: 1.4; }
+  .item-title { font-size: 13px; font-weight: 700; color: var(--text-mid); line-height: 1.4; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
   .check-item.done .item-title { text-decoration: line-through; color: var(--text-dim); }
   .sub { font-size: 11px; color: var(--text-mid); margin-top: 3px; line-height: 1.5; font-family: var(--mono); }
   .check-item.done .sub { color: var(--text-dim); }
 
   .task-list {
     list-style: none;
-    margin-top: 6px;
+    margin-top: 4px;
     display: flex;
     flex-direction: column;
-    gap: 3px;
+    gap: 2px;
   }
   .task-list li {
-    font-size: 12px;
-    color: var(--text-mid);
-    padding-left: 14px;
-    position: relative;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+    padding: 4px 0 4px 16px;
     line-height: 1.5;
+    position: relative;
   }
   .task-list li::before {
-    content: '–';
+    content: '';
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--text-dim);
     position: absolute;
-    left: 0;
-    color: var(--text-dim);
+    left: 2px;
+    top: 11px;
+    flex-shrink: 0;
   }
-  .check-item.done .task-list li { color: var(--text-dim); }
+  .check-item.done .task-list li { color: var(--text-dim); text-decoration: line-through; }
+  .check-item.done .task-list li::before { background: var(--green); }
   .section-complete-banner { display: flex; align-items: center; gap: 10px; padding: 13px 20px; background: var(--green-light); border-top: 1px solid var(--green-mid); font-size: 13px; font-weight: 600; color: var(--green); }
 
   /* Dropbox-style preflight card */
@@ -695,39 +659,52 @@ function showAccessPreview() {
   const r = selectedRole;
   document.getElementById('accessPreview').style.display = 'block';
   const IWOMEN_GROUP = 'iWomen CT Announcements_43952db37578';
-  const baseGroups = r.adGroups.filter(g => !r.roleSpecific.includes(g) && g !== IWOMEN_GROUP);
-  const azureGroups = [...AZURE_BASE, ...(r.extraAzure || [])];
-
-  const listItem = (name, variant='ad') => `
-    <div class="access-list-item access-list-item--${variant}">
-      <span class="access-list-dot"></span>
-      <span class="access-list-name">${name}</span>
-    </div>`;
-
-  const iwomenItem = iwomenMember
-    ? listItem('iWomen CT Announcements_43952db37578', 'iwomen')
-    : `<div class="access-list-item access-list-item--skip"><span class="access-list-name" style="color:var(--text-dim);font-style:italic;">Not a member — skipped</span></div>`;
-
-  let html = `
-    <div class="access-list-section">
-      <div class="access-list-header access-list-header--ad">🖥️ Active Directory — Base</div>
-      <div class="access-list-body">${baseGroups.map(g => listItem(g, 'ad')).join('')}</div>
-    </div>
-    <div class="access-list-section">
-      <div class="access-list-header access-list-header--role">🔒 Active Directory — Role-Specific</div>
-      <div class="access-list-body">${r.roleSpecific.length ? r.roleSpecific.map(g => listItem(g, 'role')).join('') : '<div class="access-list-item"><span class="access-list-name" style="color:var(--text-dim);font-style:italic;">None</span></div>'}</div>
-    </div>
-    <div class="access-list-section">
-      <div class="access-list-header access-list-header--iwomen">💜 iWomen</div>
-      <div class="access-list-body">${iwomenItem}</div>
-    </div>
-    <div class="access-list-section">
-      <div class="access-list-header access-list-header--azure">☁️ Azure / M365</div>
-      <div class="access-list-body">${azureGroups.map(g => listItem(g, 'azure')).join('')}</div>
+  const baseGroups = r.adGroups.filter(
+    g => !r.roleSpecific.includes(g) && g !== IWOMEN_GROUP
+  );
+  const azureGroups = [
+    ...AZURE_BASE,
+    ...(r.extraAzure || [])
+  ];
+  const section = (title, groups) => `
+    <div style="margin-bottom:20px;">
+      <div style="
+        font-weight:700;
+        font-size:14px;
+        margin-bottom:8px;
+        color:var(--blue);
+      ">
+        ${title}:
+      </div>
+      <div style="
+        background:var(--surface2);
+        border:1px solid var(--border);
+        border-radius:10px;
+        padding:14px;
+        font-family:var(--mono);
+        font-size:13px;
+        line-height:1.8;
+      ">
+        ${groups.map(g => `${g}`).join('<br>')}
+      </div>
     </div>
   `;
-  if (r.note) html = `<div class="alert alert-warn">⚠️ ${r.note}</div>` + html;
-  document.getElementById('accessPanel').innerHTML = html;
+  document.getElementById('accessPanel').innerHTML = `
+    ${section('Azure', azureGroups)}
+    ${section('Base AD Groups', baseGroups)}
+    ${section(
+      'Role-Specific Groups',
+      r.roleSpecific.length
+        ? r.roleSpecific
+        : ['None']
+    )}
+    ${section(
+      'iWomen',
+      iwomenMember
+        ? ['iWomen CT Announcements_43952db37578']
+        : ['Not a member']
+    )}
+  `;
 }
 
 function buildChecklist() {
