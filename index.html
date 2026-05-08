@@ -531,6 +531,7 @@
       <div class="logo-icon">🏢</div>
       New Users Setup
     </div>
+  </div>
 </header>
 
 <div class="stepper-wrap">
@@ -608,7 +609,8 @@
             </div>
             <div class="field full">
               <label>iWomen Membership</label>
-              <div class="toggle-row" onclick="toggleIwomen()">
+              <!-- FIX 1: Added id="iwomenToggleRow" so JS can target it reliably -->
+              <div class="toggle-row" id="iwomenToggleRow" onclick="toggleIwomen()">
                 <div class="toggle-track" id="iwomenTrack">
                   <div class="toggle-thumb" id="iwomenThumb"></div>
                 </div>
@@ -800,8 +802,6 @@ function buildChecklist() {
   const IWOMEN_GROUP = 'iWomen CT Announcements_43952db37578';
   const baseADGroups = r.adGroups.filter(g => !r.roleSpecific.includes(g) && g !== IWOMEN_GROUP);
 
-  // Copyable field rows for the dropbox-style detail panel
-  // Each section gets a preflight card with labeled copyable values
   provSections = [
     { id:'ad', label:'Active Directory', icon:'🖥️', color:'#2563eb', bg:'#eff6ff', desc:'Create account and assign AD security groups',
       preflight: {
@@ -940,7 +940,6 @@ function renderActiveSection() {
   const total = sec.tasks.length, done = sec.tasks.filter(t => checkStates[t.id]).length;
   const pct = total ? Math.round((done/total)*100) : 0, isComplete = done === total;
 
-  // Dropbox-style preflight card
   const pf = sec.preflight;
   const preflightHTML = pf ? `
     <div class="preflight-card" style="border-left: 3px solid ${sec.color};">
@@ -964,7 +963,6 @@ function renderActiveSection() {
         </div>` : ''}
     </div>` : '';
 
-  // Admin panel reference card (8x8 UI mirror)
   const adminPanelHTML = (sec.adminPanel) ? `
     <div class="admin-panel-ref">
       <div class="admin-panel-ref-label">📋 Admin Console Reference</div>
@@ -1126,15 +1124,18 @@ function resetAll() {
   document.getElementById('btn-step2').disabled = true;
   document.getElementById('userContextBar').classList.remove('visible');
   document.querySelectorAll('.role-card').forEach(c => c.classList.remove('selected'));
-  const row = document.querySelector('.toggle-row');
+  // FIX 2: Use getElementById instead of querySelector to reliably target the toggle
+  const row = document.getElementById('iwomenToggleRow');
   if (row) row.classList.remove('on');
   document.getElementById('iwomenLabel').textContent = 'Not a member';
   goTo(1);
 }
 
+// FIX 3: Use getElementById instead of querySelector to reliably target the toggle
 function toggleIwomen() {
   iwomenMember = !iwomenMember;
-  document.querySelector('.toggle-row').classList.toggle('on', iwomenMember);
+  const row = document.getElementById('iwomenToggleRow');
+  if (row) row.classList.toggle('on', iwomenMember);
   document.getElementById('iwomenLabel').textContent = iwomenMember ? '✨ iWomen member' : 'Not a member';
 }
 
