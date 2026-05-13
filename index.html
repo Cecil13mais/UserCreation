@@ -678,7 +678,7 @@
         2. Set the secret value to your desired password<br>
         3. Copy the Secret ID (UUID shown in the secret detail)<br>
         4. Create a Machine Account → generate an Access Token<br>
-        5. Paste both below — stored only in this browser
+        5. Paste below — stored only in this browser
       </div>
       <div class="login-field">
         <label>Bitwarden Secret ID</label>
@@ -689,8 +689,16 @@
         <input type="password" id="setupToken" placeholder="0.xxxxxxxx..." />
       </div>
       <div class="login-field">
-        <label>API URL <span style="font-weight:400;color:var(--text-dim);">(leave default unless self-hosted)</span></label>
-        <input type="text" id="setupApiUrl" placeholder="https://sm-api.bitwarden.com/api" />
+        <label>Organization ID</label>
+        <input type="text" id="setupOrgId" placeholder="57e24b03-9548-4ce8-ab67-b28f00de9392" />
+      </div>
+      <div class="login-field">
+        <label>Identity Server URL</label>
+        <input type="text" id="setupIdentityUrl" placeholder="https://vault.bitwarden.com/identity" />
+      </div>
+      <div class="login-field">
+        <label>API Server URL</label>
+        <input type="text" id="setupApiUrl" placeholder="https://vault.bitwarden.com/api" />
       </div>
       <button class="login-btn" onclick="saveSetup()" style="margin-top:8px;">Save & Test Connection</button>
     </div>
@@ -1353,9 +1361,11 @@ buildRoleGrid();
 // Credentials (Secret ID + Access Token) are stored only in localStorage.
 
 const BW_STORAGE_KEYS = {
-  secretId : 'ii_bw_secret_id',
-  token    : 'ii_bw_token',
-  apiUrl   : 'ii_bw_api_url',
+  secretId    : 'ii_bw_secret_id',
+  token       : 'ii_bw_token',
+  apiUrl      : 'ii_bw_api_url',
+  identityUrl : 'ii_bw_identity_url',
+  orgId       : 'ii_bw_org_id',
 };
 const SESSION_KEY = 'ii_session_ok';
 
@@ -1369,29 +1379,56 @@ function setError(msg) {
 }
 
 async function fetchPasswordFromBitwarden() {
-  const secretId = localStorage.getItem(BW_STORAGE_KEYS.secretId);
-  const token    = localStorage.getItem(BW_STORAGE_KEYS.token);
-  const apiUrl   = (localStorage.getItem(BW_STORAGE_KEYS.apiUrl) || 'https://sm-api.bitwarden.com/api').replace(/\/$/, '');
+  const secretId    = localStorage.getItem(BW_STORAGE_KEYS.secretId);
+  const accessToken = localStorage.getItem(BW_STORAGE_KEYS.token);
+  const apiUrl      = (localStorage.getItem(BW_STORAGE_KEYS.apiUrl)      || 'https://vault.bitwarden.com/api').replace(/\/$/, '');
+  const identityUrl = (localStorage.getItem(BW_STORAGE_KEYS.identityUrl) || 'https://vault.bitwarden.com/identity').replace(/\/$/, '');
 
-  if (!secretId || !token) return null;
+  if (!secretId || !accessToken) return null;
 
-  setStatus('Connecting to Bitwarden…');
+  // Step 1: Exchange access token for a bearer token via identity server
+  setStatus('Authenticating with Bitwarden…');
+  let bearerToken;
   try {
-    const res = await fetch(`${apiUrl}/secrets/${secretId}`, {
+    const authRes = await fetch(`${identityUrl}/connect/token`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({
+        grant_type    : 'client_credentials',
+        scope         : 'api.secrets',
+        client_id     : 'machine',
+        client_secret : accessToken,
+      })
+    });
+    if (!authRes.ok) {
+      const err = await authRes.json().catch(() => ({}));
+      setStatus(`Auth failed: ${err.error_description || authRes.status} — check your Access Token.`);
+      return null;
+    }
+    const authData = await authRes.json();
+    bearerToken = authData.access_token;
+  } catch (e) {
+    setStatus('Cannot reach Bitwarden identity server. Check your connection.');
+    return null;
+  }
+
+  // Step 2: Fetch the secret value using the bearer token
+  setStatus('Fetching secret…');
+  try {
+    const secretRes = await fetch(`${apiUrl}/secrets/${secretId}`, {
       headers: {
-        'Authorization': `Bearer ${token}`,
+        'Authorization': `Bearer ${bearerToken}`,
         'Content-Type' : 'application/json',
       }
     });
-    if (res.status === 401) { setStatus('Access token rejected — check your Bitwarden token.'); return null; }
-    if (res.status === 404) { setStatus('Secret ID not found — check your Bitwarden Secret ID.'); return null; }
-    if (!res.ok)            { setStatus(`Bitwarden error: ${res.status} — check API URL.`); return null; }
-    const data = await res.json();
+    if (secretRes.status === 401) { setStatus('Unauthorized — token may lack secrets scope.'); return null; }
+    if (secretRes.status === 404) { setStatus('Secret ID not found — double-check the UUID.'); return null; }
+    if (!secretRes.ok)            { setStatus(`API error: ${secretRes.status}`); return null; }
+    const data = await secretRes.json();
     setStatus('');
-    // Bitwarden SM returns { value: "..." }
     return (data.value || '').trim();
   } catch (e) {
-    setStatus('Network error — Bitwarden SM API may block direct browser requests (CORS). Consider a proxy.');
+    setStatus('Cannot reach Bitwarden API server. Check your connection.');
     return null;
   }
 }
@@ -1454,26 +1491,31 @@ function toggleSetup() {
   const panel = document.getElementById('setupPanel');
   panel.classList.toggle('visible');
   if (panel.classList.contains('visible')) {
-    // Pre-fill existing values
-    document.getElementById('setupSecretId').value = localStorage.getItem(BW_STORAGE_KEYS.secretId) || '';
-    document.getElementById('setupToken').value    = localStorage.getItem(BW_STORAGE_KEYS.token)    || '';
-    document.getElementById('setupApiUrl').value   = localStorage.getItem(BW_STORAGE_KEYS.apiUrl)   || '';
+    document.getElementById('setupSecretId').value    = localStorage.getItem(BW_STORAGE_KEYS.secretId)    || '';
+    document.getElementById('setupToken').value       = localStorage.getItem(BW_STORAGE_KEYS.token)       || '';
+    document.getElementById('setupOrgId').value       = localStorage.getItem(BW_STORAGE_KEYS.orgId)       || '';
+    document.getElementById('setupIdentityUrl').value = localStorage.getItem(BW_STORAGE_KEYS.identityUrl) || '';
+    document.getElementById('setupApiUrl').value      = localStorage.getItem(BW_STORAGE_KEYS.apiUrl)      || '';
   }
 }
 
 async function saveSetup() {
-  const secretId = document.getElementById('setupSecretId').value.trim();
-  const token    = document.getElementById('setupToken').value.trim();
-  const apiUrl   = document.getElementById('setupApiUrl').value.trim() || 'https://sm-api.bitwarden.com/api';
+  const secretId    = document.getElementById('setupSecretId').value.trim();
+  const token       = document.getElementById('setupToken').value.trim();
+  const orgId       = document.getElementById('setupOrgId').value.trim();
+  const identityUrl = document.getElementById('setupIdentityUrl').value.trim() || 'https://vault.bitwarden.com/identity';
+  const apiUrl      = document.getElementById('setupApiUrl').value.trim()      || 'https://vault.bitwarden.com/api';
 
   if (!secretId || !token) {
-    setStatus('Please fill in both Secret ID and Access Token.');
+    setStatus('Please fill in Secret ID and Access Token.');
     return;
   }
 
-  localStorage.setItem(BW_STORAGE_KEYS.secretId, secretId);
-  localStorage.setItem(BW_STORAGE_KEYS.token,    token);
-  localStorage.setItem(BW_STORAGE_KEYS.apiUrl,   apiUrl);
+  localStorage.setItem(BW_STORAGE_KEYS.secretId,    secretId);
+  localStorage.setItem(BW_STORAGE_KEYS.token,       token);
+  localStorage.setItem(BW_STORAGE_KEYS.orgId,       orgId);
+  localStorage.setItem(BW_STORAGE_KEYS.identityUrl, identityUrl);
+  localStorage.setItem(BW_STORAGE_KEYS.apiUrl,      apiUrl);
 
   setStatus('Testing connection…');
   const result = await fetchPasswordFromBitwarden();
@@ -1493,4 +1535,4 @@ if (sessionStorage.getItem(SESSION_KEY) === '1') {
 }
 </script>
 </body>
-</html>v
+</html>
