@@ -690,7 +690,7 @@
       </div>
       <div class="login-field">
         <label>API URL <span style="font-weight:400;color:var(--text-dim);">(leave default unless self-hosted)</span></label>
-        <input type="text" id="setupApiUrl" placeholder="https://api.bitwarden.com" />
+        <input type="text" id="setupApiUrl" placeholder="https://sm-api.bitwarden.com/api" />
       </div>
       <button class="login-btn" onclick="saveSetup()" style="margin-top:8px;">Save & Test Connection</button>
     </div>
@@ -1371,7 +1371,7 @@ function setError(msg) {
 async function fetchPasswordFromBitwarden() {
   const secretId = localStorage.getItem(BW_STORAGE_KEYS.secretId);
   const token    = localStorage.getItem(BW_STORAGE_KEYS.token);
-  const apiUrl   = localStorage.getItem(BW_STORAGE_KEYS.apiUrl) || 'https://api.bitwarden.com';
+  const apiUrl   = (localStorage.getItem(BW_STORAGE_KEYS.apiUrl) || 'https://sm-api.bitwarden.com/api').replace(/\/$/, '');
 
   if (!secretId || !token) return null;
 
@@ -1385,13 +1385,13 @@ async function fetchPasswordFromBitwarden() {
     });
     if (res.status === 401) { setStatus('Access token rejected — check your Bitwarden token.'); return null; }
     if (res.status === 404) { setStatus('Secret ID not found — check your Bitwarden Secret ID.'); return null; }
-    if (!res.ok)            { setStatus(`Bitwarden error: ${res.status}`); return null; }
+    if (!res.ok)            { setStatus(`Bitwarden error: ${res.status} — check API URL.`); return null; }
     const data = await res.json();
     setStatus('');
     // Bitwarden SM returns { value: "..." }
     return (data.value || '').trim();
   } catch (e) {
-    setStatus('Network error — check your connection or API URL.');
+    setStatus('Network error — Bitwarden SM API may block direct browser requests (CORS). Consider a proxy.');
     return null;
   }
 }
@@ -1464,7 +1464,7 @@ function toggleSetup() {
 async function saveSetup() {
   const secretId = document.getElementById('setupSecretId').value.trim();
   const token    = document.getElementById('setupToken').value.trim();
-  const apiUrl   = document.getElementById('setupApiUrl').value.trim() || 'https://api.bitwarden.com';
+  const apiUrl   = document.getElementById('setupApiUrl').value.trim() || 'https://sm-api.bitwarden.com/api';
 
   if (!secretId || !token) {
     setStatus('Please fill in both Secret ID and Access Token.');
@@ -1493,4 +1493,4 @@ if (sessionStorage.getItem(SESSION_KEY) === '1') {
 }
 </script>
 </body>
-</html>
+</html>v
