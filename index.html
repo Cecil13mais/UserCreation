@@ -521,9 +521,185 @@
     .role-grid { grid-template-columns: 1fr 1fr; }
     .step-name { display: none; }
   }
+
+  /* ── Login gate ── */
+  #loginGate {
+    position: fixed;
+    inset: 0;
+    background: var(--bg);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+  #loginGate.hidden { display: none; }
+  #appContent { display: none; }
+  #appContent.visible { display: block; }
+
+  .login-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 36px 32px;
+    width: 100%;
+    max-width: 420px;
+    text-align: center;
+  }
+  .login-logo {
+    width: 48px; height: 48px;
+    background: var(--blue);
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    margin: 0 auto 20px;
+    color: white;
+  }
+  .login-title { font-size: 20px; font-weight: 800; letter-spacing: -0.4px; margin-bottom: 6px; }
+  .login-sub { font-size: 13px; color: var(--text-dim); margin-bottom: 28px; }
+
+  .login-field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; text-align: left; }
+  .login-field label { font-size: 12px; font-weight: 600; color: var(--text-mid); }
+  .login-field input {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 13px;
+    padding: 10px 14px;
+    border-radius: var(--radius-sm);
+    outline: none;
+    width: 100%;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .login-field input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
+
+  .login-btn {
+    width: 100%;
+    background: var(--blue);
+    color: white;
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 700;
+    padding: 11px 0;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.15s;
+    margin-top: 4px;
+  }
+  .login-btn:hover { background: #1d4ed8; }
+  .login-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .login-error {
+    font-size: 12px;
+    color: #dc2626;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 8px;
+    padding: 8px 12px;
+    margin-top: 12px;
+    display: none;
+  }
+  .login-error.visible { display: block; }
+
+  .login-status {
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-top: 12px;
+    min-height: 18px;
+    font-family: var(--mono);
+  }
+
+  .setup-toggle {
+    font-size: 12px;
+    color: var(--blue);
+    cursor: pointer;
+    margin-top: 20px;
+    display: inline-block;
+    text-decoration: underline;
+  }
+  .setup-panel {
+    display: none;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+    text-align: left;
+  }
+  .setup-panel.visible { display: block; }
+  .setup-note {
+    font-size: 11px;
+    color: var(--text-dim);
+    line-height: 1.6;
+    margin-bottom: 14px;
+    font-family: var(--mono);
+  }
+  .logout-btn {
+    position: fixed;
+    bottom: 16px;
+    right: 16px;
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 6px 14px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    border-radius: 20px;
+    cursor: pointer;
+    z-index: 200;
+    transition: all 0.15s;
+  }
+  .logout-btn:hover { border-color: #dc2626; color: #dc2626; }
 </style>
 </head>
 <body>
+
+<!-- ── Login Gate ── -->
+<div id="loginGate">
+  <div class="login-card">
+    <div class="login-logo">🏢</div>
+    <div class="login-title">New User Setup</div>
+    <div class="login-sub">Icon International IT Provisioning</div>
+
+    <div class="login-field">
+      <label>Password</label>
+      <input type="password" id="loginPassword" placeholder="Enter password" onkeydown="if(event.key==='Enter')attemptLogin()" />
+    </div>
+
+    <button class="login-btn" id="loginBtn" onclick="attemptLogin()">Unlock →</button>
+    <div class="login-error" id="loginError">Incorrect password. Please try again.</div>
+    <div class="login-status" id="loginStatus"></div>
+
+    <span class="setup-toggle" onclick="toggleSetup()">⚙ First-time setup / change source</span>
+    <div class="setup-panel" id="setupPanel">
+      <div class="setup-note">
+        Password is fetched live from Bitwarden Secrets Manager.<br>
+        1. In Bitwarden → Secrets Manager → create a secret<br>
+        2. Set the secret value to your desired password<br>
+        3. Copy the Secret ID (UUID shown in the secret detail)<br>
+        4. Create a Machine Account → generate an Access Token<br>
+        5. Paste both below — stored only in this browser
+      </div>
+      <div class="login-field">
+        <label>Bitwarden Secret ID</label>
+        <input type="text" id="setupSecretId" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" />
+      </div>
+      <div class="login-field">
+        <label>Bitwarden Access Token</label>
+        <input type="password" id="setupToken" placeholder="0.xxxxxxxx..." />
+      </div>
+      <div class="login-field">
+        <label>API URL <span style="font-weight:400;color:var(--text-dim);">(leave default unless self-hosted)</span></label>
+        <input type="text" id="setupApiUrl" placeholder="https://api.bitwarden.com" />
+      </div>
+      <button class="login-btn" onclick="saveSetup()" style="margin-top:8px;">Save & Test Connection</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── App (hidden until authenticated) ── -->
+<div id="appContent">
+<button class="logout-btn" onclick="logout()">🔒 Lock</button>
 
 <header>
   <div class="header-inner">
@@ -1167,6 +1343,154 @@ function autoEmail() {
 }
 
 buildRoleGrid();
+</script>
+
+</div><!-- /#appContent -->
+
+<script>
+// ── Bitwarden Secrets Manager Auth ────────────────────────────────────────
+// Password is fetched live from Bitwarden on every login attempt.
+// Credentials (Secret ID + Access Token) are stored only in localStorage.
+
+const BW_STORAGE_KEYS = {
+  secretId : 'ii_bw_secret_id',
+  token    : 'ii_bw_token',
+  apiUrl   : 'ii_bw_api_url',
+};
+const SESSION_KEY = 'ii_session_ok';
+
+function setStatus(msg) {
+  document.getElementById('loginStatus').textContent = msg;
+}
+function setError(msg) {
+  const el = document.getElementById('loginError');
+  el.textContent = msg || 'Incorrect password. Please try again.';
+  el.classList.toggle('visible', !!msg);
+}
+
+async function fetchPasswordFromBitwarden() {
+  const secretId = localStorage.getItem(BW_STORAGE_KEYS.secretId);
+  const token    = localStorage.getItem(BW_STORAGE_KEYS.token);
+  const apiUrl   = localStorage.getItem(BW_STORAGE_KEYS.apiUrl) || 'https://api.bitwarden.com';
+
+  if (!secretId || !token) return null;
+
+  setStatus('Connecting to Bitwarden…');
+  try {
+    const res = await fetch(`${apiUrl}/secrets/${secretId}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type' : 'application/json',
+      }
+    });
+    if (res.status === 401) { setStatus('Access token rejected — check your Bitwarden token.'); return null; }
+    if (res.status === 404) { setStatus('Secret ID not found — check your Bitwarden Secret ID.'); return null; }
+    if (!res.ok)            { setStatus(`Bitwarden error: ${res.status}`); return null; }
+    const data = await res.json();
+    setStatus('');
+    // Bitwarden SM returns { value: "..." }
+    return (data.value || '').trim();
+  } catch (e) {
+    setStatus('Network error — check your connection or API URL.');
+    return null;
+  }
+}
+
+async function attemptLogin() {
+  const entered = document.getElementById('loginPassword').value;
+  if (!entered) return;
+
+  const btn = document.getElementById('loginBtn');
+  btn.disabled = true;
+  btn.textContent = 'Checking…';
+  setError('');
+
+  const secretId = localStorage.getItem(BW_STORAGE_KEYS.secretId);
+  const token    = localStorage.getItem(BW_STORAGE_KEYS.token);
+
+  if (!secretId || !token) {
+    setError('');
+    setStatus('No Bitwarden credentials saved yet. Open ⚙ setup below.');
+    btn.disabled = false;
+    btn.textContent = 'Unlock →';
+    return;
+  }
+
+  const correctPassword = await fetchPasswordFromBitwarden();
+
+  if (correctPassword === null) {
+    // fetchPassword already set a status message
+    btn.disabled = false;
+    btn.textContent = 'Unlock →';
+    return;
+  }
+
+  if (entered === correctPassword) {
+    sessionStorage.setItem(SESSION_KEY, '1');
+    unlockApp();
+  } else {
+    setError('Incorrect password. Please try again.');
+    document.getElementById('loginPassword').value = '';
+    btn.disabled = false;
+    btn.textContent = 'Unlock →';
+  }
+}
+
+function unlockApp() {
+  document.getElementById('loginGate').classList.add('hidden');
+  document.getElementById('appContent').classList.add('visible');
+}
+
+function logout() {
+  sessionStorage.removeItem(SESSION_KEY);
+  document.getElementById('loginGate').classList.remove('hidden');
+  document.getElementById('appContent').classList.remove('visible');
+  document.getElementById('loginPassword').value = '';
+  setStatus('');
+  setError('');
+}
+
+function toggleSetup() {
+  const panel = document.getElementById('setupPanel');
+  panel.classList.toggle('visible');
+  if (panel.classList.contains('visible')) {
+    // Pre-fill existing values
+    document.getElementById('setupSecretId').value = localStorage.getItem(BW_STORAGE_KEYS.secretId) || '';
+    document.getElementById('setupToken').value    = localStorage.getItem(BW_STORAGE_KEYS.token)    || '';
+    document.getElementById('setupApiUrl').value   = localStorage.getItem(BW_STORAGE_KEYS.apiUrl)   || '';
+  }
+}
+
+async function saveSetup() {
+  const secretId = document.getElementById('setupSecretId').value.trim();
+  const token    = document.getElementById('setupToken').value.trim();
+  const apiUrl   = document.getElementById('setupApiUrl').value.trim() || 'https://api.bitwarden.com';
+
+  if (!secretId || !token) {
+    setStatus('Please fill in both Secret ID and Access Token.');
+    return;
+  }
+
+  localStorage.setItem(BW_STORAGE_KEYS.secretId, secretId);
+  localStorage.setItem(BW_STORAGE_KEYS.token,    token);
+  localStorage.setItem(BW_STORAGE_KEYS.apiUrl,   apiUrl);
+
+  setStatus('Testing connection…');
+  const result = await fetchPasswordFromBitwarden();
+  if (result !== null) {
+    setStatus('✅ Connected! Enter the password to unlock.');
+    document.getElementById('setupPanel').classList.remove('visible');
+  }
+}
+
+// On page load: if session already authenticated, skip gate
+if (sessionStorage.getItem(SESSION_KEY) === '1') {
+  unlockApp();
+} else if (localStorage.getItem(BW_STORAGE_KEYS.secretId)) {
+  setStatus('Bitwarden source configured. Enter password to unlock.');
+} else {
+  setStatus('First time? Open ⚙ setup to connect Bitwarden.');
+}
 </script>
 </body>
 </html>
