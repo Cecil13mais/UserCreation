@@ -706,17 +706,35 @@ const ROLES = [
   { title:"President of Travel Services", dept:"Travel", adGroups:["Domain Users","Everyone","IconIntl_7212181d39b7","Inventory Folder MOD","Marketing Folder MOD","Marketing Share MOD","Merchandise Folder MOD","MerchTravel Billing Folder","Point of Purchase SG","SPS Folder","Trade Credits Folder","Travel Folder MOD"], roleSpecific:["Travel Folder MOD","Point of Purchase SG","Trade Credits Folder"] },
   { title:"Media Investment Associate", dept:"Performance Media", adGroups:["Domain Users","Everyone","II iconurl_7212181d39b7","iWomen CT Announcements_43952db37578","Printer-Mediainvestment-14thFloor","Direct Response Folder MOD"], roleSpecific:["Direct Response Folder MOD","Printer-Mediainvestment-14thFloor"], extraAzure:["Media Investment","Comcast IDP"], needsMediaOps:true },
   { title:"Sr. Media Investment Lead", dept:"Performance Media", adGroups:["Domain Users","DRLocalShared","DRNationalShared","Everyone","II iconurl_7212181d39b7","iWomen CT Announcements_43952db37578","Direct Response Folder MOD"], roleSpecific:["DRLocalShared","DRNationalShared","Direct Response Folder MOD"], extraAzure:["Media Investment","Comcast IDP"], needsMediaOps:true },
+  { title:"Local Media Associate", dept:"Local Media", adGroups:["Domain Users","Everyone","II ICON Communications_fe5e67f5ba5","IconInt_7212181d39b7","Direct Response Folder MOD"], roleSpecific:["Direct Response Folder MOD"], extraAzure:["Comcast IDP","Media Investment"], needsMediaOps:true },
+  { title:"Local Media Lead", dept:"Local Media", adGroups:["Domain Users","DRLocalShared","Everyone","II ICON Communications_fe5e67f5ba5","IconInt_7212181d39b7","Direct Response Folder MOD"], roleSpecific:["DRLocalShared","Direct Response Folder MOD"], extraAzure:["Comcast IDP","Media Investment"], needsMediaOps:true },
   { title:"Billing Analyst", dept:"Accounting", adGroups:["Accounting Folder MOD","Billing (Local)_b33079d06102","Domain Users","Everyone","II icon billing","ICON Communications_fe5e67f5ba5"], roleSpecific:["Accounting Folder MOD","Billing (Local)_b33079d06102","II icon billing"] },
   { title:"Financial Credit Analyst", dept:"Credit", adGroups:["Domain Users","Everyone","II ICON Communications_fe5e67f5ba5","Icon Credit Group_9a88e9c5088","IconInt_7212181d39b7","Inventory Folder MOD","iWomen CT Announcements_43952db37578","MAFs","Pentaho_Credit","Pentaho_Users"], roleSpecific:["Icon Credit Group_9a88e9c5088","Pentaho_Credit","Pentaho_Users","MAFs"] },
   { title:"Front Office Administrator", dept:"Human Resources", adGroups:["Domain Users","Everyone"], roleSpecific:[], note:"Confirm AD and Azure groups with HR manager — not fully specified." },
-  { title:"Media Investment Associate (Print/OOH)", dept:"Print/OOH", adGroups:["Domain Users","Everyone","II ICON Communications_fe5e67f5ba5","IconInt_7212181d39b7","Print-OOH Dept._b9df28125db5","Print-OOH Folder MOD"], roleSpecific:["Print-OOH Dept._b9df28125db5","Print-OOH Folder MOD"], extraAzure:["Comcast IDP"], needsMediaOps:true },
+  { title:"Media Investment Associate (Print/OOH)", dept:"Print/OOH", adGroups:["Domain Users","Everyone","II ICON Communications_fe5e67f5ba5","IconInt_7212181d39b7","Print-OOH Dept._b9df28125db5","Print-OOH Folder MOD"], roleSpecific:["Print-OOH Dept._b9df28125db5","Print-OOH Folder MOD"], extraAzure:["Comcast IDP","Media Investment"], needsMediaOps:true },
   { title:"New Business Director", dept:"Sales", adGroups:["Domain Users","Everyone","II ICON Communications_fe5e67f5ba5","IconInt_7212181d39b7","Sales Folder RO","SALES TEAM_a6f66db4ae4b"], roleSpecific:["Sales Folder RO","SALES TEAM_a6f66db4ae4b"] },
-  { title:"Programmatic Supply Lead", dept:"Ad Platforms", adGroups:["Ad Platforms MOD","Digital Media Operations","Digital Media PMs RO","Domain Users","Everyone","II ICON Communications_fe5e67f5ba5","IconInt_7212181d39b7","RPM Team_b3289e4544"], roleSpecific:["Ad Platforms MOD","Digital Media Operations","Digital Media PMs RO","RPM Team_b3289e4544"], needsMediaOps:true },
-  { title:"Affiliate Marketing Lead", dept:"Ad Platforms", adGroups:["Ad Platforms MOD","Affiliate Team_d5585afc475","David's Bridal_5455dc1497d","Domain Users","Everyone","II ICON Communications_fe5e67f5ba5","IconInt_7212181d39b7"], roleSpecific:["Ad Platforms MOD","Affiliate Team_d5585afc475","David's Bridal_5455dc1497d"], needsMediaOps:true },
+  { title:"Programmatic Supply Lead", dept:"Ad Platforms", adGroups:["Ad Platforms MOD","Digital Media Operations","Digital Media PMs RO","Domain Users","Everyone","II ICON Communications_fe5e67f5ba5","IconInt_7212181d39b7","RPM Team_b3289e4544"], roleSpecific:["Ad Platforms MOD","Digital Media Operations","Digital Media PMs RO","RPM Team_b3289e4544"], extraAzure:["Comcast IDP"], needsMediaOps:true },
+  { title:"Affiliate Marketing Lead", dept:"Ad Platforms", adGroups:["Ad Platforms MOD","Affiliate Team_d5585afc475","David's Bridal_5455dc1497d","Domain Users","Everyone","II ICON Communications_fe5e67f5ba5","IconInt_7212181d39b7"], roleSpecific:["Ad Platforms MOD","Affiliate Team_d5585afc475","David's Bridal_5455dc1497d"], extraAzure:["Comcast IDP"], needsMediaOps:true },
   { title:"Account Service Specialist", dept:"Performance Media", adGroups:["Direct Response Folder MOD","Domain Users","Everyone","II ICON Communications_fe5e67f5ba5","IconInt_7212181d39b7"], roleSpecific:["Direct Response Folder MOD"], needsMediaOps:true }
 ];
 
-const AZURE_BASE = ["8x8 Phone Licenses","ConditionalAccessTest","Conditional Access: Risky sign-in MFA","Netskope Pilot Policy Assignment","Netskope Private Access - All Users","Icon Intl-Everyone","Icon Intl-Stamford/Florida Office"];
+const AZURE_BASE = [
+  "8x8 Phone Licenses",
+  "Conditional Access: Risky sign-in multifactor authentication",
+  "ConditionalAccessTest",
+  "DOMO Users",
+  "ICON Announcements",
+  "Icon Intl-Everyone",
+  "Icon Intl-Florida Office",
+  "Icon Intl-LocalBroadcast",
+  "IconIntl",
+  "Netskope Pilot Policy Assignment",
+  "Netskope Private Access - All Users",
+];
+
+// Extra Azure groups by category
+const AZURE_LOCAL_MEDIA = ["Comcast IDP"];
+const AZURE_AD_PLATFORMS = ["Comcast IDP"];
 
 let selectedRole = null, currentStep = 1, checkStates = {}, provSections = [], currentSection = 0, iwomenMember = false;
 
