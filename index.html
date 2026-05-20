@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Icon Intl · New User Creation Checklist</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #eef2f7;
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            padding: 2rem 1rem;
+            color: #1a2c3e;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* header */
+        .header {
+            margin-bottom: 2rem;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, #0b2b3b, #1b4f6e);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            letter-spacing: -0.3px;
+        }
+
+        .header p {
+            color: #2c5368;
+            margin-top: 0.5rem;
+            border-left: 3px solid #2c7da0;
+            padding-left: 1rem;
+        }
+
+        /* card style */
+        .card {
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(0, 0, 0, 0.02);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            transition: all 0.2s;
+        }
+
+        .card-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border-bottom: 2px solid #e9edf2;
+            padding-bottom: 0.6rem;
+        }
+
+        .card-title i {
+            font-size: 1.5rem;
+        }
+
+        .grid-2col {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 1.8rem;
+        }
+
+        .checklist-group {
+            background: #f9fafc;
+            border-radius: 20px;
+            padding: 0.2rem 0;
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.7rem 1rem;
+            border-bottom: 1px solid #eef2f8;
+            transition: background 0.1s;
+        }
+
+        .checklist-item:hover {
+            background: #ffffffd0;
+        }
+
+        .checklist-item label {
+            flex: 1;
+            font-weight: 500;
+            color: #1f3b4a;
+            cursor: pointer;
+            font-size: 0.92rem;
+        }
+
+        input[type="checkbox"] {
+            width: 1.2rem;
+            height: 1.2rem;
+            accent-color: #1e6f5c;
+            cursor: pointer;
+        }
+
+        .badge-group {
+            background: #e1ecf4;
+            padding: 0.2rem 0.5rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #1e5f7a;
+        }
+
+        .role-selector {
+            background: #f1f5f9;
+            padding: 1rem;
+            border-radius: 20px;
+            margin-bottom: 1rem;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-end;
+            gap: 1.2rem;
+        }
+
+        .role-selector .field {
+            flex: 2;
+            min-width: 180px;
+        }
+
+        .role-selector label {
+            font-weight: 600;
+            display: block;
+            margin-bottom: 0.3rem;
+            font-size: 0.8rem;
+            color: #2c5a74;
+        }
+
+        select, input[type="text"], input[type="email"] {
+            width: 100%;
+            padding: 0.6rem 1rem;
+            border-radius: 14px;
+            border: 1px solid #cbd5e1;
+            background: white;
+            font-size: 0.9rem;
+            transition: 0.2s;
+        }
+
+        select:focus, input:focus {
+            outline: none;
+            border-color: #2c7da0;
+            box-shadow: 0 0 0 2px rgba(44,125,160,0.2);
+        }
+
+        button {
+            background: #1f6e8c;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 40px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.85rem;
+        }
+
+        button.secondary {
+            background: #e2e8f0;
+            color: #1e2f3a;
+            border: 1px solid #cbd5e1;
+        }
+
+        button.secondary:hover {
+            background: #cbd5e1;
+        }
+
+        button:hover {
+            background: #0e576e;
+            transform: translateY(-1px);
+        }
+
+        .info-note {
+            background: #eef6fb;
+            border-radius: 18px;
+            padding: 1rem;
+            margin-top: 1rem;
+            font-size: 0.85rem;
+            border-left: 4px solid #2c7da0;
+        }
+
+        .flex-between {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+        }
+
+        .completion-badge {
+            font-size: 0.8rem;
+            background: #e9f5e9;
+            padding: 0.2rem 0.8rem;
+            border-radius: 50px;
+            color: #2b6e4f;
+        }
+
+        hr {
+            margin: 1rem 0;
+            border-color: #e2e8f0;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 2rem;
+            font-size: 0.75rem;
+            color: #6c86a3;
+        }
+
+        @media (max-width: 760px) {
+            body {
+                padding: 1rem;
+            }
+            .card {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>✨ New User Onboarding · Interactive Checklist</h1>
+        <p>AD groups + Azure security + MFA + 8x8 & PowerShell — complete each step for Icon International new hires.</p>
+    </div>
+
+    <div class="card">
+        <div class="flex-between">
+            <div class="card-title">👤 1. User details & role</div>
+            <div class="completion-badge" id="roleBadge">Role required</div>
+        </div>
+        <div class="role-selector">
+            <div class="field">
+                <label>Full name</label>
+                <input type="text" id="userName" placeholder="e.g., Jennifer Stephens" value="Jennifer Stephens">
+            </div>
+            <div class="field">
+                <label>Email address</label>
+                <input type="email" id="userEmail" placeholder="first.last@iconinternational.com" value="Jennifer.Stephens@iconinternational.com">
+            </div>
+            <div class="field">
+                <label>Job title (role) *</label>
+                <select id="roleSelect">
+                    <option value="president">President of Travel Services</option>
+                    <option value="mediaPerf">Media Investment Associate (Performance Media)</option>
+                    <option value="srMediaLead">Sr. Media Investment Lead</option>
+                    <option value="accounting">Accounting Analyst (Billing)</option>
+                    <option value="financialCredit">Financial Credit Analyst</option>
+                    <option value="hrAdmin">Human Resources Front Office Administrator</option>
+                    <option value="mediaPrint">Media Investment Associate (Print/OOH)</option>
+                    <option value="salesDir">Sales - New Business Director</option>
+                    <option value="adPlatformsProg">Ad Platforms - Programmatic Supply Lead</option>
+                    <option value="adPlatformsAff">Ad Platforms - Affiliate Marketing Lead</option>
+                    <option value="accountService">Account Service Specialist (Performance Media)</option>
+                </select>
+            </div>
+            <div>
+                <button id="resetRoleDefaultsBtn" class="secondary" style="margin-top: 1.6rem;">⟳ Reset role groups</button>
+            </div>
+        </div>
+        <div class="info-note">
+            📌 Based on selected role, mandatory AD security groups + role-specific Azure assignments will be auto-checked below.
+            <strong>Office 365 Admin Center:</strong> Save changes after each edit & enable MFA enforcement.
+        </div>
+    </div>
+
+    <div class="grid-2col">
+        <!-- LEFT COLUMN: AD GROUPS + AZURE DEFAULT -->
+        <div>
+            <!-- Active Directory groups (role specific) -->
+            <div class="card">
+                <div class="card-title">🖥️ Active Directory Security Groups <span style="font-size:0.8rem;">(role‑based)</span></div>
+                <div id="adGroupsContainer" class="checklist-group">
+                    <!-- dynamic AD checklist will be injected here -->
+                    <div style="padding:1rem; text-align:center;">Loading groups...</div>
+                </div>
+                <div class="info-note" style="margin-top: 1rem;">
+                    ⚙️ Groups extracted from user provisioning docs: folder MOD, shares, department securities.
+                </div>
+            </div>
+
+            <!-- Default Azure groups (always required) -->
+            <div class="card">
+                <div class="card-title">☁️ Azure AD Default Groups <span class="badge-group">EVERY USER</span></div>
+                <div id="azureDefaultContainer" class="checklist-group">
+                    <!-- static + dynamic default azure groups -->
+                </div>
+                <div class="info-note">
+                    🔐 Based on internal standards: 8x8 licenses, Conditional Access, Netskope, Icon Intl-Everyone, Stamford/Florida Office.
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT COLUMN: ROLE-SPECIFIC AZURE + TASKS -->
+        <div>
+            <div class="card">
+                <div class="card-title">🌐 Additional Azure Groups <span class="badge-group">role‑specific</span></div>
+                <div id="roleAzureContainer" class="checklist-group">
+                    <!-- dynamic azure extra groups (Media investment, Comcast IDP etc) -->
+                </div>
+                <div class="info-note">
+                    🧩 Media Investment roles get "Media investment", "Local Media" — Print/OOH additionally "Comcast IDP".
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">📞 8x8 & Collaboration Setup</div>
+                <div id="telecomTasks" class="checklist-group">
+                    <!-- 8x8, teams integration -->
+                </div>
+                <div class="info-note">
+                    🎧 8x8 license: X Series - X2-VOSVC0216-02-US • MS Teams integration must be ENABLED.
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">⚙️ Critical Admin Steps</div>
+                <div id="criticalTasksContainer" class="checklist-group"></div>
+                <div class="info-note" style="margin-top: 12px;">
+                    💻 PowerShell: <code>powershell.exe -ExecutionPolicy Bypass -File .\PullIIUserInfo.ps1</code><br>
+                    🌐 Internet Options → Security → Local Intranet → Sites → Advanced: add <strong>https://intranet.iconinternational.com/</strong> (require server verification HTTPS)
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Final summary + action -->
+    <div class="card">
+        <div class="flex-between">
+            <div class="card-title">✅ Master completion tracker</div>
+            <button id="resetAllChecks" class="secondary">Reset all checkboxes</button>
+        </div>
+        <div id="progressSummary" style="margin-bottom: 0.8rem; font-weight:500;"></div>
+        <div style="display: flex; gap: 1rem; flex-wrap:wrap; justify-content: space-between; align-items:center;">
+            <span id="checkCountDisplay">0/0 tasks completed</span>
+            <button id="copySummaryBtn" style="background:#2c7a6e;">📋 Copy checklist status</button>
+        </div>
+        <div class="info-note" style="margin-top: 1rem;">
+            📝 Media Ops Ticket reference: Start date 05/11/2026 sample accounts (Jennifer Stephens, Elisabeth Etienne, Jonathan Baker). Ensure above groups match requisition.
+        </div>
+    </div>
+    <footer>
+        Icon International new user guide — Interactive checklist | AD groups + Azure + MFA enforcement + Intranet config
+    </footer>
+</div>
+
+<script>
+    // --------------------------------------------------------------
+    // 1. DATA MAPPING: AD groups per role (based on provided table)
+    // --------------------------------------------------------------
+    const roleADMap = {
+        president: [
+            "Domain Users", "Everyone", "IconIntl_7212181d39b7", "Inventory Folder MOD",
+            "Marketing Folder MOD", "Marketing Share MOD", "Merchandise Folder MOD",
+            "MerchTravel Billing Folder", "Point of Purchase SG", "SPS Folder",
+            "Trade Credits Folder", "Travel Folder MOD"
+        ],
+        mediaPerf: [
+            "Direct Response Folder MOD", "Domain Users", "Everyone II",
+            "iconurl_7212181d39b7", "iWomen CT Announcements_43952db37578",
+            "Printer-Mediainvestment-14thFloor"
+        ],
+        srMediaLead: [
+            "Direct Response Folder MOD", "Domain Users", "DRLocalShared", "DRNationalShared",
+            "Everyone II", "iconurl_7212181d39b7", "iWomen CT Announcements_43952db37578"
+        ],
+        accounting: [
+            "Accounting Folder MOD Billing", "(Local)_b33079d06102", "Domain Users",
+            "Everyone II", "icon billing", "ICON Communications_fe5e67f5ba5"
+        ],
+        financialCredit: [
+            "Domain Users", "Everyone II", "ICON Communications_fe5e67f5ba5",
+            "Icon Credit Group_9a88e9c5088", "IconInt_7212181d39b7", "Inventory Folder MOD",
+            "iWomen CT Announcements_43952db37578", "MAFs", "Pentaho_Credit", "Pentaho_Users"
+        ],
+        hrAdmin: [
+            "Domain Users", "Everyone II", "HR Shared Folder MOD", "AD Groups - HR Department"
+        ],
+        mediaPrint: [
+            "Domain Users", "Everyone II", "ICON Communications_fe5e67f5ba5",
+            "IconInt_7212181d39b7", "Print-OOH Dept._b9df28125db5", "Print-OOH Folder MOD"
+        ],
+        salesDir: [
+            "Domain Users", "Everyone II", "ICON Communications_fe5e67f5ba5",
+            "IconInt_7212181d39b7", "Sales Folder RO", "SALES TEAM_a6f66db4ae4b"
+        ],
+        adPlatformsProg: [
+            "Ad Platforms MOD", "Digital Media Operations", "Digital Media PMs RO",
+            "Domain Users", "Everyone II", "ICON Communications_fe5e67f5ba5",
+            "IconInt_7212181d39b7", "RPM Team_b3289e4544"
+        ],
+        adPlatformsAff: [
+            "Ad Platforms MOD", "Affiliate Team_d5585afc475", "David's Bridal_5455dc1497d",
+            "Domain Users", "Everyone II", "ICON Communications_fe5e67f5ba5", "IconInt_7212181d39b7"
+        ],
+        accountService: [
+            "Direct Response Folder MOD", "Domain Users", "Everyone II",
+            "ICON Communications_fe5e67f5ba5", "IconInt_7212181d39b7"
+        ]
+    };
+
+    // role-specific Azure extra groups (beyond default)
+    const roleSpecificAzureMap = {
+        mediaPerf: ["Media investment", "Local Media"],
+        srMediaLead: ["Media investment", "Local Media"],
+        mediaPrint: ["Comcast IDP"],
+        // for others none or could extend
+        president: [],
+        accounting: [],
+        financialCredit: [],
+        hrAdmin: [],
+        salesDir: [],
+        adPlatformsProg: [],
+        adPlatformsAff: [],
+        accountService: []
+    };
+    // merge for mediaPrint: also include Comcast IDP only, mediaPerf also keeps
+    // if needed combine later
+
+    // Default Azure groups (from documentation)
+    const DEFAULT_AZURE_GROUPS = [
+        "8x8 Phone Licenses", "ConditionalAccessTest", "Conditional Access: Risky sign-in MFA",
+        "Netskope Pilot Policy Assignment", "Netskope Private Access - All Users",
+        "Icon Intl-Everyone", "Icon Intl-Stamford/Florida Office"
+    ];
+
+    // Critical tasks (always present)
+    const CRITICAL_TASKS = [
+        { id: "mfa_enable", label: "Enable Multi-Factor Authentication (MFA)" },
+        { id: "mfa_enforce", label: "Enforce MFA (after enabling)" },
+        { id: "add_admin_center", label: "Add user in Office 365 Admin Center & assign groups per checklist" },
+        { id: "run_powershell", label: "Run PowerShell: powershell.exe -ExecutionPolicy Bypass -File .\\PullIIUserInfo.ps1" },
+        { id: "intranet_site", label: "Add https://intranet.iconinternational.com/ to Local Intranet Sites (Advanced) + require server verification HTTPS" }
+    ];
+
+    const TELECOM_TASKS = [
+        { id: "8x8_license", label: "Assign 8x8 Phone License (X Series - X2-VOSVC0216-02-US)" },
+        { id: "teams_integration", label: "Enable MS Teams integration (ON)" }
+    ];
+
+    // DOM references
+    let adGroupsContainer = document.getElementById('adGroupsContainer');
+    let azureDefaultContainer = document.getElementById('azureDefaultContainer');
+    let roleAzureContainer = document.getElementById('roleAzureContainer');
+    let telecomTasksDiv = document.getElementById('telecomTasks');
+    let criticalTasksDiv = document.getElementById('criticalTasksContainer');
+    let roleSelect = document.getElementById('roleSelect');
+    let resetRoleBtn = document.getElementById('resetRoleDefaultsBtn');
+    let resetAllChecks = document.getElementById('resetAllChecks');
+    let copySummaryBtn = document.getElementById('copySummaryBtn');
+    let checkCountDisplay = document.getElementById('checkCountDisplay');
+    let progressSummarySpan = document.getElementById('progressSummary');
+
+    // store all checkbox references for count update
+    let allCheckboxes = [];
+
+    function rebuildAllSections() {
+        buildDefaultAzureChecklist();
+        buildTelecomChecklist();
+        buildCriticalChecklist();
+        updateRoleBasedContent();   // AD + role-specific azure groups
+        attachGlobalCheckboxListener();
+        updateCompletionCounter();
+    }
+
+    function buildDefaultAzureChecklist() {
+        azureDefaultContainer.innerHTML = '';
+        DEFAULT_AZURE_GROUPS.forEach(group => {
+            const div = document.createElement('div');
+            div.className = 'checklist-item';
+            const cb = document.createElement('input');
+            cb.type = 'checkbox';
+            cb.checked = true;   // by default all required groups checked (standard)
+            cb.setAttribute('data-category', 'azure-default');
+            cb.setAttribute('data-name', group);
+            const label = document.createElement('label');
+            label.innerText = group;
+            div.appendChild(cb);
+            div.appendChild(label);
+            azureDefaultContainer.appendChild(div);
+        });
+    }
+
+    function buildTelecomChecklist() {
+        telecomTasksDiv.innerHTML = '';
+        TELECOM_TASKS.forEach(task => {
+            const div = document.createElement('div');
+            div.className = 'checklist-item';
+            const cb = document.createElement('input');
+            cb.type = 'checkbox';
+            cb.checked = true;
+            cb.setAttribute('data-category', 'telecom');
+            cb.setAttribute('data-name', task.label);
+            const label = document.createElement('label');
+            label.innerText = task.label;
+            div.appendChild(cb);
+            div.appendChild(label);
+            telecomTasksDiv.appendChild(div);
+        });
+    }
+
+    function buildCriticalChecklist() {
+        criticalTasksDiv.innerHTML = '';
+        CRITICAL_TASKS.forEach(task => {
+            const div = document.createElement('div');
+            div.className = 'checklist-item';
+            const cb = document.createElement('input');
+            cb.type = 'checkbox';
+            cb.checked = false;
+            cb.setAttribute('data-category', 'critical');
+            cb.setAttribute('data-name', task.label);
+            const label = document.createElement('label');
+            label.innerText = task.label;
+            div.appendChild(cb);
+            div.appendChild(label);
+            criticalTasksDiv.appendChild(div);
+        });
+    }
+
+    function updateRoleBasedContent() {
+        const selectedRole = roleSelect.value;
+        // Update AD groups
+        const groups = roleADMap[selectedRole] || [];
+        adGroupsContainer.innerHTML = '';
+        if (groups.length === 0) {
+            adGroupsContainer.innerHTML = '<div class="checklist-item"><i>No specific AD groups for this role (use defaults).</i></div>';
+        } else {
+            groups.forEach(group => {
+                const div = document.createElement('div');
+                div.className = 'checklist-item';
+                const cb = document.createElement('input');
+                cb.type = 'checkbox';
+                cb.checked = true;   // mandatory groups pre-checked
+                cb.setAttribute('data-category', 'adgroup');
+                cb.setAttribute('data-name', group);
+                const label = document.createElement('label');
+                label.innerText = group;
+                div.appendChild(cb);
+                div.appendChild(label);
+                adGroupsContainer.appendChild(div);
+            });
+        }
+
+        // Role-specific Azure extra groups
+        let extraAzure = roleSpecificAzureMap[selectedRole] || [];
+        // For mediaPrint already includes Comcast IDP, but also note nothing else. For mediaPerf/srMediaLead as above
+        if (selectedRole === 'mediaPrint') {
+            if (!extraAzure.includes('Comcast IDP')) extraAzure = ['Comcast IDP'];
+        }
+        if (selectedRole === 'mediaPerf' || selectedRole === 'srMediaLead') {
+            const base = ['Media investment', 'Local Media'];
+            extraAzure = [...new Set([...base, ...extraAzure])];
+        }
+        roleAzureContainer.innerHTML = '';
+        if (extraAzure.length === 0) {
+            roleAzureContainer.innerHTML = '<div class="checklist-item"><i>No extra Azure groups required for this role.</i></div>';
+        } else {
+            extraAzure.forEach(group => {
+                const div = document.createElement('div');
+                div.className = 'checklist-item';
+                const cb = document.createElement('input');
+                cb.type = 'checkbox';
+                cb.checked = true;
+                cb.setAttribute('data-category', 'role-azure');
+                cb.setAttribute('data-name', group);
+                const label = document.createElement('label');
+                label.innerText = group;
+                div.appendChild(cb);
+                div.appendChild(label);
+                roleAzureContainer.appendChild(div);
+            });
+        }
+    }
+
+    function attachGlobalCheckboxListener() {
+        const containers = [adGroupsContainer, azureDefaultContainer, roleAzureContainer, telecomTasksDiv, criticalTasksDiv];
+        allCheckboxes = [];
+        containers.forEach(container => {
+            if (container) {
+                const cbs = container.querySelectorAll('input[type="checkbox"]');
+                cbs.forEach(cb => {
+                    if (!allCheckboxes.includes(cb)) allCheckboxes.push(cb);
+                    cb.removeEventListener('change', updateCompletionCounter);
+                    cb.addEventListener('change', updateCompletionCounter);
+                });
+            }
+        });
+        // also gather after dynamic
+        updateCompletionCounter();
+    }
+
+    function updateCompletionCounter() {
+        const allBoxes = document.querySelectorAll('input[type="checkbox"]');
+        let total = allBoxes.length;
+        let checked = 0;
+        allBoxes.forEach(cb => { if (cb.checked) checked++; });
+        const percent = total ? Math.round((checked / total) * 100) : 0;
+        checkCountDisplay.innerText = `${checked}/${total} tasks completed (${percent}%)`;
+        progressSummarySpan.innerHTML = `📋 ${checked} of ${total} checkpoints done — ${percent}% ready for deployment.`;
+        if (percent === 100) progressSummarySpan.innerHTML += ' 🎉 All steps verified!';
+    }
+
+    function resetRoleDefaults() {
+        // reset AD groups and role-specific Azure based on current role, but preserve default azure and telecom?
+        // for consistency, we reset AD & roleAzure to default checked, and keep default azure checked (they are default checked already)
+        // Also reset 8x8/MS teams remain checked (but they are part of telecom, we want them checked). keep critical tasks unchecked? critical tasks should remain untouched but we can optionally set only role-based. We'll reset role sections.
+        updateRoleBasedContent();
+        // Also re-check default azure groups (all checked)
+        const defaultAzureChecks = azureDefaultContainer.querySelectorAll('input[type="checkbox"]');
+        defaultAzureChecks.forEach(cb => { cb.checked = true; });
+        // telecom tasks (8x8, teams integration) keep them checked (good practice)
+        const telecomChecks = telecomTasksDiv.querySelectorAll('input[type="checkbox"]');
+        telecomChecks.forEach(cb => { cb.checked = true; });
+        // critical tasks stay as user-modified but could also set to unchecked for fresh? but better no interference.
+        // We optionally do not reset critical tasks because admin may want them separate but provide explicit "reset all" button.
+        attachGlobalCheckboxListener();
+        updateCompletionCounter();
+    }
+
+    function resetAllCheckboxesCompletely() {
+        const allBoxes = document.querySelectorAll('input[type="checkbox"]');
+        allBoxes.forEach(cb => { cb.checked = false; });
+        // But then we need to set intelligent defaults? Better to reapply "default role+azure+telecom" state but keep AD and role Azure checked? 
+        // According to UX: reset all means start fresh empty state but it's confusing, we'll reset role-specific defaults again keeping AD & azure role groups checked.
+        // For consistency: apply resetRoleDefaults (restores mandatory groups, telecom, default azure)
+        resetRoleDefaults();
+        // but also we set critical tasks to unchecked (fresh)
+        const criticalBoxes = criticalTasksDiv.querySelectorAll('input[type="checkbox"]');
+        criticalBoxes.forEach(cb => { cb.checked = false; });
+        attachGlobalChecklistObserverRefresh();
+        updateCompletionCounter();
+    }
+
+    function attachGlobalChecklistObserverRefresh() {
+        const allNew = document.querySelectorAll('input[type="checkbox"]');
+        allNew.forEach(cb => {
+            cb.removeEventListener('change', updateCompletionCounter);
+            cb.addEventListener('change', updateCompletionCounter);
+        });
+        updateCompletionCounter();
+    }
+
+    function copySummary() {
+        const userName = document.getElementById('userName').value || 'New User';
+        const userEmail = document.getElementById('userEmail').value || 'email@iconinternational.com';
+        const roleText = roleSelect.options[roleSelect.selectedIndex]?.text || 'Role';
+        let checkedItems = [];
+        document.querySelectorAll('input[type="checkbox"]:checked').forEach(cb => {
+            const parentLabel = cb.parentElement?.querySelector('label')?.innerText;
+            if (parentLabel) checkedItems.push(parentLabel);
+        });
+        const summary = `User: ${userName} (${userEmail}) | Role: ${roleText}\n✅ Completed tasks (${checkedItems.length}):\n- ${checkedItems.join('\n- ')}`;
+        navigator.clipboard.writeText(summary).then(() => {
+            alert('Checklist status copied to clipboard!');
+        }).catch(() => alert('Could not copy'));
+    }
+
+    // Additional: also call after dynamic role change to refresh listeners
+    function onRoleChangeFull() {
+        updateRoleBasedContent();
+        attachGlobalCheckboxListener();
+        // ensure default azure groups are all still checked? they remain unchanged.
+        // for consistency we make sure default azure remains checked
+        const defAzure = azureDefaultContainer.querySelectorAll('input[type="checkbox"]');
+        defAzure.forEach(cb => { if (!cb.checked) cb.checked = true; });
+        const telecomChecks = telecomTasksDiv.querySelectorAll('input[type="checkbox"]');
+        telecomChecks.forEach(cb => { if (!cb.checked) cb.checked = true; });
+        attachGlobalCheckboxListener();
+        updateCompletionCounter();
+    }
+
+    // Event binding
+    roleSelect.addEventListener('change', onRoleChangeFull);
+    resetRoleBtn.addEventListener('click', resetRoleDefaults);
+    resetAllChecks.addEventListener('click', resetAllCheckboxesCompletely);
+    copySummaryBtn.addEventListener('click', copySummary);
+
+    // initial build
+    rebuildAllSections();
+    onRoleChangeFull();  // load first role groups
+    attachGlobalCheckboxListener();
+
+    // additional: reattach after any dynamic changes
+    function finalListeners() {
+        const obs = new MutationObserver(() => {
+            attachGlobalCheckboxListener();
+            updateCompletionCounter();
+        });
+        obs.observe(adGroupsContainer, { childList: true, subtree: true });
+        obs.observe(roleAzureContainer, { childList: true, subtree: true });
+    }
+    finalListeners();
+</script>
+</body>
+</html>
