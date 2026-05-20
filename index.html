@@ -3,57 +3,65 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Icon Intl · New User Onboarding Checklist</title>
+<title>Icon Intl · New User Onboarding</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Segoe UI',Roboto,'Helvetica Neue',sans-serif;background:#f0f4f8;color:#1a2c3e;padding:2rem 1rem}
 #app{max-width:1200px;margin:0 auto}
+
 .page-header{margin-bottom:1.5rem}
-.page-header h1{font-size:22px;font-weight:600;color:#0b2b3b;display:flex;align-items:center;gap:8px}
-.page-header p{font-size:13px;color:#4a6a80;margin-top:4px;border-left:3px solid #2c7da0;padding-left:10px}
-.user-bar{background:#fff;border:1px solid #dde4ed;border-radius:16px;padding:1rem 1.25rem;margin-bottom:1rem;box-shadow:0 2px 8px rgba(0,0,0,.04)}
+.page-header h1{font-size:21px;font-weight:600;color:#0b2b3b}
+.page-header p{font-size:13px;color:#4a6a80;margin-top:5px;border-left:3px solid #2c7da0;padding-left:10px}
+
+.user-bar{background:#fff;border:1px solid #dde4ed;border-radius:14px;padding:1rem 1.25rem;margin-bottom:1rem;box-shadow:0 2px 6px rgba(0,0,0,.04)}
 .user-bar-grid{display:grid;grid-template-columns:1fr 1fr 2fr;gap:12px;align-items:end}
-@media(max-width:600px){.user-bar-grid{grid-template-columns:1fr}}
-.field-label{font-size:12px;color:#4a6a80;margin-bottom:4px;display:block;font-weight:500}
-input[type=text],input[type=email],select{width:100%;padding:8px 12px;border:1px solid #cbd5e1;border-radius:10px;background:#fff;font-size:13px;font-family:inherit;transition:.2s}
-input:focus,select:focus{outline:none;border-color:#2c7da0;box-shadow:0 0 0 3px rgba(44,125,160,.15)}
-.progress-bar-wrap{background:#fff;border:1px solid #dde4ed;border-radius:16px;padding:1rem 1.25rem;margin-bottom:1rem;display:flex;align-items:center;gap:16px;box-shadow:0 2px 8px rgba(0,0,0,.04)}
-.progress-track{flex:1;height:6px;background:#e2e8f0;border-radius:999px;overflow:hidden}
-.progress-fill{height:100%;background:#0f6e56;border-radius:999px;transition:width .3s}
-.progress-label{font-size:13px;color:#4a6a80;white-space:nowrap;min-width:80px;text-align:right}
-.complete-badge{display:none;font-size:12px;background:#eaf3de;color:#3b6d11;padding:2px 10px;border-radius:999px;white-space:nowrap;font-weight:500}
-.complete-badge.show{display:inline}
+@media(max-width:640px){.user-bar-grid{grid-template-columns:1fr}}
+.field-label{font-size:11px;font-weight:600;color:#4a6a80;margin-bottom:4px;display:block;text-transform:uppercase;letter-spacing:.4px}
+input[type=text],input[type=email],select{width:100%;padding:7px 11px;border:1px solid #cbd5e1;border-radius:8px;background:#fff;font-size:13px;font-family:inherit;transition:.15s;color:#1a2c3e}
+input:focus,select:focus{outline:none;border-color:#2c7da0;box-shadow:0 0 0 3px rgba(44,125,160,.12)}
+
+.progress-wrap{background:#fff;border:1px solid #dde4ed;border-radius:14px;padding:.9rem 1.25rem;margin-bottom:1.2rem;display:flex;align-items:center;gap:14px;box-shadow:0 2px 6px rgba(0,0,0,.04)}
+.progress-track{flex:1;height:5px;background:#e2e8f0;border-radius:999px;overflow:hidden}
+.progress-fill{height:100%;background:#0f6e56;border-radius:999px;transition:width .35s ease}
+.progress-label{font-size:12px;color:#6b8299;white-space:nowrap;min-width:76px;text-align:right}
+.done-badge{display:none;font-size:11px;font-weight:600;background:#eaf3de;color:#2b6e4f;padding:2px 10px;border-radius:999px}
+.done-badge.show{display:inline}
+
 .columns{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 @media(max-width:680px){.columns{grid-template-columns:1fr}}
-.section-card{background:#fff;border:1px solid #dde4ed;border-radius:16px;padding:1rem 1.25rem;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,.04)}
-.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid #eef2f8}
-.section-title{font-size:14px;font-weight:600;color:#1a2c3e;display:flex;align-items:center;gap:6px}
-.section-icon{font-size:16px}
-.section-count{font-size:11px;color:#6b8299;background:#f1f5f9;padding:2px 8px;border-radius:999px}
-.badge{font-size:10px;font-weight:600;padding:1px 8px;border-radius:999px}
-.badge-all{background:#e6f4fb;color:#0c447c}
-.badge-role{background:#faeeda;color:#633806}
-.badge-critical{background:#fcebeb;color:#7a1f1f}
-.check-item{display:flex;align-items:flex-start;gap:10px;padding:7px 4px;border-bottom:1px solid #f1f5f9;cursor:pointer;transition:background .1s;border-radius:6px}
-.check-item:last-child{border-bottom:none}
-.check-item:hover{background:#f8fafc}
-.checkmark{width:18px;height:18px;min-width:18px;border:1.5px solid #cbd5e1;border-radius:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;transition:all .15s}
-.checkmark svg{display:none;width:11px;height:11px;stroke:#fff;stroke-width:2.5;fill:none}
-.check-item.checked .checkmark{background:#0f6e56;border-color:#0f6e56}
-.check-item.checked .checkmark svg{display:block}
-.check-item.checked .item-text{color:#94a3b8;text-decoration:line-through}
-.item-text{font-size:13px;color:#1a2c3e;flex:1;line-height:1.4}
-.item-sub{font-size:11px;color:#6b8299;margin-top:2px;font-family:'Courier New',monospace}
-.info-note{font-size:12px;color:#4a6a80;background:#f0f7fb;border-left:3px solid #2c7da0;border-radius:0 6px 6px 0;padding:8px 10px;margin-top:10px;line-height:1.6}
-.info-note code{font-family:'Courier New',monospace;font-size:11px;background:#fff;padding:1px 4px;border-radius:3px;border:1px solid #dde4ed;color:#0b4f6c}
-.empty-state{font-size:13px;color:#94a3b8;padding:8px 0;font-style:italic}
-.actions-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:1rem;justify-content:flex-end;align-items:center}
-button{padding:7px 14px;border-radius:999px;border:1px solid #cbd5e1;background:#fff;font-size:12px;font-family:inherit;font-weight:600;cursor:pointer;color:#1a2c3e;transition:all .2s;display:inline-flex;align-items:center;gap:5px}
+
+.card{background:#fff;border:1px solid #dde4ed;border-radius:14px;padding:1rem 1.25rem;margin-bottom:12px;box-shadow:0 2px 6px rgba(0,0,0,.04)}
+.card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;padding-bottom:9px;border-bottom:1px solid #eef2f8}
+.card-title{font-size:13px;font-weight:600;color:#1a2c3e;display:flex;align-items:center;gap:6px}
+.card-count{font-size:11px;color:#6b8299;background:#f1f5f9;padding:1px 8px;border-radius:999px}
+.badge{font-size:10px;font-weight:600;padding:1px 7px;border-radius:999px;margin-left:2px}
+.b-role{background:#fef3c7;color:#92400e}
+.b-warn{background:#fee2e2;color:#7f1d1d}
+.b-info{background:#dbeafe;color:#1e40af}
+
+.item{display:flex;align-items:flex-start;gap:9px;padding:6px 4px;border-bottom:1px solid #f1f5f9;cursor:pointer;border-radius:5px;transition:background .1s;user-select:none}
+.item:last-child{border-bottom:none}
+.item:hover{background:#f8fafc}
+.box{width:17px;height:17px;min-width:17px;border:1.5px solid #cbd5e1;border-radius:4px;display:flex;align-items:center;justify-content:center;margin-top:1px;transition:all .15s;flex-shrink:0}
+.box svg{display:none;width:10px;height:10px;stroke:#fff;stroke-width:2.8;fill:none}
+.item.on .box{background:#0f6e56;border-color:#0f6e56}
+.item.on .box svg{display:block}
+.item.on .lbl{color:#94a3b8;text-decoration:line-through}
+.lbl{font-size:13px;color:#1a2c3e;flex:1;line-height:1.4}
+.sub{font-size:11px;color:#6b8299;margin-top:1px}
+
+.note{font-size:12px;color:#4a6a80;background:#f0f7fb;border-left:3px solid #2c7da0;border-radius:0 5px 5px 0;padding:7px 10px;margin-top:9px;line-height:1.6}
+.note code{font-family:'Courier New',monospace;font-size:11px;background:#fff;padding:1px 4px;border-radius:3px;border:1px solid #dde4ed;color:#0b4f6c}
+.empty{font-size:12px;color:#94a3b8;padding:6px 2px;font-style:italic}
+.pending{font-size:12px;color:#b45309;background:#fffbeb;border-left:3px solid #f59e0b;border-radius:0 5px 5px 0;padding:7px 10px;margin-top:4px}
+
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:.8rem;justify-content:flex-end;align-items:center}
+button{padding:6px 14px;border-radius:999px;border:1px solid #cbd5e1;background:#fff;font-size:12px;font-family:inherit;font-weight:600;cursor:pointer;color:#1a2c3e;transition:all .18s;display:inline-flex;align-items:center;gap:5px}
 button:hover{background:#f0f4f8;border-color:#94a3b8}
-button.primary{background:#1f6e8c;color:#fff;border-color:#1f6e8c}
-button.primary:hover{background:#0e576e}
-.copy-feedback{font-size:12px;color:#0f6e56;opacity:0;transition:opacity .3s;font-weight:500}
-.copy-feedback.show{opacity:1}
+button.pri{background:#1f6e8c;color:#fff;border-color:#1f6e8c}
+button.pri:hover{background:#0e576e}
+.fb{font-size:12px;color:#0f6e56;opacity:0;transition:opacity .3s;font-weight:500}
+.fb.show{opacity:1}
 footer{text-align:center;margin-top:2rem;font-size:11px;color:#94a3b8}
 </style>
 </head>
@@ -61,275 +69,357 @@ footer{text-align:center;margin-top:2rem;font-size:11px;color:#94a3b8}
 <div id="app">
 
 <div class="page-header">
-  <h1>&#10024; New user onboarding — Icon International</h1>
-  <p>AD groups · Azure security · MFA · 8x8 · PowerShell — complete every step before the user's start date.</p>
+  <h1>&#10024; New user onboarding &mdash; Icon International</h1>
+  <p>AD groups &middot; Azure groups &middot; MFA &middot; 8x8 &middot; PowerShell &mdash; complete every step before the user&rsquo;s start date.</p>
 </div>
 
 <div class="user-bar">
   <div class="user-bar-grid">
     <div>
       <span class="field-label">Full name</span>
-      <input type="text" id="userName" placeholder="Jennifer Stephens" value="Jennifer Stephens">
+      <input type="text" id="uName" placeholder="First Last">
     </div>
     <div>
-      <span class="field-label">Email address</span>
-      <input type="email" id="userEmail" placeholder="first.last@iconinternational.com" value="Jennifer.Stephens@iconinternational.com">
+      <span class="field-label">Email</span>
+      <input type="email" id="uEmail" placeholder="first.last@iconinternational.com">
     </div>
     <div>
-      <span class="field-label">Job title / role</span>
+      <span class="field-label">Role</span>
       <select id="roleSelect">
-        <option value="president">President of Travel Services</option>
-        <option value="mediaPerf">Media Investment Associate (Performance Media)</option>
-        <option value="srMediaLead">Sr. Media Investment Lead</option>
-        <option value="accounting">Accounting Analyst (Billing)</option>
-        <option value="financialCredit">Financial Credit Analyst</option>
-        <option value="hrAdmin">Human Resources Front Office Administrator</option>
-        <option value="mediaPrint">Media Investment Associate (Print/OOH)</option>
-        <option value="salesDir">Sales — New Business Director</option>
-        <option value="adPlatformsProg">Ad Platforms — Programmatic Supply Lead</option>
-        <option value="adPlatformsAff">Ad Platforms — Affiliate Marketing Lead</option>
-        <option value="accountService">Account Service Specialist (Performance Media)</option>
+        <option value="president">President of Travel Services — Travel</option>
+        <option value="mediaInv">Media Investment Associate — Performance Media</option>
+        <option value="localMedia">Local Media</option>
+        <option value="perfMedia">Performance Media</option>
+        <option value="srMediaLead">Sr. Media Investment Lead — Performance Media</option>
+        <option value="accounting">Accounting Analyst (Billing) — Billing</option>
+        <option value="financialCredit">Financial Credit Analyst — Credit</option>
+        <option value="hrAdmin">HR Front Office Administrator — Human Resources</option>
+        <option value="mediaPrint">Media Investment Associate — Print/OOH</option>
+        <option value="salesDir">New Business Director — Sales</option>
+        <option value="adProg">Programmatic Supply Lead — Ad Platforms</option>
+        <option value="adAff">Affiliate Marketing Lead — Ad Platforms</option>
+        <option value="accountService">Account Service Specialist — Performance Media</option>
       </select>
     </div>
   </div>
 </div>
 
-<div class="progress-bar-wrap">
-  <span style="font-size:18px;">&#9989;</span>
-  <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
-  <span class="progress-label" id="progressLabel">0 / 0 done</span>
-  <span class="complete-badge" id="completeBadge">&#10003; All done!</span>
+<div class="progress-wrap">
+  <span style="font-size:15px">&#9989;</span>
+  <div class="progress-track"><div class="progress-fill" id="pFill" style="width:0%"></div></div>
+  <span class="progress-label" id="pLabel">0 / 0</span>
+  <span class="done-badge" id="doneBadge">&#10003; All done!</span>
 </div>
 
 <div class="columns">
   <div>
-    <div class="section-card">
-      <div class="section-header">
-        <span class="section-title">
-          <span class="section-icon">&#128421;</span>
-          Active Directory groups
-          <span class="badge badge-role">role-based</span>
-        </span>
-        <span class="section-count" id="adCount">0/0</span>
+    <!-- AD Groups -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">&#128421; Active Directory groups <span class="badge b-role">role-based</span></span>
+        <span class="card-count" id="cntAD">—</span>
       </div>
-      <div id="adList"></div>
-      <div class="info-note">Groups extracted from user provisioning docs: folder MOD, shares, department securities.</div>
+      <div id="lstAD"></div>
     </div>
 
-    <div class="section-card">
-      <div class="section-header">
-        <span class="section-title">
-          <span class="section-icon">&#9729;&#65039;</span>
-          Azure AD — default groups
-          <span class="badge badge-all">every user</span>
-        </span>
-        <span class="section-count" id="azureDefaultCount">0/0</span>
+    <!-- Azure Groups -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">&#9729;&#65039; Azure AD groups <span class="badge b-role">role-based</span></span>
+        <span class="card-count" id="cntAZ">—</span>
       </div>
-      <div id="azureDefaultList"></div>
-      <div class="info-note">All users are assigned these groups regardless of role. Includes licensing, Conditional Access, Netskope, and distribution lists.</div>
+      <div id="lstAZ"></div>
     </div>
   </div>
 
   <div>
-    <div class="section-card">
-      <div class="section-header">
-        <span class="section-title">
-          <span class="section-icon">&#129528;</span>
-          Azure AD — role-specific groups
-          <span class="badge badge-role">role-based</span>
-        </span>
-        <span class="section-count" id="roleAzureCount">0/0</span>
+    <!-- 8x8 -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">&#128222; 8x8 &amp; collaboration</span>
+        <span class="card-count" id="cntTel">—</span>
       </div>
-      <div id="roleAzureList"></div>
-      <div class="info-note">Performance Media / Sr. Lead &#8594; Media Investment + Local Media. Print/OOH &#8594; Comcast IDP. Assigned in addition to default groups above.</div>
+      <div id="lstTel"></div>
+      <div class="note">License SKU: <code>X Series - X2-VOSVC0216-02-US</code> &middot; MS Teams integration must be set to ON.</div>
     </div>
 
-    <div class="section-card">
-      <div class="section-header">
-        <span class="section-title">
-          <span class="section-icon">&#128222;</span>
-          8x8 &amp; collaboration
-        </span>
-        <span class="section-count" id="telecomCount">0/0</span>
+    <!-- Critical steps -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">&#128274; Critical admin steps <span class="badge b-warn">do last</span></span>
+        <span class="card-count" id="cntCrit">—</span>
       </div>
-      <div id="telecomList"></div>
-      <div class="info-note">License SKU: <code>X Series - X2-VOSVC0216-02-US</code> &middot; MS Teams integration must be enabled.</div>
-    </div>
-
-    <div class="section-card">
-      <div class="section-header">
-        <span class="section-title">
-          <span class="section-icon">&#128274;</span>
-          Critical admin steps
-          <span class="badge badge-critical">do last</span>
-        </span>
-        <span class="section-count" id="criticalCount">0/0</span>
-      </div>
-      <div id="criticalList"></div>
-      <div class="info-note">
+      <div id="lstCrit"></div>
+      <div class="note">
         PowerShell: <code>powershell.exe -ExecutionPolicy Bypass -File .\PullIIUserInfo.ps1</code><br><br>
-        Internet Options &#8594; Security &#8594; Local Intranet &#8594; Sites &#8594; Advanced &#8594; add <code>https://intranet.iconinternational.com/</code> (require server verification HTTPS)
+        Internet Options &#8594; Security &#8594; Local Intranet &#8594; Sites &#8594; Advanced &#8594; add <code>https://intranet.iconinternational.com/</code> and require server verification (HTTPS).
       </div>
     </div>
   </div>
 </div>
 
-<div class="actions-row">
-  <span class="copy-feedback" id="copyFeedback">&#10003; Copied!</span>
-  <button id="copyBtn" class="primary">&#128203; Copy summary</button>
-  <button id="resetBtn">&#8635; Reset all</button>
+<div class="actions">
+  <span class="fb" id="fb">&#10003; Copied!</span>
+  <button class="pri" id="btnCopy">&#128203; Copy summary</button>
+  <button id="btnReset">&#8635; Reset</button>
 </div>
 
-<footer>Icon International new user onboarding checklist &mdash; AD groups + Azure + MFA + 8x8 + PowerShell</footer>
+<footer>Icon International &mdash; New user onboarding checklist</footer>
 </div>
 
 <script>
-const roleADMap = {
-  president: ["Domain Users","Everyone","IconIntl_7212181d39b7","Inventory Folder MOD","Marketing Folder MOD","Marketing Share MOD","Merchandise Folder MOD","MerchTravel Billing Folder","Point of Purchase SG","SPS Folder","Trade Credits Folder","Travel Folder MOD"],
-  mediaPerf: ["Direct Response Folder MOD","Domain Users","Everyone II","iconurl_7212181d39b7","iWomen CT Announcements_43952db37578","Printer-Mediainvestment-14thFloor"],
-  srMediaLead: ["Direct Response Folder MOD","Domain Users","DRLocalShared","DRNationalShared","Everyone II","iconurl_7212181d39b7","iWomen CT Announcements_43952db37578"],
-  accounting: ["Accounting Folder MOD Billing","(Local)_b33079d06102","Domain Users","Everyone II","icon billing","ICON Communications_fe5e67f5ba5"],
-  financialCredit: ["Domain Users","Everyone II","ICON Communications_fe5e67f5ba5","Icon Credit Group_9a88e9c5088","IconInt_7212181d39b7","Inventory Folder MOD","iWomen CT Announcements_43952db37578","MAFs","Pentaho_Credit","Pentaho_Users"],
-  hrAdmin: ["Domain Users","Everyone II","HR Shared Folder MOD","AD Groups - HR Department"],
-  mediaPrint: ["Domain Users","Everyone II","ICON Communications_fe5e67f5ba5","IconInt_7212181d39b7","Print-OOH Dept._b9df28125db5","Print-OOH Folder MOD"],
-  salesDir: ["Domain Users","Everyone II","ICON Communications_fe5e67f5ba5","IconInt_7212181d39b7","Sales Folder RO","SALES TEAM_a6f66db4ae4b"],
-  adPlatformsProg: ["Ad Platforms MOD","Digital Media Operations","Digital Media PMs RO","Domain Users","Everyone II","ICON Communications_fe5e67f5ba5","IconInt_7212181d39b7","RPM Team_b3289e4544"],
-  adPlatformsAff: ["Ad Platforms MOD","Affiliate Team_d5585afc475","David's Bridal_5455dc1497d","Domain Users","Everyone II","ICON Communications_fe5e67f5ba5","IconInt_7212181d39b7"],
-  accountService: ["Direct Response Folder MOD","Domain Users","Everyone II","ICON Communications_fe5e67f5ba5","IconInt_7212181d39b7"]
+// ── AD GROUPS ─────────────────────────────────────────────────────────────────
+const AD = {
+  president: [
+    "Domain Users","Everyone","IconIntl_7212181d39b7","Inventory Folder MOD",
+    "Marketing Folder MOD","Marketing Share MOD","Merchandise Folder MOD",
+    "MerchTravel Billing Folder","Point of Purchase SG","SPS Folder",
+    "Trade Credits Folder","Travel Folder MOD"
+  ],
+  mediaInv: [
+    "Direct Response Folder MOD","Domain Users","Everyone II",
+    "iconurl_7212181d39b7","iWomen CT Announcements_43952db37578",
+    "Printer-Mediainvestment-14thFloor"
+  ],
+  localMedia: [],
+  perfMedia: [],
+  srMediaLead: [
+    "Direct Response Folder MOD","Domain Users","DRLocalShared","DRNationalShared",
+    "Everyone II","iconurl_7212181d39b7","iWomen CT Announcements_43952db37578"
+  ],
+  accounting: [
+    "Accounting Folder MOD Billing","(Local)_b33079d06102","Domain Users",
+    "Everyone II","icon billing","ICON Communications_fe5e67f5ba5"
+  ],
+  financialCredit: [
+    "Domain Users","Everyone II","ICON Communications_fe5e67f5ba5",
+    "Icon Credit Group_9a88e9c5088","IconInt_7212181d39b7","Inventory Folder MOD",
+    "iWomen CT Announcements_43952db37578","MAFs","Pentaho_Credit","Pentaho_Users"
+  ],
+  hrAdmin: [],
+  mediaPrint: [
+    "Domain Users","Everyone II","ICON Communications_fe5e67f5ba5",
+    "IconInt_7212181d39b7","Print-OOH Dept._b9df28125db5","Print-OOH Folder MOD"
+  ],
+  salesDir: [
+    "Domain Users","Everyone II","ICON Communications_fe5e67f5ba5",
+    "IconInt_7212181d39b7","Sales Folder RO","SALES TEAM_a6f66db4ae4b"
+  ],
+  adProg: [
+    "Ad Platforms MOD","Digital Media Operations","Digital Media PMs RO",
+    "Domain Users","Everyone II","ICON Communications_fe5e67f5ba5",
+    "IconInt_7212181d39b7","RPM Team_b3289e4544"
+  ],
+  adAff: [
+    "Ad Platforms MOD","Affiliate Team_d5585afc475","David's Bridal_5455dc1497d",
+    "Domain Users","Everyone II","ICON Communications_fe5e67f5ba5","IconInt_7212181d39b7"
+  ],
+  accountService: [
+    "Direct Response Folder MOD","Domain Users","Everyone II",
+    "ICON Communications_fe5e67f5ba5","IconInt_7212181d39b7"
+  ]
 };
 
-const DEFAULT_AZURE = [
-  {name:"8x8 Phone Licenses", email:""},
-  {name:"Comcast IDP", email:""},
-  {name:"Conditional Access: Risky sign-in multifactor authentication", email:"", sub:"a4ea6c0f-b8fb-4d29-91f1-9f8cf0601e98"},
-  {name:"ConditionalAccessTest", email:""},
-  {name:"DOMO Users", email:""},
-  {name:"ICON Announcements", email:""},
-  {name:"Icon Intl-Everyone", email:"Everyone@ICON-INTL.com"},
-  {name:"Icon Intl-Florida Office", email:"FloridaTeam@ICON-INTL.com"},
-  {name:"Icon Intl-LocalBroadcast", email:"Local_Broadcast@ICON-INTL.com"},
-  {name:"IconIntl", email:"IconIntl@iconintlus.onmicrosoft.com"},
-  {name:"Netskope Pilot Policy Assignment", email:""},
-  {name:"Netskope Private Access - All Users", email:""}
-];
-
-const roleAzureMap = {
-  mediaPerf:    [{name:"Media Investment",email:""},{name:"Local Media",email:""}],
-  srMediaLead:  [{name:"Media Investment",email:""},{name:"Local Media",email:""}],
-  mediaPrint:   [{name:"Media Investment",email:""},{name:"Local Media",email:""},{name:"Comcast IDP",email:""}],
-  president:[], accounting:[], financialCredit:[], hrAdmin:[], salesDir:[], adPlatformsProg:[], adPlatformsAff:[], accountService:[]
+// ── AZURE GROUPS ──────────────────────────────────────────────────────────────
+const AZ = {
+  mediaInv: [
+    { n:"8x8 Phone Licenses" },
+    { n:"Comcast IDP" },
+    { n:"Conditional Access: Risky sign-in multifactor authentication", s:"a4ea6c0f-b8fb-4d29-91f1-9f8cf0601e98" },
+    { n:"ConditionalAccessTest" },
+    { n:"DOMO Users" },
+    { n:"ICON Announcements" },
+    { n:"Icon Intl-Everyone", s:"Everyone@ICON-INTL.com" },
+    { n:"Icon Intl-Florida Office", s:"FloridaTeam@ICON-INTL.com" },
+    { n:"Icon Intl-iWomenGroup", s:"iWomenGroup@ICON-INTL.com" },
+    { n:"IconIntl", s:"IconIntl@iconintlus.onmicrosoft.com" },
+    { n:"iWomen Florida", s:"iWomenFlorida@iconintl.com" },
+    { n:"Media Investment", s:"MediaInvestment@icon-intl.com" },
+    { n:"Netskope Pilot Policy Assignment" },
+    { n:"Netskope Private Access - All Users" }
+  ],
+  localMedia: [
+    { n:"8x8 Phone Licenses" },
+    { n:"Comcast IDP" },
+    { n:"Conditional Access: Risky sign-in multifactor authentication", s:"a4ea6c0f-b8fb-4d29-91f1-9f8cf0601e98" },
+    { n:"ConditionalAccessTest" },
+    { n:"DOMO Users" },
+    { n:"ICON Announcements" },
+    { n:"Icon Intl-Everyone", s:"Everyone@ICON-INTL.com" },
+    { n:"Icon Intl-Florida Office", s:"FloridaTeam@ICON-INTL.com" },
+    { n:"Icon Intl-LocalBroadcast", s:"Local_Broadcast@ICON-INTL.com" },
+    { n:"IconIntl", s:"IconIntl@iconintlus.onmicrosoft.com" },
+    { n:"Netskope Pilot Policy Assignment" },
+    { n:"Netskope Private Access - All Users" }
+  ],
+  perfMedia: [
+    { n:"8x8 Phone Licenses" },
+    { n:"Conditional Access: Risky sign-in multifactor authentication", s:"a4ea6c0f-b8fb-4d29-91f1-9f8cf0601e98" },
+    { n:"ConditionalAccessTest" },
+    { n:"ICON Announcements" },
+    { n:"Icon Intl-Everyone", s:"Everyone@ICON-INTL.com" },
+    { n:"Icon Intl-Florida Office", s:"FloridaTeam@ICON-INTL.com" },
+    { n:"Icon Intl-Performance Media", s:"PM@icon-intl.com" },
+    { n:"IconIntl", s:"IconIntl@iconintlus.onmicrosoft.com" },
+    { n:"Netskope Pilot Policy Assignment" },
+    { n:"Netskope Private Access - All Users" },
+    { n:"PM - Performance Media", s:"PM-PerformanceMedia@iconintl.com" }
+  ],
+  adProg: [
+    { n:"8x8 Phone Licenses" },
+    { n:"Ad Platforms Team", s:"AdPlatformsTeam@icon-intl.com" },
+    { n:"Conditional Access: Risky sign-in multifactor authentication", s:"a4ea6c0f-b8fb-4d29-91f1-9f8cf0601e98" },
+    { n:"ConditionalAccessTest" },
+    { n:"DOMO Users" },
+    { n:"ICON Announcements" },
+    { n:"ICON Communications", s:"ICONCommunications@iconintl.com" },
+    { n:"ICON Newell Media Team", s:"NewellMediaTeam@iconinternational.com" },
+    { n:"iWomen Florida", s:"iWomenFlorida@iconintl.com" },
+    { n:"Netskope Pilot Policy Assignment" },
+    { n:"Netskope Private Access - All Users" },
+    { n:"Slack Users" }
+  ],
+  adAff: [
+    { n:"8x8 Phone Licenses" },
+    { n:"Ad Platforms Team", s:"AdPlatformsTeam@icon-intl.com" },
+    { n:"Conditional Access: Risky sign-in multifactor authentication", s:"a4ea6c0f-b8fb-4d29-91f1-9f8cf0601e98" },
+    { n:"ConditionalAccessTest" },
+    { n:"DOMO Users" },
+    { n:"ICON Announcements" },
+    { n:"ICON Communications", s:"ICONCommunications@iconintl.com" },
+    { n:"ICON Newell Media Team", s:"NewellMediaTeam@iconinternational.com" },
+    { n:"iWomen Florida", s:"iWomenFlorida@iconintl.com" },
+    { n:"Netskope Pilot Policy Assignment" },
+    { n:"Netskope Private Access - All Users" },
+    { n:"Slack Users" }
+  ],
+  // Pending — no screenshot yet
+  president:      null,
+  srMediaLead:    null,
+  accounting:     null,
+  financialCredit:null,
+  hrAdmin:        null,
+  mediaPrint:     null,
+  salesDir:       null,
+  accountService: null
 };
 
+// ── STATIC SECTIONS ───────────────────────────────────────────────────────────
 const TELECOM = [
-  {name:"Assign 8x8 phone license (X Series - X2-VOSVC0216-02-US)"},
-  {name:"Enable MS Teams integration"}
+  { n:"Assign 8x8 phone license — X Series: X2-VOSVC0216-02-US" },
+  { n:"Enable MS Teams integration (set to ON)" }
 ];
 
 const CRITICAL = [
-  {name:"Enable Multi-Factor Authentication (MFA)"},
-  {name:"Enforce MFA after enabling"},
-  {name:"Add user in Office 365 Admin Center and assign groups per checklist"},
-  {name:"Run PowerShell: PullIIUserInfo.ps1 with Bypass execution policy"},
-  {name:"Add intranet.iconinternational.com to Local Intranet Sites (HTTPS, require server verification)"}
+  { n:"Enable Multi-Factor Authentication (MFA)" },
+  { n:"Enforce MFA after enabling" },
+  { n:"Add user in Office 365 Admin Center and assign all groups per checklist" },
+  { n:"Run PowerShell: PullIIUserInfo.ps1 with -ExecutionPolicy Bypass" },
+  { n:"Add intranet.iconinternational.com to Local Intranet Sites (HTTPS + require server verification)" }
 ];
 
-const CHECK_SVG = '<svg viewBox="0 0 12 12"><polyline points="1.5,6 4.5,9 10.5,3"/></svg>';
+// ── RENDER ────────────────────────────────────────────────────────────────────
+const SVG = '<svg viewBox="0 0 12 12"><polyline points="1.5,6.5 4.5,9.5 10.5,2.5"/></svg>';
 
-function makeItem(containerId, id, name, defaultChecked, sub) {
-  const wrap = document.createElement('div');
-  wrap.className = 'check-item' + (defaultChecked ? ' checked' : '');
-  wrap.setAttribute('role', 'checkbox');
-  wrap.setAttribute('aria-checked', defaultChecked ? 'true' : 'false');
-  wrap.setAttribute('tabindex', '0');
+function makeItem(parentId, text, checked, sub) {
+  const row = document.createElement('div');
+  row.className = 'item' + (checked ? ' on' : '');
+  row.setAttribute('role','checkbox');
+  row.setAttribute('aria-checked', checked);
+  row.setAttribute('tabindex','0');
 
-  const mark = document.createElement('span');
-  mark.className = 'checkmark';
-  mark.innerHTML = CHECK_SVG;
+  const box = document.createElement('span');
+  box.className = 'box';
+  box.innerHTML = SVG;
 
-  const labelWrap = document.createElement('span');
-  labelWrap.className = 'item-text';
-  labelWrap.appendChild(document.createTextNode(name));
+  const lbl = document.createElement('span');
+  lbl.className = 'lbl';
+  lbl.appendChild(document.createTextNode(text));
   if (sub) {
     const s = document.createElement('div');
-    s.className = 'item-sub';
+    s.className = 'sub';
     s.textContent = sub;
-    labelWrap.appendChild(s);
+    lbl.appendChild(s);
   }
 
-  wrap.appendChild(mark);
-  wrap.appendChild(labelWrap);
+  row.appendChild(box);
+  row.appendChild(lbl);
 
   const toggle = () => {
-    const nowChecked = !wrap.classList.contains('checked');
-    wrap.classList.toggle('checked', nowChecked);
-    wrap.setAttribute('aria-checked', nowChecked);
-    updateAll();
+    const on = row.classList.toggle('on');
+    row.setAttribute('aria-checked', on);
+    updateProgress();
   };
-  wrap.addEventListener('click', toggle);
-  wrap.addEventListener('keydown', e => { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); toggle(); } });
+  row.addEventListener('click', toggle);
+  row.addEventListener('keydown', e => {
+    if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); toggle(); }
+  });
 
-  document.getElementById(containerId).appendChild(wrap);
+  document.getElementById(parentId).appendChild(row);
 }
 
-function buildList(containerId, items, defaultChecked, prefix) {
-  const el = document.getElementById(containerId);
+function fillSection(id, items, checked) {
+  const el = document.getElementById(id);
   el.innerHTML = '';
-  if (!items || items.length === 0) {
-    el.innerHTML = '<div class="empty-state">No additional groups for this role.</div>';
+  if (items === null) {
+    el.innerHTML = '<div class="pending">&#9888; Azure groups not yet added for this role &mdash; update coming.</div>';
     return;
   }
-  items.forEach((item, i) => {
-    const sub = item.sub || item.email || '';
-    makeItem(containerId, prefix + i, item.name || item, defaultChecked, sub || undefined);
+  if (!items || items.length === 0) {
+    el.innerHTML = '<div class="empty">No groups on file for this role yet.</div>';
+    return;
+  }
+  items.forEach(item => {
+    const obj = typeof item === 'string' ? { n: item } : item;
+    makeItem(id, obj.n, checked, obj.s || null);
   });
 }
 
-function updateSectionCount(countId, containerId) {
-  const items = document.querySelectorAll('#' + containerId + ' .check-item');
-  const checked = document.querySelectorAll('#' + containerId + ' .check-item.checked');
-  document.getElementById(countId).textContent = items.length ? checked.length + '/' + items.length : '—';
+function updateCount(countId, listId) {
+  const all = document.querySelectorAll('#' + listId + ' .item');
+  const on  = document.querySelectorAll('#' + listId + ' .item.on');
+  document.getElementById(countId).textContent = all.length ? on.length + '/' + all.length : '—';
 }
 
-function updateAll() {
-  [['adCount','adList'],['azureDefaultCount','azureDefaultList'],['roleAzureCount','roleAzureList'],['telecomCount','telecomList'],['criticalCount','criticalList']]
-    .forEach(([c, l]) => updateSectionCount(c, l));
-  const all = document.querySelectorAll('.check-item');
-  const done = document.querySelectorAll('.check-item.checked');
-  const total = all.length, checked = done.length;
-  const pct = total ? Math.round(checked / total * 100) : 0;
-  document.getElementById('progressFill').style.width = pct + '%';
-  document.getElementById('progressLabel').textContent = checked + ' / ' + total + ' done';
-  document.getElementById('completeBadge').classList.toggle('show', pct === 100);
+function updateProgress() {
+  [['cntAD','lstAD'],['cntAZ','lstAZ'],['cntTel','lstTel'],['cntCrit','lstCrit']]
+    .forEach(([c,l]) => updateCount(c,l));
+  const all  = document.querySelectorAll('.item').length;
+  const done = document.querySelectorAll('.item.on').length;
+  const pct  = all ? Math.round(done / all * 100) : 0;
+  document.getElementById('pFill').style.width = pct + '%';
+  document.getElementById('pLabel').textContent = done + ' / ' + all;
+  document.getElementById('doneBadge').classList.toggle('show', pct === 100);
 }
 
-function buildRole() {
+function build() {
   const role = document.getElementById('roleSelect').value;
-  buildList('adList', (roleADMap[role] || []).map(g => ({name:g})), true, 'ad_');
-  buildList('azureDefaultList', DEFAULT_AZURE, true, 'az_');
-  buildList('roleAzureList', roleAzureMap[role] || [], true, 'rz_');
-  buildList('telecomList', TELECOM, true, 'tc_');
-  buildList('criticalList', CRITICAL, false, 'cr_');
-  updateAll();
+  fillSection('lstAD',   (AD[role] || []).map(g => ({ n: g })), true);
+  fillSection('lstAZ',   AZ[role] !== undefined ? AZ[role] : null, true);
+  fillSection('lstTel',  TELECOM, true);
+  fillSection('lstCrit', CRITICAL, false);
+  updateProgress();
 }
 
-document.getElementById('roleSelect').addEventListener('change', buildRole);
-document.getElementById('resetBtn').addEventListener('click', buildRole);
+// ── ACTIONS ───────────────────────────────────────────────────────────────────
+document.getElementById('roleSelect').addEventListener('change', build);
+document.getElementById('btnReset').addEventListener('click', build);
 
-document.getElementById('copyBtn').addEventListener('click', () => {
-  const name = document.getElementById('userName').value || 'New User';
-  const email = document.getElementById('userEmail').value || '—';
-  const roleEl = document.getElementById('roleSelect');
-  const role = roleEl.options[roleEl.selectedIndex].text;
-  const done = [...document.querySelectorAll('.check-item.checked .item-text')].map(el => '  [x] ' + el.childNodes[0].textContent.trim());
-  const notDone = [...document.querySelectorAll('.check-item:not(.checked) .item-text')].map(el => '  [ ] ' + el.childNodes[0].textContent.trim());
-  const text = 'Icon International — New User Onboarding\nUser: ' + name + ' (' + email + ')\nRole: ' + role + '\n\n' + [...done, ...notDone].join('\n');
-  navigator.clipboard.writeText(text).catch(() => {});
-  const fb = document.getElementById('copyFeedback');
+document.getElementById('btnCopy').addEventListener('click', () => {
+  const name  = document.getElementById('uName').value  || 'New User';
+  const email = document.getElementById('uEmail').value || '—';
+  const sel   = document.getElementById('roleSelect');
+  const role  = sel.options[sel.selectedIndex].text;
+  const checked   = [...document.querySelectorAll('.item.on .lbl')].map(el => '  [x] ' + el.childNodes[0].textContent.trim());
+  const unchecked = [...document.querySelectorAll('.item:not(.on) .lbl')].map(el => '  [ ] ' + el.childNodes[0].textContent.trim());
+  const out = ['Icon International — New User Onboarding','User:  ' + name + ' (' + email + ')','Role:  ' + role,'', ...checked, ...unchecked].join('\n');
+  navigator.clipboard.writeText(out).catch(() => {});
+  const fb = document.getElementById('fb');
   fb.classList.add('show');
-  setTimeout(() => fb.classList.remove('show'), 2000);
+  setTimeout(() => fb.classList.remove('show'), 2200);
 });
 
-buildRole();
+build();
 </script>
 </body>
 </html>
