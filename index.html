@@ -263,6 +263,7 @@ const AZ = {
   ],
   adAff: [
     { n:"8x8 Phone Licenses" },
+    { n:"Ad Platforms Team", s:"AdPlatformsTeam@icon-intl.com" },
     { n:"Conditional Access: Risky sign-in multifactor authentication", s:"a4ea6c0f-b8fb-4d29-91f1-9f8cf0601e98" },
     { n:"ConditionalAccessTest" },
     { n:"DOMO Users" },
@@ -365,9 +366,9 @@ function updateProgress() {
 
 function build() {
   const role = document.getElementById('roleSelect').value;
-  fillSection('lstAD',   (AD[role] || []).map(g => ({ n: g })), true);
-  fillSection('lstAZ',   AZ[role] !== undefined ? AZ[role] : null, true);
-  fillSection('lstTel',  TELECOM, true);
+  fillSection('lstAD',   (AD[role] || []).map(g => ({ n: g })), false);
+  fillSection('lstAZ',   AZ[role] !== undefined ? AZ[role] : null, false);
+  fillSection('lstTel',  TELECOM, false);
   fillSection('lstCrit', CRITICAL, false);
   updateProgress();
 }
