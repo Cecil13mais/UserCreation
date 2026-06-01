@@ -32,7 +32,7 @@ input:focus,select:focus{outline:none;border-color:#2c7da0;box-shadow:0 0 0 3px 
 .badge{font-size:10px;font-weight:600;padding:1px 7px;border-radius:999px;margin-left:2px}
 .b-role{background:#fef3c7;color:#92400e}
 .b-warn{background:#fee2e2;color:#7f1d1d}
-.item{display:flex;align-items:flex-start;gap:9px;padding:6px 4px;border-bottom:1px solid #f1f5f9;cursor:pointer;border-radius:5px;transition:background .1s;user-select:none}
+.item{display:flex;align-items:flex-start;gap:9px;padding:6px 4px;border-bottom:1px solid #f1f5f9;cursor:pointer;border-radius:5px;transition:background .1s;user-select:text}
 .item:last-child{border-bottom:none}
 .item:hover{background:#f8fafc}
 .box{width:17px;height:17px;min-width:17px;border:1.5px solid #cbd5e1;border-radius:4px;display:flex;align-items:center;justify-content:center;margin-top:1px;transition:all .15s;flex-shrink:0}
@@ -77,19 +77,19 @@ footer{text-align:center;margin-top:2rem;font-size:11px;color:#94a3b8}
     <div>
       <span class="field-label">Role</span>
       <select id="roleSelect">
-        <option value="president">President of Travel Services — Travel</option>
-        <option value="mediaInv">Media Investment Associate — Performance Media</option>
-        <option value="localMedia">Local Media</option>
-        <option value="perfMedia">Performance Media</option>
-        <option value="srMediaLead">Sr. Media Investment Lead — Performance Media</option>
-        <option value="accounting">Accounting Analyst (Billing) — Billing</option>
-        <option value="financialCredit">Financial Credit Analyst — Credit</option>
-        <option value="hrAdmin">HR Front Office Administrator — Human Resources</option>
-        <option value="mediaPrint">Media Investment Associate — Print/OOH</option>
-        <option value="salesDir">New Business Director — Sales</option>
-        <option value="adProg">Programmatic Supply Lead — Ad Platforms</option>
-        <option value="adAff">Affiliate Marketing Lead — Ad Platforms</option>
-        <option value="accountService">Account Service Specialist — Performance Media</option>
+        <option value="president">President of Travel Services &mdash; Travel</option>
+        <option value="mediaInv">Media Investment Associate &mdash; Media Investment</option>
+        <option value="localMedia">Media Investment Associate &mdash; Local Media</option>
+        <option value="perfMedia">Media Investment Associate &mdash; Performance Media</option>
+        <option value="srMediaLead">Sr. Media Investment Lead &mdash; Performance Media</option>
+        <option value="accounting">Accounting Analyst (Billing) &mdash; Billing</option>
+        <option value="financialCredit">Financial Credit Analyst &mdash; Credit</option>
+        <option value="hrAdmin">HR Front Office Administrator &mdash; Human Resources</option>
+        <option value="mediaPrint">Media Investment Associate &mdash; Print/OOH</option>
+        <option value="salesDir">New Business Director &mdash; Sales</option>
+        <option value="adProg">Programmatic Supply Lead &mdash; Ad Platforms</option>
+        <option value="adAff">Affiliate Marketing Lead &mdash; Ad Platforms</option>
+        <option value="accountService">Account Service Specialist &mdash; Performance Media</option>
       </select>
     </div>
   </div>
@@ -126,7 +126,7 @@ footer{text-align:center;margin-top:2rem;font-size:11px;color:#94a3b8}
         <span class="card-count" id="cntTel">—</span>
       </div>
       <div id="lstTel"></div>
-      <div class="note">License SKU: <code>X Series - X2-VOSVC0216-02-US</code> &middot; MS Teams integration must be set to ON.</div>
+      <div class="note">License SKU: <code>X Series - X2-VOSVC0216-02-US</code> &middot; Master User Template &middot; MS Teams integration must be set to ON &middot; Site: Headquarters &middot; Time zone: US/Eastern &middot; Company directory: ON</div>
     </div>
     <div class="card">
       <div class="card-header">
@@ -136,7 +136,7 @@ footer{text-align:center;margin-top:2rem;font-size:11px;color:#94a3b8}
       <div id="lstCrit"></div>
       <div class="note">
         PowerShell: <code>powershell.exe -ExecutionPolicy Bypass -File .\PullIIUserInfo.ps1</code><br><br>
-        Internet Options &#8594; Security &#8594; Local Intranet &#8594; Sites &#8594; Advanced &#8594; add <code>https://intranet.iconinternational.com/</code> and require server verification (HTTPS).
+        Internet Options &rarr; Security &rarr; Local Intranet &rarr; Sites &rarr; Advanced &rarr; add <code>https://intranet.iconinternational.com/</code> and require server verification (HTTPS).
       </div>
     </div>
   </div>
@@ -284,25 +284,32 @@ const AZ = {
 };
 
 const TELECOM = [
-  { n:"Assign 8x8 phone license — X Series: X2-VOSVC0216-02-US" },
-  { n:"Enable MS Teams integration (set to ON)" }
+  { n:"Navigate to 8x8 Admin Console → Services and Permissions" },
+  { n:"Assign profile policy: 8x8 Master User Template" },
+  { n:"Assign license: X Series – X2-VOSVC0216-02-US" },
+  { n:"Enable MS Teams integration: ON" },
+  { n:"Set Site: Headquarters (Icon International)" },
+  { n:"Set Language: English – United States" },
+  { n:"Set Time zone: US/Eastern" },
+  { n:"Contact directory scope: Company (view all contacts)" },
+  { n:"Display in company directory: ON" }
 ];
 
 const CRITICAL = [
   { n:"Enable Multi-Factor Authentication (MFA)" },
   { n:"Enforce MFA after enabling" },
-  { n:"Add user in Office 365 Admin Center and assign all groups per checklist" },
+  { n:"Add user in Office 365 Admin Center — assign all groups per checklist" },
   { n:"Run PowerShell: PullIIUserInfo.ps1 with -ExecutionPolicy Bypass" },
-  { n:"Add intranet.iconinternational.com to Local Intranet Sites (HTTPS + require server verification)" }
+  { n:"Add intranet.iconinternational.com to Local Intranet Sites (HTTPS + server verification)" }
 ];
 
 const SVG = '<svg viewBox="0 0 12 12"><polyline points="1.5,6.5 4.5,9.5 10.5,2.5"/></svg>';
 
-function makeItem(parentId, text, checked, sub) {
+function makeItem(parentId, text, sub) {
   const row = document.createElement('div');
-  row.className = 'item' + (checked ? ' on' : '');
+  row.className = 'item';
   row.setAttribute('role','checkbox');
-  row.setAttribute('aria-checked', checked);
+  row.setAttribute('aria-checked','false');
   row.setAttribute('tabindex','0');
   const box = document.createElement('span');
   box.className = 'box';
@@ -323,18 +330,29 @@ function makeItem(parentId, text, checked, sub) {
     row.setAttribute('aria-checked', on);
     updateProgress();
   };
-  row.addEventListener('click', toggle);
+  box.addEventListener('click', e => { e.stopPropagation(); toggle(); });
   row.addEventListener('keydown', e => {
     if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); toggle(); }
+  });
+  lbl.style.cursor = 'copy';
+  lbl.title = 'Click to copy';
+  lbl.addEventListener('click', e => {
+    e.stopPropagation();
+    const copyText = text + (sub ? ' ' + sub : '');
+    navigator.clipboard.writeText(copyText).then(() => {
+      const orig = lbl.style.color;
+      lbl.style.color = '#0f6e56';
+      setTimeout(() => { lbl.style.color = orig; }, 700);
+    }).catch(() => {});
   });
   document.getElementById(parentId).appendChild(row);
 }
 
-function fillSection(id, items, checked) {
+function fillSection(id, items) {
   const el = document.getElementById(id);
   el.innerHTML = '';
   if (items === null) {
-    el.innerHTML = '<div class="pending">&#9888; Azure groups not yet added for this role — update coming.</div>';
+    el.innerHTML = '<div class="pending">&#9888; Azure groups not yet confirmed for this role — update coming.</div>';
     return;
   }
   if (!items || items.length === 0) {
@@ -343,7 +361,7 @@ function fillSection(id, items, checked) {
   }
   items.forEach(item => {
     const obj = typeof item === 'string' ? { n: item } : item;
-    makeItem(id, obj.n, checked, obj.s || null);
+    makeItem(id, obj.n, obj.s || null);
   });
 }
 
@@ -366,10 +384,10 @@ function updateProgress() {
 
 function build() {
   const role = document.getElementById('roleSelect').value;
-  fillSection('lstAD',   (AD[role] || []).map(g => ({ n: g })), false);
-  fillSection('lstAZ',   AZ[role] !== undefined ? AZ[role] : null, false);
-  fillSection('lstTel',  TELECOM, false);
-  fillSection('lstCrit', CRITICAL, false);
+  fillSection('lstAD', (AD[role] || []).map(g => ({ n: g })));
+  fillSection('lstAZ', AZ[role] !== undefined ? AZ[role] : null);
+  fillSection('lstTel', TELECOM);
+  fillSection('lstCrit', CRITICAL);
   updateProgress();
 }
 
