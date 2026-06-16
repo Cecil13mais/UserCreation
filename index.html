@@ -4,410 +4,400 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Icon Intl · New User Onboarding</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Segoe UI',Roboto,'Helvetica Neue',sans-serif;background:#f0f4f8;color:#1a2c3e;padding:2rem 1rem}
-#app{max-width:1200px;margin:0 auto}
-.page-header{margin-bottom:1.5rem}
-.page-header h1{font-size:21px;font-weight:600;color:#0b2b3b}
-.page-header p{font-size:13px;color:#4a6a80;margin-top:5px;border-left:3px solid #2c7da0;padding-left:10px}
-.user-bar{background:#fff;border:1px solid #dde4ed;border-radius:14px;padding:1rem 1.25rem;margin-bottom:1rem;box-shadow:0 2px 6px rgba(0,0,0,.04)}
-.user-bar-grid{display:grid;grid-template-columns:1fr 1fr 2fr;gap:12px;align-items:end}
-@media(max-width:640px){.user-bar-grid{grid-template-columns:1fr}}
-.field-label{font-size:11px;font-weight:600;color:#4a6a80;margin-bottom:4px;display:block;text-transform:uppercase;letter-spacing:.4px}
-input[type=text],input[type=email],select{width:100%;padding:7px 11px;border:1px solid #cbd5e1;border-radius:8px;background:#fff;font-size:13px;font-family:inherit;transition:.15s;color:#1a2c3e}
-input:focus,select:focus{outline:none;border-color:#2c7da0;box-shadow:0 0 0 3px rgba(44,125,160,.12)}
-.progress-wrap{background:#fff;border:1px solid #dde4ed;border-radius:14px;padding:.9rem 1.25rem;margin-bottom:1.2rem;display:flex;align-items:center;gap:14px;box-shadow:0 2px 6px rgba(0,0,0,.04)}
-.progress-track{flex:1;height:5px;background:#e2e8f0;border-radius:999px;overflow:hidden}
-.progress-fill{height:100%;background:#0f6e56;border-radius:999px;transition:width .35s ease}
-.progress-label{font-size:12px;color:#6b8299;white-space:nowrap;min-width:76px;text-align:right}
-.done-badge{display:none;font-size:11px;font-weight:600;background:#eaf3de;color:#2b6e4f;padding:2px 10px;border-radius:999px}
-.done-badge.show{display:inline}
-.columns{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-@media(max-width:680px){.columns{grid-template-columns:1fr}}
-.card{background:#fff;border:1px solid #dde4ed;border-radius:14px;padding:1rem 1.25rem;margin-bottom:12px;box-shadow:0 2px 6px rgba(0,0,0,.04)}
-.card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;padding-bottom:9px;border-bottom:1px solid #eef2f8}
-.card-title{font-size:13px;font-weight:600;color:#1a2c3e;display:flex;align-items:center;gap:6px}
-.card-count{font-size:11px;color:#6b8299;background:#f1f5f9;padding:1px 8px;border-radius:999px}
-.badge{font-size:10px;font-weight:600;padding:1px 7px;border-radius:999px;margin-left:2px}
-.b-role{background:#fef3c7;color:#92400e}
-.b-warn{background:#fee2e2;color:#7f1d1d}
-.item{display:flex;align-items:flex-start;gap:9px;padding:6px 4px;border-bottom:1px solid #f1f5f9;cursor:pointer;border-radius:5px;transition:background .1s;user-select:text}
-.item:last-child{border-bottom:none}
-.item:hover{background:#f8fafc}
-.box{width:17px;height:17px;min-width:17px;border:1.5px solid #cbd5e1;border-radius:4px;display:flex;align-items:center;justify-content:center;margin-top:1px;transition:all .15s;flex-shrink:0}
-.box svg{display:none;width:10px;height:10px;stroke:#fff;stroke-width:2.8;fill:none}
-.item.on .box{background:#0f6e56;border-color:#0f6e56}
-.item.on .box svg{display:block}
-.item.on .lbl{color:#94a3b8;text-decoration:line-through}
-.lbl{font-size:13px;color:#1a2c3e;flex:1;line-height:1.4}
-.sub{font-size:11px;color:#6b8299;margin-top:1px}
-.note{font-size:12px;color:#4a6a80;background:#f0f7fb;border-left:3px solid #2c7da0;border-radius:0 5px 5px 0;padding:7px 10px;margin-top:9px;line-height:1.6}
-.note code{font-family:'Courier New',monospace;font-size:11px;background:#fff;padding:1px 4px;border-radius:3px;border:1px solid #dde4ed;color:#0b4f6c}
-.empty{font-size:12px;color:#94a3b8;padding:6px 2px;font-style:italic}
-.pending{font-size:12px;color:#b45309;background:#fffbeb;border-left:3px solid #f59e0b;border-radius:0 5px 5px 0;padding:7px 10px;margin-top:4px}
-.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:.8rem;justify-content:flex-end;align-items:center}
-button{padding:6px 14px;border-radius:999px;border:1px solid #cbd5e1;background:#fff;font-size:12px;font-family:inherit;font-weight:600;cursor:pointer;color:#1a2c3e;transition:all .18s;display:inline-flex;align-items:center;gap:5px}
-button:hover{background:#f0f4f8;border-color:#94a3b8}
-button.pri{background:#1f6e8c;color:#fff;border-color:#1f6e8c}
-button.pri:hover{background:#0e576e}
-.fb{font-size:12px;color:#0f6e56;opacity:0;transition:opacity .3s;font-weight:500}
-.fb.show{opacity:1}
-footer{text-align:center;margin-top:2rem;font-size:11px;color:#94a3b8}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', -apple-system, sans-serif; background: #f5f5f4; color: #1a1a1a; font-size: 14px; min-height: 100vh; }
+#shell { display: grid; grid-template-columns: 272px 1fr; min-height: 100vh; }
+#sidebar { background: #fff; border-right: 1px solid #e8e8e6; padding: 1.75rem 1.25rem; display: flex; flex-direction: column; gap: 1.75rem; position: sticky; top: 0; height: 100vh; overflow-y: auto; }
+.logo-name { font-size: 13px; font-weight: 600; color: #1a1a1a; }
+.logo-sub  { font-size: 11px; color: #aaa; margin-top: 2px; }
+.sb-section { display: flex; flex-direction: column; gap: .55rem; }
+.sb-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .6px; color: #c0c0bc; }
+.field + .field { margin-top: 6px; }
+.field input, .field select { width: 100%; height: 33px; padding: 0 9px; border: 1px solid #e4e4e2; border-radius: 6px; background: #fafaf9; font-family: inherit; font-size: 12.5px; color: #1a1a1a; appearance: none; -webkit-appearance: none; transition: border-color .15s; }
+.field input::placeholder { color: #c0c0bc; }
+.field input:focus, .field select:focus { outline: none; border-color: #aaa; background: #fff; }
+.prog-nums { display: flex; align-items: baseline; gap: 6px; margin-bottom: 8px; }
+.prog-done { font-size: 24px; font-weight: 600; line-height: 1; }
+.prog-of   { font-size: 13px; color: #bbb; }
+.track { height: 3px; background: #ebebea; border-radius: 99px; overflow: hidden; }
+.fill  { height: 100%; background: #1a1a1a; border-radius: 99px; width: 0%; transition: width .35s ease; }
+.done-tag { display: none; margin-top: 8px; font-size: 11px; font-weight: 600; color: #2b7a52; background: #edf7f1; padding: 3px 9px; border-radius: 99px; width: fit-content; }
+.done-tag.show { display: block; }
+.stat-list { display: flex; flex-direction: column; }
+.stat-row { display: flex; justify-content: space-between; align-items: center; padding: 5px 7px; border-radius: 6px; }
+.stat-row:hover { background: #fafaf9; }
+.stat-name { font-size: 12px; color: #777; }
+.stat-num  { font-size: 12px; font-weight: 500; color: #1a1a1a; font-variant-numeric: tabular-nums; }
+.sb-actions { margin-top: auto; display: flex; flex-direction: column; gap: 7px; }
+.copy-fb { text-align: center; font-size: 11px; color: #2b7a52; height: 14px; opacity: 0; transition: opacity .3s; }
+.copy-fb.show { opacity: 1; }
+.btn { width: 100%; height: 34px; border-radius: 7px; border: 1px solid #e4e4e2; background: #fff; font-family: inherit; font-size: 12.5px; font-weight: 500; color: #555; cursor: pointer; transition: all .15s; }
+.btn:hover { background: #fafaf9; border-color: #ccc; color: #1a1a1a; }
+.btn.pri { background: #1a1a1a; border-color: #1a1a1a; color: #fff; }
+.btn.pri:hover { background: #333; border-color: #333; }
+.btn.grn { background: #1a4731; border-color: #1a4731; color: #fff; }
+.btn.grn:hover { background: #245c40; border-color: #245c40; }
+.btn:disabled { opacity: .5; cursor: not-allowed; }
+#main { padding: 1.75rem 1.5rem 3rem; display: flex; flex-direction: column; gap: 10px; }
+.section { background: #fff; border: 1px solid #e8e8e6; border-radius: 10px; overflow: hidden; }
+.section-head { display: flex; align-items: center; justify-content: space-between; padding: .65rem 1rem; border-bottom: 1px solid #f0f0ee; }
+.section-title { font-size: 12px; font-weight: 600; color: #1a1a1a; display: flex; align-items: center; gap: 7px; }
+.badge { font-size: 10px; font-weight: 600; padding: 1px 7px; border-radius: 99px; }
+.b-role { background: #fef3c7; color: #92400e; }
+.b-warn { background: #fee2e2; color: #991b1b; }
+.section-count { font-size: 11px; color: #bbb; font-variant-numeric: tabular-nums; }
+.items-grid { display: grid; grid-template-columns: 1fr 1fr; }
+.items-col { display: flex; flex-direction: column; }
+.items-col:first-child { border-right: 1px solid #f0f0ee; }
+.item { display: flex; align-items: flex-start; gap: 9px; padding: 6px 1rem; border-bottom: 1px solid #f5f5f4; cursor: pointer; transition: background .1s; user-select: none; }
+.item:last-child { border-bottom: none; }
+.item:hover { background: #fafaf9; }
+.cb { width: 15px; height: 15px; min-width: 15px; border: 1.5px solid #d5d5d2; border-radius: 4px; margin-top: 2px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all .15s; }
+.cb svg { display: none; width: 8px; height: 8px; stroke: #fff; stroke-width: 3; fill: none; }
+.item.on .cb { background: #1a1a1a; border-color: #1a1a1a; }
+.item.on .cb svg { display: block; }
+.item.on .item-name { color: #bbb; text-decoration: line-through; text-decoration-color: #ccc; }
+.item.on .item-alias { opacity: .35; }
+.item-body { flex: 1; min-width: 0; }
+.item-name { font-size: 12.5px; color: #222; line-height: 1.45; word-break: break-word; }
+.item-alias { font-size: 11px; color: #aaa; margin-top: 1px; font-family: ui-monospace, 'SF Mono', Consolas, monospace; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.note-strip { padding: .65rem 1rem; border-top: 1px solid #f0f0ee; font-size: 11.5px; color: #999; line-height: 1.7; background: #fafaf9; }
+.note-strip code { font-size: 11px; font-family: ui-monospace, 'SF Mono', Consolas, monospace; background: #f0f0ee; color: #555; padding: 1px 5px; border-radius: 4px; }
+.state-empty   { font-size: 12px; color: #bbb; padding: 10px 1rem; font-style: italic; }
+.state-pending { font-size: 12px; color: #b45309; padding: 10px 1rem; }
+
+/* password modal */
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.35); z-index: 200; align-items: center; justify-content: center; }
+.modal-overlay.show { display: flex; }
+.modal { background: #fff; border-radius: 12px; padding: 1.5rem; width: 340px; box-shadow: 0 8px 32px rgba(0,0,0,.12); }
+.modal h2 { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+.modal p  { font-size: 12px; color: #888; margin-bottom: 1rem; line-height: 1.5; }
+.modal input { width: 100%; height: 36px; padding: 0 10px; border: 1px solid #e4e4e2; border-radius: 7px; font-family: inherit; font-size: 13px; margin-bottom: 6px; }
+.modal input:focus { outline: none; border-color: #aaa; }
+.modal-hint { font-size: 11px; color: #aaa; margin-bottom: 1rem; }
+.modal-btns { display: flex; gap: 8px; }
+.modal-btns .btn { width: auto; flex: 1; }
+
+@media (max-width: 780px) {
+  #shell { grid-template-columns: 1fr; }
+  #sidebar { position: static; height: auto; border-right: none; border-bottom: 1px solid #e8e8e6; }
+  .sb-actions { flex-direction: row; flex-wrap: wrap; }
+  .items-grid { grid-template-columns: 1fr; }
+  .items-col:first-child { border-right: none; }
+}
 </style>
 </head>
 <body>
-<div id="app">
-
-<div class="page-header">
-  <h1>&#10024; New user onboarding &mdash; Icon International</h1>
-  <p>AD groups &middot; Azure groups &middot; MFA &middot; 8x8 &middot; PowerShell &mdash; complete every step before the user&rsquo;s start date.</p>
-</div>
-
-<div class="user-bar">
-  <div class="user-bar-grid">
+<div id="shell">
+  <aside id="sidebar">
     <div>
-      <span class="field-label">Full name</span>
-      <input type="text" id="uName" placeholder="First Last">
+      <div class="logo-name">Icon International</div>
+      <div class="logo-sub">New user onboarding</div>
     </div>
-    <div>
-      <span class="field-label">Email</span>
-      <input type="email" id="uEmail" placeholder="first.last@iconinternational.com">
+    <div class="sb-section">
+      <div class="sb-label">Hire details</div>
+      <div class="field"><input type="text"  id="uName"  placeholder="Full name"></div>
+      <div class="field"><input type="email" id="uEmail" placeholder="Email address"></div>
+      <div class="field"><input type="text"  id="uPhone" placeholder="8x8 phone number"></div>
+      <div class="field">
+        <select id="roleSelect">
+          <option value="president">President of Travel Services — Travel</option>
+          <option value="mediaInv">Media Investment Associate — Media Investment</option>
+          <option value="localMedia">Media Investment Associate — Local Media</option>
+          <option value="perfMedia">Media Investment Associate — Performance Media</option>
+          <option value="srMediaLead">Sr. Media Investment Lead — Performance Media</option>
+          <option value="accounting">Accounting Analyst (Billing) — Billing</option>
+          <option value="financialCredit">Financial Credit Analyst — Credit</option>
+          <option value="hrAdmin">HR Front Office Administrator — Human Resources</option>
+          <option value="mediaPrint">Media Investment Associate — Print/OOH</option>
+          <option value="salesDir">New Business Director — Sales</option>
+          <option value="adProg">Programmatic Supply Lead — Ad Platforms</option>
+          <option value="adAff">Affiliate Marketing Lead — Ad Platforms</option>
+          <option value="accountService">Account Service Specialist — Performance Media</option>
+        </select>
+      </div>
     </div>
-    <div>
-      <span class="field-label">Role</span>
-      <select id="roleSelect">
-        <option value="president">President of Travel Services &mdash; Travel</option>
-        <option value="mediaInv">Media Investment Associate &mdash; Media Investment</option>
-        <option value="localMedia">Media Investment Associate &mdash; Local Media</option>
-        <option value="perfMedia">Media Investment Associate &mdash; Performance Media</option>
-        <option value="srMediaLead">Sr. Media Investment Lead &mdash; Performance Media</option>
-        <option value="accounting">Accounting Analyst (Billing) &mdash; Billing</option>
-        <option value="financialCredit">Financial Credit Analyst &mdash; Credit</option>
-        <option value="hrAdmin">HR Front Office Administrator &mdash; Human Resources</option>
-        <option value="mediaPrint">Media Investment Associate &mdash; Print/OOH</option>
-        <option value="salesDir">New Business Director &mdash; Sales</option>
-        <option value="adProg">Programmatic Supply Lead &mdash; Ad Platforms</option>
-        <option value="adAff">Affiliate Marketing Lead &mdash; Ad Platforms</option>
-        <option value="accountService">Account Service Specialist &mdash; Performance Media</option>
-      </select>
+    <div class="sb-section">
+      <div class="sb-label">Progress</div>
+      <div class="prog-nums">
+        <span class="prog-done" id="progDone">0</span>
+        <span class="prog-of"   id="progOf">/ 0 tasks</span>
+      </div>
+      <div class="track"><div class="fill" id="pFill"></div></div>
+      <div class="done-tag" id="doneBadge">All done ✓</div>
     </div>
-  </div>
-</div>
+    <div class="sb-section">
+      <div class="sb-label">By section</div>
+      <div class="stat-list">
+        <div class="stat-row"><span class="stat-name">Active Directory</span><span class="stat-num" id="cntAD">—</span></div>
+        <div class="stat-row"><span class="stat-name">Azure AD</span><span class="stat-num" id="cntAZ">—</span></div>
+        <div class="stat-row"><span class="stat-name">8x8</span><span class="stat-num" id="cntTel">—</span></div>
+        <div class="stat-row"><span class="stat-name">Critical steps</span><span class="stat-num" id="cntCrit">—</span></div>
+      </div>
+    </div>
+    <div class="sb-actions">
+      <div class="copy-fb" id="copyFb">Copied to clipboard</div>
+      <button class="btn grn" id="btnExcel">⬇ Download IT Info sheet</button>
+      <button class="btn pri" id="btnCopy">Copy checklist summary</button>
+      <button class="btn"     id="btnReset">Reset checklist</button>
+    </div>
+  </aside>
 
-<div class="progress-wrap">
-  <span style="font-size:15px">&#9989;</span>
-  <div class="progress-track"><div class="progress-fill" id="pFill" style="width:0%"></div></div>
-  <span class="progress-label" id="pLabel">0 / 0</span>
-  <span class="done-badge" id="doneBadge">&#10003; All done!</span>
-</div>
-
-<div class="columns">
-  <div>
-    <div class="card">
-      <div class="card-header">
-        <span class="card-title">&#128421; Active Directory groups <span class="badge b-role">role-based</span></span>
-        <span class="card-count" id="cntAD">—</span>
+  <main id="main">
+    <div class="section">
+      <div class="section-head">
+        <div class="section-title">Active Directory <span class="badge b-role">Role-based</span></div>
+        <span class="section-count" id="hdAD">—</span>
       </div>
       <div id="lstAD"></div>
     </div>
-    <div class="card">
-      <div class="card-header">
-        <span class="card-title">&#9729;&#65039; Azure AD groups <span class="badge b-role">role-based</span></span>
-        <span class="card-count" id="cntAZ">—</span>
+    <div class="section">
+      <div class="section-head">
+        <div class="section-title">Azure AD <span class="badge b-role">Role-based</span></div>
+        <span class="section-count" id="hdAZ">—</span>
       </div>
       <div id="lstAZ"></div>
     </div>
-  </div>
-  <div>
-    <div class="card">
-      <div class="card-header">
-        <span class="card-title">&#128222; 8x8 &amp; collaboration</span>
-        <span class="card-count" id="cntTel">—</span>
+    <div class="section">
+      <div class="section-head">
+        <div class="section-title">8x8 &amp; collaboration</div>
+        <span class="section-count" id="hdTel">—</span>
       </div>
       <div id="lstTel"></div>
-      <div class="note">License SKU: <code>X Series - X2-VOSVC0216-02-US</code> &middot; Master User Template &middot; MS Teams integration must be set to ON &middot; Site: Headquarters &middot; Time zone: US/Eastern &middot; Company directory: ON</div>
+      <div class="note-strip">SKU: <code>X Series - X2-VOSVC0216-02-US</code> &nbsp;·&nbsp; Template: <code>Master User Template</code> &nbsp;·&nbsp; MS Teams: ON &nbsp;·&nbsp; Site: Headquarters &nbsp;·&nbsp; TZ: US/Eastern &nbsp;·&nbsp; Company directory: ON</div>
     </div>
-    <div class="card">
-      <div class="card-header">
-        <span class="card-title">&#128274; Critical admin steps <span class="badge b-warn">do last</span></span>
-        <span class="card-count" id="cntCrit">—</span>
+    <div class="section">
+      <div class="section-head">
+        <div class="section-title">Critical admin steps <span class="badge b-warn">Do last</span></div>
+        <span class="section-count" id="hdCrit">—</span>
       </div>
       <div id="lstCrit"></div>
-      <div class="note">
-        PowerShell: <code>powershell.exe -ExecutionPolicy Bypass -File .\PullIIUserInfo.ps1</code><br><br>
-        Internet Options &rarr; Security &rarr; Local Intranet &rarr; Sites &rarr; Advanced &rarr; add <code>https://intranet.iconinternational.com/</code> and require server verification (HTTPS).
-      </div>
+      <div class="note-strip">PowerShell: <code>powershell.exe -ExecutionPolicy Bypass -File .\PullIIUserInfo.ps1</code><br>Internet Options → Security → Local Intranet → Sites → Advanced → add <code>https://intranet.iconinternational.com/</code> with HTTPS server verification</div>
+    </div>
+  </main>
+</div>
+
+<!-- Password modal -->
+<div class="modal-overlay" id="pwModal">
+  <div class="modal">
+    <h2>Set temporary password</h2>
+    <p>This will be printed on the IT info sheet handed to the new hire. Use the standard welcome format.</p>
+    <input type="text" id="pwInput" placeholder="e.g. BHw3lc0m3tob@rter" autocomplete="off" spellcheck="false">
+    <div class="modal-hint">Tip: First initial + Last initial + w3lc0m3to + company abbreviation</div>
+    <div class="modal-btns">
+      <button class="btn" id="pwCancel">Cancel</button>
+      <button class="btn grn" id="pwConfirm">Generate Excel</button>
     </div>
   </div>
-</div>
-
-<div class="actions">
-  <span class="fb" id="fb">&#10003; Copied!</span>
-  <button class="pri" id="btnCopy">&#128203; Copy summary</button>
-  <button id="btnReset">&#8635; Reset</button>
-</div>
-
-<footer>Icon International &mdash; New user onboarding checklist</footer>
 </div>
 
 <script>
-const AD = {
-  president: [
-    "Domain Users","Everyone","IconIntl_7212181d39b7","Inventory Folder MOD",
-    "Marketing Folder MOD","Marketing Share MOD","Merchandise Folder MOD",
-    "MerchTravel Billing Folder","Point of Purchase SG","SPS Folder",
-    "Trade Credits Folder","Travel Folder MOD"
-  ],
-  mediaInv: [
-    "Direct Response Folder MOD","Domain Users","Everyone II",
-    "iconurl_7212181d39b7","iWomen CT Announcements_43952db37578",
-    "Printer-Mediainvestment-14thFloor"
-  ],
-  localMedia: [],
-  perfMedia: [],
-  srMediaLead: [
-    "Direct Response Folder MOD","Domain Users","DRLocalShared","DRNationalShared",
-    "Everyone II","iconurl_7212181d39b7","iWomen CT Announcements_43952db37578"
-  ],
-  accounting: [
-    "Accounting Folder MOD Billing","(Local)_b33079d06102","Domain Users",
-    "Everyone II","icon billing","ICON Communications_fe5e67f5ba5"
-  ],
-  financialCredit: [
-    "Domain Users","Everyone II","ICON Communications_fe5e67f5ba5",
-    "Icon Credit Group_9a88e9c5088","IconInt_7212181d39b7","Inventory Folder MOD",
-    "iWomen CT Announcements_43952db37578","MAFs","Pentaho_Credit","Pentaho_Users"
-  ],
-  hrAdmin: [],
-  mediaPrint: [
-    "Domain Users","Everyone II","ICON Communications_fe5e67f5ba5",
-    "IconInt_7212181d39b7","Print-OOH Dept._b9df28125db5","Print-OOH Folder MOD"
-  ],
-  salesDir: [
-    "Domain Users","Everyone II","ICON Communications_fe5e67f5ba5",
-    "IconInt_7212181d39b7","Sales Folder RO","SALES TEAM_a6f66db4ae4b"
-  ],
-  adProg: [
-    "Ad Platforms MOD","Digital Media Operations","Digital Media PMs RO",
-    "Domain Users","Everyone II","ICON Communications_fe5e67f5ba5",
-    "IconInt_7212181d39b7","RPM Team_b3289e4544"
-  ],
-  adAff: [
-    "Ad Platforms MOD","Affiliate Team_d5585afc475","David's Bridal_5455dc1497d",
-    "Domain Users","Everyone II","ICON Communications_fe5e67f5ba5","IconInt_7212181d39b7"
-  ],
-  accountService: [
-    "Direct Response Folder MOD","Domain Users","Everyone II",
-    "ICON Communications_fe5e67f5ba5","IconInt_7212181d39b7"
-  ]
-};
+const AD={president:["Domain Users","Everyone","IconIntl_7212181d39b7","Inventory Folder MOD","Marketing Folder MOD","Marketing Share MOD","Merchandise Folder MOD","MerchTravel Billing Folder","Point of Purchase SG","SPS Folder","Trade Credits Folder","Travel Folder MOD"],mediaInv:["Direct Response Folder MOD","Domain Users","Everyone II","iconurl_7212181d39b7","iWomen CT Announcements_43952db37578","Printer-Mediainvestment-14thFloor"],localMedia:[],perfMedia:[],srMediaLead:["Direct Response Folder MOD","Domain Users","DRLocalShared","DRNationalShared","Everyone II","iconurl_7212181d39b7","iWomen CT Announcements_43952db37578"],accounting:["Accounting Folder MOD Billing","(Local)_b33079d06102","Domain Users","Everyone II","icon billing","ICON Communications_fe5e67f5ba5"],financialCredit:["Domain Users","Everyone II","ICON Communications_fe5e67f5ba5","Icon Credit Group_9a88e9c5088","IconInt_7212181d39b7","Inventory Folder MOD","iWomen CT Announcements_43952db37578","MAFs","Pentaho_Credit","Pentaho_Users"],hrAdmin:[],mediaPrint:["Domain Users","Everyone II","ICON Communications_fe5e67f5ba5","IconInt_7212181d39b7","Print-OOH Dept._b9df28125db5","Print-OOH Folder MOD"],salesDir:["Domain Users","Everyone II","ICON Communications_fe5e67f5ba5","IconInt_7212181d39b7","Sales Folder RO","SALES TEAM_a6f66db4ae4b"],adProg:["Ad Platforms MOD","Digital Media Operations","Digital Media PMs RO","Domain Users","Everyone II","ICON Communications_fe5e67f5ba5","IconInt_7212181d39b7","RPM Team_b3289e4544"],adAff:["Ad Platforms MOD","Affiliate Team_d5585afc475","David's Bridal_5455dc1497d","Domain Users","Everyone II","ICON Communications_fe5e67f5ba5","IconInt_7212181d39b7"],accountService:["Direct Response Folder MOD","Domain Users","Everyone II","ICON Communications_fe5e67f5ba5","IconInt_7212181d39b7"]};
+const AZ={mediaInv:[{n:"8x8 Phone Licenses"},{n:"Comcast IDP"},{n:"Conditional Access: Risky sign-in MFA",s:"a4ea6c0f-b8fb-4d29-91f1-9f8cf0601e98"},{n:"ConditionalAccessTest"},{n:"DOMO Users"},{n:"ICON Announcements"},{n:"Icon Intl-Everyone",s:"Everyone@ICON-INTL.com"},{n:"Icon Intl-Florida/Stamford Office"},{n:"Icon Intl-iWomenGroup",s:"iWomenGroup@ICON-INTL.com"},{n:"IconIntl",s:"IconIntl@iconintlus.onmicrosoft.com"},{n:"iWomen Florida",s:"iWomenFlorida@iconintl.com"},{n:"Media Investment",s:"MediaInvestment@icon-intl.com"},{n:"Netskope Pilot Policy Assignment"},{n:"Netskope Private Access - All Users"}],localMedia:[{n:"8x8 Phone Licenses"},{n:"Comcast IDP"},{n:"Conditional Access: Risky sign-in MFA",s:"a4ea6c0f-b8fb-4d29-91f1-9f8cf0601e98"},{n:"ConditionalAccessTest"},{n:"DOMO Users"},{n:"ICON Announcements"},{n:"Icon Intl-Everyone",s:"Everyone@ICON-INTL.com"},{n:"Icon Intl-Florida/Stamford Office"},{n:"Icon Intl-LocalBroadcast",s:"Local_Broadcast@ICON-INTL.com"},{n:"Netskope Pilot Policy Assignment"},{n:"Netskope Private Access - All Users"}],perfMedia:[{n:"8x8 Phone Licenses"},{n:"Conditional Access: Risky sign-in MFA",s:"a4ea6c0f-b8fb-4d29-91f1-9f8cf0601e98"},{n:"ConditionalAccessTest"},{n:"ICON Announcements"},{n:"Icon Intl-Everyone",s:"Everyone@ICON-INTL.com"},{n:"Icon Intl-Florida/Stamford Office"},{n:"Icon Intl-Performance Media",s:"PM@icon-intl.com"},{n:"IconIntl",s:"IconIntl@iconintlus.onmicrosoft.com"},{n:"Netskope Pilot Policy Assignment"},{n:"Netskope Private Access - All Users"},{n:"PM - Performance Media",s:"PM-PerformanceMedia@iconintl.com"},{n:"Slack Users"}],adProg:[{n:"8x8 Phone Licenses"},{n:"Ad Platforms Team",s:"AdPlatformsTeam@icon-intl.com"},{n:"Conditional Access: Risky sign-in MFA",s:"a4ea6c0f-b8fb-4d29-91f1-9f8cf0601e98"},{n:"ConditionalAccessTest"},{n:"DOMO Users"},{n:"ICON Announcements"},{n:"ICON Communications",s:"ICONCommunications@iconintl.com"},{n:"ICON Newell Media Team",s:"NewellMediaTeam@iconinternational.com"},{n:"iWomen Florida",s:"iWomenFlorida@iconintl.com"},{n:"Netskope Pilot Policy Assignment"},{n:"Netskope Private Access - All Users"},{n:"Slack Users"}],adAff:[{n:"8x8 Phone Licenses"},{n:"Ad Platforms Team",s:"AdPlatformsTeam@icon-intl.com"},{n:"Conditional Access: Risky sign-in MFA",s:"a4ea6c0f-b8fb-4d29-91f1-9f8cf0601e98"},{n:"ConditionalAccessTest"},{n:"DOMO Users"},{n:"ICON Announcements"},{n:"ICON Communications",s:"ICONCommunications@iconintl.com"},{n:"iWomen Florida",s:"iWomenFlorida@iconintl.com"},{n:"Netskope Pilot Policy Assignment"},{n:"Netskope Private Access - All Users"}],president:null,srMediaLead:null,accounting:null,financialCredit:null,hrAdmin:null,mediaPrint:null,salesDir:null,accountService:null};
+const TELECOM=[{n:"Navigate to 8x8 Admin Console → Services and Permissions"},{n:"Assign profile policy: 8x8 Master User Template"},{n:"Assign license: X Series – X2-VOSVC0216-02-US"},{n:"Enable MS Teams integration: ON"},{n:"Set Site: Headquarters (Icon International)"},{n:"Set Language: English – United States"},{n:"Set Time zone: US/Eastern"},{n:"Contact directory scope: Company (view all contacts)"},{n:"Display in company directory: ON"}];
+const CRITICAL=[{n:"Enable Multi-Factor Authentication (MFA)"},{n:"Enforce MFA after enabling"},{n:"Add user in Office 365 Admin Center — assign all groups per checklist"},{n:"Run PowerShell: PullIIUserInfo.ps1 with -ExecutionPolicy Bypass"},{n:"Add intranet.iconinternational.com to Local Intranet Sites (HTTPS + server verification)"}];
+const SVG='<svg viewBox="0 0 10 10"><polyline points="1,5.5 4,8.5 9,2"/></svg>';
 
-const AZ = {
-  mediaInv: [
-    { n:"8x8 Phone Licenses" },
-    { n:"Comcast IDP" },
-    { n:"Conditional Access: Risky sign-in multifactor authentication", s:"a4ea6c0f-b8fb-4d29-91f1-9f8cf0601e98" },
-    { n:"ConditionalAccessTest" },
-    { n:"DOMO Users" },
-    { n:"ICON Announcements" },
-    { n:"Icon Intl-Everyone", s:"Everyone@ICON-INTL.com" },
-    { n:"Icon Intl-Florida/Stamford Office" },
-    { n:"Icon Intl-iWomenGroup", s:"iWomenGroup@ICON-INTL.com" },
-    { n:"IconIntl", s:"IconIntl@iconintlus.onmicrosoft.com" },
-    { n:"iWomen Florida", s:"iWomenFlorida@iconintl.com" },
-    { n:"Media Investment", s:"MediaInvestment@icon-intl.com" },
-    { n:"Netskope Pilot Policy Assignment" },
-    { n:"Netskope Private Access - All Users" }
-  ],
-  localMedia: [
-    { n:"8x8 Phone Licenses" },
-    { n:"Comcast IDP" },
-    { n:"Conditional Access: Risky sign-in multifactor authentication", s:"a4ea6c0f-b8fb-4d29-91f1-9f8cf0601e98" },
-    { n:"ConditionalAccessTest" },
-    { n:"DOMO Users" },
-    { n:"ICON Announcements" },
-    { n:"Icon Intl-Everyone", s:"Everyone@ICON-INTL.com" },
-    { n:"Icon Intl-Florida/Stamford Office" },
-    { n:"Icon Intl-LocalBroadcast", s:"Local_Broadcast@ICON-INTL.com" },
-    { n:"Netskope Pilot Policy Assignment" },
-    { n:"Netskope Private Access - All Users" }
-  ],
-  perfMedia: [
-    { n:"8x8 Phone Licenses" },
-    { n:"Conditional Access: Risky sign-in multifactor authentication", s:"a4ea6c0f-b8fb-4d29-91f1-9f8cf0601e98" },
-    { n:"ConditionalAccessTest" },
-    { n:"ICON Announcements" },
-    { n:"Icon Intl-Everyone", s:"Everyone@ICON-INTL.com" },
-    { n:"Icon Intl-Florida/Stamford Office" },
-    { n:"Icon Intl-Performance Media", s:"PM@icon-intl.com" },
-    { n:"IconIntl", s:"IconIntl@iconintlus.onmicrosoft.com" },
-    { n:"Netskope Pilot Policy Assignment" },
-    { n:"Netskope Private Access - All Users" },
-    { n:"PM - Performance Media", s:"PM-PerformanceMedia@iconintl.com" },
-    { n:"Slack Users" }
-  ],
-  adProg: [
-    { n:"8x8 Phone Licenses" },
-    { n:"Ad Platforms Team", s:"AdPlatformsTeam@icon-intl.com" },
-    { n:"Conditional Access: Risky sign-in multifactor authentication", s:"a4ea6c0f-b8fb-4d29-91f1-9f8cf0601e98" },
-    { n:"ConditionalAccessTest" },
-    { n:"DOMO Users" },
-    { n:"ICON Announcements" },
-    { n:"ICON Communications", s:"ICONCommunications@iconintl.com" },
-    { n:"ICON Newell Media Team", s:"NewellMediaTeam@iconinternational.com" },
-    { n:"iWomen Florida", s:"iWomenFlorida@iconintl.com" },
-    { n:"Netskope Pilot Policy Assignment" },
-    { n:"Netskope Private Access - All Users" },
-    { n:"Slack Users" }
-  ],
-  adAff: [
-    { n:"8x8 Phone Licenses" },
-    { n:"Ad Platforms Team", s:"AdPlatformsTeam@icon-intl.com" },
-    { n:"Conditional Access: Risky sign-in multifactor authentication", s:"a4ea6c0f-b8fb-4d29-91f1-9f8cf0601e98" },
-    { n:"ConditionalAccessTest" },
-    { n:"DOMO Users" },
-    { n:"ICON Announcements" },
-    { n:"ICON Communications", s:"ICONCommunications@iconintl.com" },
-    { n:"iWomen Florida", s:"iWomenFlorida@iconintl.com" },
-    { n:"Netskope Pilot Policy Assignment" },
-    { n:"Netskope Private Access - All Users" }
-  ],
-  president:       null,
-  srMediaLead:     null,
-  accounting:      null,
-  financialCredit: null,
-  hrAdmin:         null,
-  mediaPrint:      null,
-  salesDir:        null,
-  accountService:  null
-};
-
-const TELECOM = [
-  { n:"Navigate to 8x8 Admin Console → Services and Permissions" },
-  { n:"Assign profile policy: 8x8 Master User Template" },
-  { n:"Assign license: X Series – X2-VOSVC0216-02-US" },
-  { n:"Enable MS Teams integration: ON" },
-  { n:"Set Site: Headquarters (Icon International)" },
-  { n:"Set Language: English – United States" },
-  { n:"Set Time zone: US/Eastern" },
-  { n:"Contact directory scope: Company (view all contacts)" },
-  { n:"Display in company directory: ON" }
-];
-
-const CRITICAL = [
-  { n:"Enable Multi-Factor Authentication (MFA)" },
-  { n:"Enforce MFA after enabling" },
-  { n:"Add user in Office 365 Admin Center — assign all groups per checklist" },
-  { n:"Run PowerShell: PullIIUserInfo.ps1 with -ExecutionPolicy Bypass" },
-  { n:"Add intranet.iconinternational.com to Local Intranet Sites (HTTPS + server verification)" }
-];
-
-const SVG = '<svg viewBox="0 0 12 12"><polyline points="1.5,6.5 4.5,9.5 10.5,2.5"/></svg>';
-
-function makeItem(parentId, text, sub) {
+function makeItem(parent, name, alias) {
   const row = document.createElement('div');
   row.className = 'item';
-  row.setAttribute('role','checkbox');
-  row.setAttribute('aria-checked','false');
-  row.setAttribute('tabindex','0');
-  const box = document.createElement('span');
-  box.className = 'box';
-  box.innerHTML = SVG;
-  const lbl = document.createElement('span');
-  lbl.className = 'lbl';
-  lbl.appendChild(document.createTextNode(text));
-  if (sub) {
-    const s = document.createElement('div');
-    s.className = 'sub';
-    s.textContent = sub;
-    lbl.appendChild(s);
-  }
-  row.appendChild(box);
-  row.appendChild(lbl);
-  const toggle = () => {
-    const on = row.classList.toggle('on');
-    row.setAttribute('aria-checked', on);
-    updateProgress();
-  };
-  box.addEventListener('click', e => { e.stopPropagation(); toggle(); });
-  row.addEventListener('keydown', e => {
-    if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); toggle(); }
-  });
-  lbl.style.cursor = 'copy';
-  lbl.title = 'Click to copy';
-  lbl.addEventListener('click', e => {
-    e.stopPropagation();
-    const copyText = text + (sub ? ' ' + sub : '');
-    navigator.clipboard.writeText(copyText).then(() => {
-      const orig = lbl.style.color;
-      lbl.style.color = '#0f6e56';
-      setTimeout(() => { lbl.style.color = orig; }, 700);
-    }).catch(() => {});
-  });
-  document.getElementById(parentId).appendChild(row);
+  row.setAttribute('role','checkbox'); row.setAttribute('aria-checked','false'); row.setAttribute('tabindex','0');
+  const cb = document.createElement('div'); cb.className = 'cb'; cb.innerHTML = SVG;
+  const body = document.createElement('div'); body.className = 'item-body';
+  const nameEl = document.createElement('div'); nameEl.className = 'item-name'; nameEl.textContent = name;
+  body.appendChild(nameEl);
+  if (alias) { const a = document.createElement('div'); a.className = 'item-alias'; a.textContent = alias; body.appendChild(a); }
+  const toggle = () => { const on = row.classList.toggle('on'); row.setAttribute('aria-checked', String(on)); updateProgress(); };
+  row.addEventListener('click', toggle);
+  row.addEventListener('keydown', e => { if(e.key===' '||e.key==='Enter'){e.preventDefault();toggle();} });
+  row.appendChild(cb); row.appendChild(body); parent.appendChild(row);
 }
 
-function fillSection(id, items) {
-  const el = document.getElementById(id);
-  el.innerHTML = '';
-  if (items === null) {
-    el.innerHTML = '<div class="pending">&#9888; Azure groups not yet confirmed for this role — update coming.</div>';
-    return;
-  }
-  if (!items || items.length === 0) {
-    el.innerHTML = '<div class="empty">No groups on file for this role yet.</div>';
-    return;
-  }
-  items.forEach(item => {
-    const obj = typeof item === 'string' ? { n: item } : item;
-    makeItem(id, obj.n, obj.s || null);
-  });
-}
-
-function updateCount(countId, listId) {
-  const all = document.querySelectorAll('#' + listId + ' .item');
-  const on  = document.querySelectorAll('#' + listId + ' .item.on');
-  document.getElementById(countId).textContent = all.length ? on.length + '/' + all.length : '—';
+function fillSection(listId, cntId, hdId, items) {
+  const el = document.getElementById(listId); el.innerHTML = '';
+  if (items === null) { el.innerHTML = '<div class="state-pending">⚠ Azure groups not yet confirmed for this role.</div>'; document.getElementById(cntId).textContent='—'; document.getElementById(hdId).textContent='—'; return; }
+  if (!items||!items.length) { el.innerHTML = '<div class="state-empty">No groups configured for this role yet.</div>'; document.getElementById(cntId).textContent='—'; document.getElementById(hdId).textContent='—'; return; }
+  if (items.length > 5) {
+    const mid = Math.ceil(items.length/2), grid = document.createElement('div'); grid.className = 'items-grid';
+    const c1 = document.createElement('div'); c1.className = 'items-col';
+    const c2 = document.createElement('div'); c2.className = 'items-col';
+    items.slice(0,mid).forEach(i=>makeItem(c1,i.n,i.s||null));
+    items.slice(mid).forEach(i=>makeItem(c2,i.n,i.s||null));
+    grid.appendChild(c1); grid.appendChild(c2); el.appendChild(grid);
+  } else { items.forEach(i=>makeItem(el,i.n,i.s||null)); }
+  const t='0 / '+items.length; document.getElementById(cntId).textContent=t; document.getElementById(hdId).textContent=t;
 }
 
 function updateProgress() {
-  [['cntAD','lstAD'],['cntAZ','lstAZ'],['cntTel','lstTel'],['cntCrit','lstCrit']]
-    .forEach(([c,l]) => updateCount(c,l));
-  const all  = document.querySelectorAll('.item').length;
-  const done = document.querySelectorAll('.item.on').length;
-  const pct  = all ? Math.round(done / all * 100) : 0;
-  document.getElementById('pFill').style.width = pct + '%';
-  document.getElementById('pLabel').textContent = done + ' / ' + all;
-  document.getElementById('doneBadge').classList.toggle('show', pct === 100);
+  const secs=[['lstAD','cntAD','hdAD'],['lstAZ','cntAZ','hdAZ'],['lstTel','cntTel','hdTel'],['lstCrit','cntCrit','hdCrit']];
+  let total=0,done=0;
+  secs.forEach(([lid,cid,hid])=>{ const all=document.querySelectorAll('#'+lid+' .item').length, chk=document.querySelectorAll('#'+lid+' .item.on').length; if(all){const t=chk+' / '+all; document.getElementById(cid).textContent=t; document.getElementById(hid).textContent=t;} total+=all; done+=chk; });
+  const pct=total?Math.round(done/total*100):0;
+  document.getElementById('pFill').style.width=pct+'%';
+  document.getElementById('progDone').textContent=done;
+  document.getElementById('progOf').textContent='/ '+total+' tasks';
+  document.getElementById('doneBadge').classList.toggle('show',pct===100&&total>0);
 }
 
 function build() {
-  const role = document.getElementById('roleSelect').value;
-  fillSection('lstAD', (AD[role] || []).map(g => ({ n: g })));
-  fillSection('lstAZ', AZ[role] !== undefined ? AZ[role] : null);
-  fillSection('lstTel', TELECOM);
-  fillSection('lstCrit', CRITICAL);
+  const role=document.getElementById('roleSelect').value;
+  fillSection('lstAD','cntAD','hdAD',(AD[role]||[]).map(g=>({n:g})));
+  fillSection('lstAZ','cntAZ','hdAZ',AZ[role]!==undefined?AZ[role]:null);
+  fillSection('lstTel','cntTel','hdTel',TELECOM);
+  fillSection('lstCrit','cntCrit','hdCrit',CRITICAL);
   updateProgress();
 }
 
-document.getElementById('roleSelect').addEventListener('change', build);
-document.getElementById('btnReset').addEventListener('click', build);
+// ── Excel generation ──────────────────────────────────────────
+async function generateExcel(password) {
+  const fullName = document.getElementById('uName').value.trim() || 'New User';
+  const email    = document.getElementById('uEmail').value.trim() || '';
+  const phone    = document.getElementById('uPhone').value.trim() || '';
+  const username = fullName.replace(' ', '.');
 
+  const wb = new ExcelJS.Workbook();
+  const ws = wb.addWorksheet('Sheet1');
+  ws.views = [{ showGridLines: false }];
+
+  ws.getColumn(1).width = 30;
+  ws.getColumn(2).width = 52;
+
+  const HELPDESK_URL = 'https://iconintlus.sharepoint.com/sites/EUCSupportHub/SitePages/ITHelpdeskHome.aspx';
+
+  function f(size, bold, color, italic, underline) {
+    const o = { name:'Arial', size, bold:!!bold, color:{argb:'FF'+(color||'000000')}, italic:!!italic };
+    if (underline) o.underline = true;
+    return o;
+  }
+  function aln() { return { horizontal:'left', vertical:'bottom' }; }
+  function set(row, col, value, font, link) {
+    const c = ws.getCell(row, col);
+    c.value = value;
+    if (font) c.font = font;
+    c.alignment = aln();
+    if (link) c.hyperlink = link;
+  }
+
+  let r = 1;
+
+  // Title
+  ws.getRow(r).height = 30;
+  set(r, 1, 'EUC: New Hire Essential IT Information', f(20, true, '000000'));
+  r++;
+
+  // Red italic subtitle
+  ws.getRow(r).height = 16;
+  set(r, 1, 'Excluding Fully remote employees ALL Users must change password at first login', f(10, true, 'FF0000', true));
+  r++;
+
+  // blank
+  ws.getRow(r).height = 10; r++;
+
+  // ── Computer Login ──
+  set(r, 1, 'Computer Login', f(12, true)); r++;
+  set(r, 1, 'Computer Username', f(10)); set(r, 2, username, f(10)); r++;
+  set(r, 1, 'Temporary Computer Password', f(10));
+  set(r, 2, password, f(10, false, '0070C0', false, true), password);
+  r++;
+
+  ws.getRow(r).height = 10; r++;
+
+  // ── Office 365 ──
+  set(r, 1, 'Office 365 Login (Outlook, Teams, OneDrive)', f(12, true)); r++;
+  set(r, 1, 'Office Email', f(10));
+  set(r, 2, email, f(10, false, '0563C1', false, true), 'mailto:' + email);
+  r++;
+  set(r, 1, 'Password', f(10));
+  set(r, 2, 'Same as the new password you created', f(10));
+  r++;
+
+  ws.getRow(r).height = 10; r++;
+
+  // ── 8x8 ──
+  set(r, 1, '8x8 Work app Login', f(12, true)); r++;
+  set(r, 1, 'Username/Email', f(10)); set(r, 2, email, f(10)); r++;
+  set(r, 1, 'Password', f(10)); set(r, 2, 'Same as the new password you created', f(10)); r++;
+  set(r, 1, 'Phone number', f(10)); set(r, 2, phone || '—', f(10)); r++;
+
+  ws.getRow(r).height = 10; r++;
+
+  // ── Specialized apps ──
+  set(r, 1, 'Specialized app logins', f(12, true)); r++;
+  set(r, 1, 'Login information of specialized apps will be found via email.', f(10)); r++;
+
+  ws.getRow(r).height = 10; r++;
+
+  // ── Help Desk ──
+  set(r, 1, 'For any Technical issues contact IT HelpDesk', f(12, true, '000000', false, true)); r++;
+  set(r, 1, 'Tickets', f(10));
+  set(r, 2, HELPDESK_URL, f(10, false, '0563C1', false, true), HELPDESK_URL);
+  r++;
+  set(r, 1, 'Email', f(10));
+  set(r, 2, 'HelpDesk@icon-intl.com', f(10, false, '0563C1', false, true), 'mailto:HelpDesk@icon-intl.com');
+  r++;
+  set(r, 1, 'Phone Number', f(10)); set(r, 2, '(203) 328-8324', f(10)); r++;
+
+  // download
+  const buf  = await wb.xlsx.writeBuffer();
+  const blob = new Blob([buf], { type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href     = url;
+  a.download = `IT_Info_${fullName.replace(' ','_')}.xlsx`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// ── Modal logic ──
+document.getElementById('btnExcel').addEventListener('click', () => {
+  const name = document.getElementById('uName').value.trim();
+  if (!name) { alert('Enter the hire\'s full name first.'); return; }
+  // pre-fill a suggested password
+  const parts = name.split(' ');
+  const initials = (parts[0][0]||'') + (parts[1]?.[0]||'');
+  document.getElementById('pwInput').value = initials + 'w3lc0m3tob@rter';
+  document.getElementById('pwModal').classList.add('show');
+  document.getElementById('pwInput').focus();
+});
+
+document.getElementById('pwCancel').addEventListener('click', () => {
+  document.getElementById('pwModal').classList.remove('show');
+});
+
+document.getElementById('pwConfirm').addEventListener('click', async () => {
+  const pw = document.getElementById('pwInput').value.trim();
+  if (!pw) { alert('Enter a temporary password.'); return; }
+  document.getElementById('pwModal').classList.remove('show');
+  const btn = document.getElementById('btnExcel');
+  btn.textContent = 'Generating…'; btn.disabled = true;
+  await generateExcel(pw);
+  btn.textContent = '⬇ Download IT Info sheet'; btn.disabled = false;
+});
+
+document.getElementById('pwInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter') document.getElementById('pwConfirm').click();
+});
+
+// ── Copy summary ──
 document.getElementById('btnCopy').addEventListener('click', () => {
   const name  = document.getElementById('uName').value  || 'New User';
   const email = document.getElementById('uEmail').value || '—';
   const sel   = document.getElementById('roleSelect');
   const role  = sel.options[sel.selectedIndex].text;
-  const checked   = [...document.querySelectorAll('.item.on .lbl')].map(el => '  [x] ' + el.childNodes[0].textContent.trim());
-  const unchecked = [...document.querySelectorAll('.item:not(.on) .lbl')].map(el => '  [ ] ' + el.childNodes[0].textContent.trim());
-  const out = ['Icon International — New User Onboarding','User:  ' + name + ' (' + email + ')','Role:  ' + role,'', ...checked, ...unchecked].join('\n');
-  navigator.clipboard.writeText(out).catch(() => {});
-  const fb = document.getElementById('fb');
+  const chk   = [...document.querySelectorAll('.item.on .item-name')].map(e=>'  [x] '+e.textContent);
+  const unchk = [...document.querySelectorAll('.item:not(.on) .item-name')].map(e=>'  [ ] '+e.textContent);
+  const out   = ['Icon International — New User Onboarding','User: '+name+' ('+email+')','Role: '+role,'',...chk,...unchk].join('\n');
+  navigator.clipboard.writeText(out).catch(()=>{});
+  const fb = document.getElementById('copyFb');
   fb.classList.add('show');
-  setTimeout(() => fb.classList.remove('show'), 2200);
+  setTimeout(()=>fb.classList.remove('show'), 1800);
 });
 
+document.getElementById('roleSelect').addEventListener('change', build);
+document.getElementById('btnReset').addEventListener('click', build);
 build();
 </script>
 </body>
