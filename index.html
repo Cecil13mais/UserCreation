@@ -254,9 +254,10 @@ function build() {
 // ── Excel generation ──────────────────────────────────────────
 async function generateExcel(password) {
   const fullName = document.getElementById('uName').value.trim() || 'New User';
-  const email    = document.getElementById('uEmail').value.trim() || '';
   const phone    = document.getElementById('uPhone').value.trim() || '';
-  const username = fullName.replace(' ', '.');
+  const parts    = fullName.trim().split(/\s+/);
+  const username = parts[0] + '.' + (parts[parts.length - 1] || parts[0]);
+  const email    = username + '@iconinternational.com';
 
   const wb = new ExcelJS.Workbook();
   const ws = wb.addWorksheet('Sheet1');
@@ -396,6 +397,15 @@ document.getElementById('btnCopy').addEventListener('click', () => {
   setTimeout(()=>fb.classList.remove('show'), 1800);
 });
 
+document.getElementById('uName').addEventListener('input', function() {
+  const parts = this.value.trim().split(/\s+/).filter(Boolean);
+  if (parts.length >= 2) {
+    const auto = parts[0] + '.' + parts[parts.length - 1] + '@iconinternational.com';
+    document.getElementById('uEmail').value = auto;
+  } else {
+    document.getElementById('uEmail').value = '';
+  }
+});
 document.getElementById('roleSelect').addEventListener('change', build);
 document.getElementById('btnReset').addEventListener('click', build);
 build();
