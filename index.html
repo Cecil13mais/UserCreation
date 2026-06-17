@@ -48,6 +48,7 @@ body { font-family: 'Inter', -apple-system, sans-serif; background: #f5f5f4; col
 .badge { font-size: 10px; font-weight: 600; padding: 1px 7px; border-radius: 99px; }
 .b-role { background: #fef3c7; color: #92400e; }
 .b-warn { background: #fee2e2; color: #991b1b; }
+.b-info { background: #dbeafe; color: #1e40af; }
 .section-count { font-size: 11px; color: #bbb; font-variant-numeric: tabular-nums; }
 .items-grid { display: grid; grid-template-columns: 1fr 1fr; }
 .items-col { display: flex; flex-direction: column; }
@@ -68,6 +69,28 @@ body { font-family: 'Inter', -apple-system, sans-serif; background: #f5f5f4; col
 .note-strip code { font-size: 11px; font-family: ui-monospace, 'SF Mono', Consolas, monospace; background: #f0f0ee; color: #555; padding: 1px 5px; border-radius: 4px; }
 .state-empty   { font-size: 12px; color: #bbb; padding: 10px 1rem; font-style: italic; }
 .state-pending { font-size: 12px; color: #b45309; padding: 10px 1rem; }
+
+/* Third-party apps section */
+.apps-grid { display: flex; flex-direction: column; }
+.app-row { display: flex; align-items: flex-start; gap: 9px; padding: 7px 1rem; border-bottom: 1px solid #f5f5f4; }
+.app-row:last-child { border-bottom: none; }
+.app-icon { width: 28px; height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; margin-top: 1px; }
+.app-icon.purple { background: #f3e8ff; }
+.app-icon.blue   { background: #dbeafe; }
+.app-icon.green  { background: #d1fae5; }
+.app-icon.orange { background: #ffedd5; }
+.app-icon.gray   { background: #f3f4f6; }
+.app-body { flex: 1; }
+.app-name { font-size: 12.5px; font-weight: 500; color: #222; }
+.app-note { font-size: 11.5px; color: #888; margin-top: 2px; line-height: 1.5; }
+.app-note a { color: #2563eb; text-decoration: none; }
+.app-note a:hover { text-decoration: underline; }
+.app-tag { display: inline-block; font-size: 10px; font-weight: 600; padding: 1px 6px; border-radius: 99px; margin-left: 6px; vertical-align: middle; }
+.app-tag.ticket { background: #fef3c7; color: #92400e; }
+.app-tag.variable { background: #f3f4f6; color: #6b7280; }
+.app-tag.none { background: #f0fdf4; color: #166534; }
+.app-tag.sales { background: #fee2e2; color: #991b1b; }
+.apps-variable-note { padding: .65rem 1rem; border-top: 1px solid #f0f0ee; font-size: 11.5px; color: #999; line-height: 1.7; background: #fafaf9; }
 
 /* password modal */
 .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.35); z-index: 200; align-items: center; justify-content: center; }
@@ -102,6 +125,7 @@ body { font-family: 'Inter', -apple-system, sans-serif; background: #f5f5f4; col
       <div class="field"><input type="text"  id="uName"  placeholder="Full name"></div>
       <div class="field"><input type="email" id="uEmail" placeholder="Email address"></div>
       <div class="field"><input type="text"  id="uPhone" placeholder="8x8 phone number"></div>
+      <div class="field"><input type="text"  id="uStart" placeholder="Start date (e.g. June 23, 2025)"></div>
       <div class="field">
         <select id="roleSelect">
           <option value="president">President of Travel Services — Travel</option>
@@ -177,6 +201,12 @@ body { font-family: 'Inter', -apple-system, sans-serif; background: #f5f5f4; col
       <div id="lstCrit"></div>
       <div class="note-strip">PowerShell: <code>powershell.exe -ExecutionPolicy Bypass -File .\PullIIUserInfo.ps1</code><br>Internet Options → Security → Local Intranet → Sites → Advanced → add <code>https://intranet.iconinternational.com/</code> with HTTPS server verification</div>
     </div>
+    <div class="section">
+      <div class="section-head">
+        <div class="section-title">Third-party apps <span class="badge b-info">Dept-specific</span></div>
+      </div>
+      <div id="lstApps"></div>
+    </div>
   </main>
 </div>
 
@@ -199,6 +229,93 @@ const AD={president:["Domain Users","Everyone","IconIntl_7212181d39b7","Inventor
 const AZ={mediaInv:[{n:"8x8 Phone Licenses"},{n:"Comcast IDP"},{n:"Conditional Access: Risky sign-in MFA",s:"a4ea6c0f-b8fb-4d29-91f1-9f8cf0601e98"},{n:"ConditionalAccessTest"},{n:"DOMO Users"},{n:"ICON Announcements"},{n:"Icon Intl-Everyone",s:"Everyone@ICON-INTL.com"},{n:"Icon Intl-Florida/Stamford Office"},{n:"Icon Intl-iWomenGroup",s:"iWomenGroup@ICON-INTL.com"},{n:"IconIntl",s:"IconIntl@iconintlus.onmicrosoft.com"},{n:"iWomen Florida",s:"iWomenFlorida@iconintl.com"},{n:"Media Investment",s:"MediaInvestment@icon-intl.com"},{n:"Netskope Pilot Policy Assignment"},{n:"Netskope Private Access - All Users"}],localMedia:[{n:"8x8 Phone Licenses"},{n:"Comcast IDP"},{n:"Conditional Access: Risky sign-in MFA",s:"a4ea6c0f-b8fb-4d29-91f1-9f8cf0601e98"},{n:"ConditionalAccessTest"},{n:"DOMO Users"},{n:"ICON Announcements"},{n:"Icon Intl-Everyone",s:"Everyone@ICON-INTL.com"},{n:"Icon Intl-Florida/Stamford Office"},{n:"Icon Intl-LocalBroadcast",s:"Local_Broadcast@ICON-INTL.com"},{n:"Netskope Pilot Policy Assignment"},{n:"Netskope Private Access - All Users"}],perfMedia:[{n:"8x8 Phone Licenses"},{n:"Conditional Access: Risky sign-in MFA",s:"a4ea6c0f-b8fb-4d29-91f1-9f8cf0601e98"},{n:"ConditionalAccessTest"},{n:"ICON Announcements"},{n:"Icon Intl-Everyone",s:"Everyone@ICON-INTL.com"},{n:"Icon Intl-Florida/Stamford Office"},{n:"Icon Intl-Performance Media",s:"PM@icon-intl.com"},{n:"IconIntl",s:"IconIntl@iconintlus.onmicrosoft.com"},{n:"Netskope Pilot Policy Assignment"},{n:"Netskope Private Access - All Users"},{n:"PM - Performance Media",s:"PM-PerformanceMedia@iconintl.com"},{n:"Slack Users"}],adProg:[{n:"8x8 Phone Licenses"},{n:"Ad Platforms Team",s:"AdPlatformsTeam@icon-intl.com"},{n:"Conditional Access: Risky sign-in MFA",s:"a4ea6c0f-b8fb-4d29-91f1-9f8cf0601e98"},{n:"ConditionalAccessTest"},{n:"DOMO Users"},{n:"ICON Announcements"},{n:"ICON Communications",s:"ICONCommunications@iconintl.com"},{n:"ICON Newell Media Team",s:"NewellMediaTeam@iconinternational.com"},{n:"iWomen Florida",s:"iWomenFlorida@iconintl.com"},{n:"Netskope Pilot Policy Assignment"},{n:"Netskope Private Access - All Users"},{n:"Slack Users"}],adAff:[{n:"8x8 Phone Licenses"},{n:"Ad Platforms Team",s:"AdPlatformsTeam@icon-intl.com"},{n:"Conditional Access: Risky sign-in MFA",s:"a4ea6c0f-b8fb-4d29-91f1-9f8cf0601e98"},{n:"ConditionalAccessTest"},{n:"DOMO Users"},{n:"ICON Announcements"},{n:"ICON Communications",s:"ICONCommunications@iconintl.com"},{n:"iWomen Florida",s:"iWomenFlorida@iconintl.com"},{n:"Netskope Pilot Policy Assignment"},{n:"Netskope Private Access - All Users"}],president:null,srMediaLead:null,accounting:null,financialCredit:null,hrAdmin:null,mediaPrint:null,salesDir:null,accountService:null};
 const TELECOM=[{n:"Navigate to 8x8 Admin Console → Services and Permissions"},{n:"Assign profile policy: 8x8 Master User Template"},{n:"Assign license: X Series – X2-VOSVC0216-02-US"},{n:"Enable MS Teams integration: ON"},{n:"Set Site: Headquarters (Icon International)"},{n:"Set Language: English – United States"},{n:"Set Time zone: US/Eastern"},{n:"Contact directory scope: Company (view all contacts)"},{n:"Display in company directory: ON"}];
 const CRITICAL=[{n:"Enable Multi-Factor Authentication (MFA)"},{n:"Enforce MFA after enabling"},{n:"Add user in Office 365 Admin Center — assign all groups per checklist"},{n:"Run PowerShell: PullIIUserInfo.ps1 with -ExecutionPolicy Bypass"},{n:"Add intranet.iconinternational.com to Local Intranet Sites (HTTPS + server verification)"}];
+
+// Third-party apps by role
+// dept mapping: role → department key
+const ROLE_DEPT = {
+  president:      'travel',
+  mediaInv:       'mediaInvestment',
+  localMedia:     'localMedia',
+  perfMedia:      'performanceMedia',
+  srMediaLead:    'performanceMedia',
+  accounting:     'billing',
+  financialCredit:'credit',
+  hrAdmin:        'humanResources',
+  mediaPrint:     'printOOH',
+  salesDir:       'sales',
+  adProg:         'adPlatforms',
+  adAff:          'adPlatforms',
+  accountService: 'performanceMedia',
+};
+
+function freewheelNote() {
+  const name  = document.getElementById('uName').value.trim()  || '[Name]';
+  const email = document.getElementById('uEmail').value.trim() || '[Email]';
+  const start = document.getElementById('uStart').value.trim() || '[Start date]';
+  const sel   = document.getElementById('roleSelect');
+  const roleText = sel.options[sel.selectedIndex].text;
+  const dept  = roleText.includes('—') ? roleText.split('—')[1].trim() : roleText;
+  const template = `Hi,\n\nRequesting a new Freewheel account for ${name} (${email}). They will be starting in ${dept} on ${start}.\n\nThank you`;
+  return { template, dept, name, email, start };
+}
+
+// apps: array of {name, note, icon, iconClass, tag}
+const DEPT_APPS = {
+  travel: {
+    apps: [],
+    variable: true,
+    variableNote: 'Travel-specific applications vary by hire. Confirm with the hiring manager before provisioning.'
+  },
+  mediaInvestment: {
+    apps: [
+      { name: 'Freewheel', note: '__freewheel__', icon: '📺', iconClass: 'blue', tag: 'ticket' }
+    ]
+  },
+  localMedia: {
+    apps: [
+      { name: 'Freewheel', note: '__freewheel__', icon: '📺', iconClass: 'blue', tag: 'ticket' }
+    ]
+  },
+  performanceMedia: {
+    apps: [
+      { name: 'Slack', note: 'Provisioned via Azure AD group. Confirm login with new hire on first day.', icon: '💬', iconClass: 'purple' },
+      { name: 'CORE', note: '', icon: '⚡', iconClass: 'orange' }
+    ]
+  },
+  billing: {
+    apps: [
+      { name: 'Adobe Reader', note: 'Standard install via software center or direct download.', icon: '📄', iconClass: 'orange' },
+      { name: 'Acumatica', note: 'ERP system. Coordinate with Accounting for user license and role.', icon: '🧾', iconClass: 'blue' }
+    ]
+  },
+  credit: {
+    apps: [
+      { name: 'Adobe Reader', note: 'Standard install via software center or direct download.', icon: '📄', iconClass: 'orange' },
+      { name: 'Acumatica', note: 'ERP system. Coordinate with Finance/Credit for user license and role.', icon: '🧾', iconClass: 'blue' }
+    ]
+  },
+  humanResources: {
+    apps: [
+      { name: 'Adobe Reader', note: 'Standard install via software center or direct download.', icon: '📄', iconClass: 'orange' }
+    ]
+  },
+  printOOH: {
+    apps: [
+      { name: 'Freewheel', note: '__freewheel__', icon: '📺', iconClass: 'blue', tag: 'ticket' }
+    ]
+  },
+  sales: {
+    apps: [],
+    salesNote: true
+  },
+  adPlatforms: {
+    apps: [
+      { name: 'Google Workspace', note: 'Likely required. Confirm with hiring manager — provisioning varies by team.', icon: '🔵', iconClass: 'blue', tag: 'variable' },
+      { name: 'Slack', note: 'Provisioned via Azure AD group. Confirm login with new hire on first day.', icon: '💬', iconClass: 'purple' }
+    ]
+  }
+};
+
 const SVG='<svg viewBox="0 0 10 10"><polyline points="1,5.5 4,8.5 9,2"/></svg>';
 
 function makeItem(parent, name, alias) {
@@ -231,6 +348,80 @@ function fillSection(listId, cntId, hdId, items) {
   const t='0 / '+items.length; document.getElementById(cntId).textContent=t; document.getElementById(hdId).textContent=t;
 }
 
+function fillApps(role) {
+  const el = document.getElementById('lstApps');
+  el.innerHTML = '';
+  const dept = ROLE_DEPT[role];
+  const config = DEPT_APPS[dept];
+  if (!config) {
+    el.innerHTML = '<div class="state-empty">No third-party app data for this role.</div>';
+    return;
+  }
+
+  if (config.salesNote) {
+    el.innerHTML = '<div class="state-pending" style="color:#6b7280;background:#f9fafb;padding:10px 1rem;font-size:12px;">Sales application provisioning is not handled by IT. Contact the Sales team directly.</div>';
+    return;
+  }
+
+  if (config.apps.length === 0 && config.variable) {
+    const grid = document.createElement('div'); grid.className = 'apps-grid';
+    const note = document.createElement('div'); note.className = 'apps-variable-note';
+    note.textContent = config.variableNote || 'Applications for this department vary. Confirm with the hiring manager.';
+    el.appendChild(grid);
+    el.appendChild(note);
+    return;
+  }
+
+  if (config.apps.length === 0) {
+    el.innerHTML = '<div class="state-empty">No standard third-party applications for this department.</div>';
+    return;
+  }
+
+  const grid = document.createElement('div'); grid.className = 'apps-grid';
+  config.apps.forEach(app => {
+    const row = document.createElement('div'); row.className = 'app-row';
+    const icon = document.createElement('div'); icon.className = 'app-icon ' + (app.iconClass||'gray'); icon.textContent = app.icon||'🔧';
+    const body = document.createElement('div'); body.className = 'app-body';
+    const nameEl = document.createElement('div'); nameEl.className = 'app-name';
+    nameEl.textContent = app.name;
+    if (app.tag) {
+      const tag = document.createElement('span'); tag.className = 'app-tag ' + app.tag;
+      tag.textContent = app.tag === 'ticket' ? 'Ticket required' : app.tag === 'variable' ? 'Confirm w/ manager' : app.tag;
+      nameEl.appendChild(tag);
+    }
+    if (app.note === '__freewheel__') {
+      const { template } = freewheelNote();
+      const TICKET_URL = 'https://iconintlus.sharepoint.com/sites/EUCSupportHub/_layouts/15/listforms.aspx?cid=MWJiNDU1NDMtNDczMi00MWExLWFjZGQtYTNlMzhjZTk5Yjlh&nav=MTQ1MTY0YjctNDY4NS00ODAyLTkzMTMtN2I0YTgwYTliYWE1';
+      const noteEl = document.createElement('div'); noteEl.className = 'app-note';
+      noteEl.innerHTML = 'Submit a Media Ops ticket — <a href="' + TICKET_URL + '" target="_blank">open form</a>';
+      const tpl = document.createElement('div');
+      tpl.style.cssText = 'margin-top:6px;background:#f8f9fa;border:1px solid #e4e4e2;border-radius:6px;padding:7px 10px;font-size:11px;color:#555;font-family:ui-monospace,monospace;white-space:pre-wrap;line-height:1.6;';
+      tpl.textContent = template;
+      const copyBtn = document.createElement('button');
+      copyBtn.textContent = 'Copy ticket text';
+      copyBtn.style.cssText = 'margin-top:6px;height:26px;padding:0 10px;border-radius:5px;border:1px solid #e4e4e2;background:#fff;font-family:inherit;font-size:11px;font-weight:500;color:#555;cursor:pointer;';
+      copyBtn.addEventListener('click', () => {
+        const { template: t } = freewheelNote();
+        navigator.clipboard.writeText(t).catch(()=>{});
+        copyBtn.textContent = 'Copied!';
+        setTimeout(() => copyBtn.textContent = 'Copy ticket text', 1800);
+      });
+      body.appendChild(nameEl); body.appendChild(noteEl); body.appendChild(tpl); body.appendChild(copyBtn);
+    } else {
+      const noteEl = document.createElement('div'); noteEl.className = 'app-note'; noteEl.innerHTML = app.note||'';
+      body.appendChild(nameEl); body.appendChild(noteEl);
+    }
+    row.appendChild(icon); row.appendChild(body); grid.appendChild(row);
+  });
+  el.appendChild(grid);
+
+  if (config.variable) {
+    const note = document.createElement('div'); note.className = 'apps-variable-note';
+    note.textContent = config.variableNote || 'Additional applications may apply. Confirm with the hiring manager.';
+    el.appendChild(note);
+  }
+}
+
 function updateProgress() {
   const secs=[['lstAD','cntAD','hdAD'],['lstAZ','cntAZ','hdAZ'],['lstTel','cntTel','hdTel'],['lstCrit','cntCrit','hdCrit']];
   let total=0,done=0;
@@ -248,6 +439,7 @@ function build() {
   fillSection('lstAZ','cntAZ','hdAZ',AZ[role]!==undefined?AZ[role]:null);
   fillSection('lstTel','cntTel','hdTel',TELECOM);
   fillSection('lstCrit','cntCrit','hdCrit',CRITICAL);
+  fillApps(role);
   updateProgress();
 }
 
@@ -284,20 +476,16 @@ async function generateExcel(password) {
 
   let r = 1;
 
-  // Title
   ws.getRow(r).height = 30;
   set(r, 1, 'EUC: New Hire Essential IT Information', f(20, true, '000000'));
   r++;
 
-  // Red italic subtitle
   ws.getRow(r).height = 16;
   set(r, 1, 'Excluding Fully remote employees ALL Users must change password at first login', f(10, true, 'FF0000', true));
   r++;
 
-  // blank
   ws.getRow(r).height = 10; r++;
 
-  // ── Computer Login ──
   set(r, 1, 'Computer Login', f(12, true)); r++;
   set(r, 1, 'Computer Username', f(10)); set(r, 2, username, f(10)); r++;
   set(r, 1, 'Temporary Computer Password', f(10));
@@ -306,7 +494,6 @@ async function generateExcel(password) {
 
   ws.getRow(r).height = 10; r++;
 
-  // ── Office 365 ──
   set(r, 1, 'Office 365 Login (Outlook, Teams, OneDrive)', f(12, true)); r++;
   set(r, 1, 'Office Email', f(10));
   set(r, 2, email, f(10, false, '0563C1', false, true), 'mailto:' + email);
@@ -317,7 +504,6 @@ async function generateExcel(password) {
 
   ws.getRow(r).height = 10; r++;
 
-  // ── 8x8 ──
   set(r, 1, '8x8 Work app Login', f(12, true)); r++;
   set(r, 1, 'Username/Email', f(10)); set(r, 2, email, f(10)); r++;
   set(r, 1, 'Password', f(10)); set(r, 2, 'Same as the new password you created', f(10)); r++;
@@ -325,13 +511,11 @@ async function generateExcel(password) {
 
   ws.getRow(r).height = 10; r++;
 
-  // ── Specialized apps ──
   set(r, 1, 'Specialized app logins', f(12, true)); r++;
   set(r, 1, 'Login information of specialized apps will be found via email.', f(10)); r++;
 
   ws.getRow(r).height = 10; r++;
 
-  // ── Help Desk ──
   set(r, 1, 'For any Technical issues contact IT HelpDesk', f(12, true, '000000', false, true)); r++;
   set(r, 1, 'Tickets', f(10));
   set(r, 2, HELPDESK_URL, f(10, false, '0563C1', false, true), HELPDESK_URL);
@@ -341,7 +525,6 @@ async function generateExcel(password) {
   r++;
   set(r, 1, 'Phone Number', f(10)); set(r, 2, '(203) 328-8324', f(10)); r++;
 
-  // download
   const buf  = await wb.xlsx.writeBuffer();
   const blob = new Blob([buf], { type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
   const url  = URL.createObjectURL(blob);
@@ -356,7 +539,6 @@ async function generateExcel(password) {
 document.getElementById('btnExcel').addEventListener('click', () => {
   const name = document.getElementById('uName').value.trim();
   if (!name) { alert('Enter the hire\'s full name first.'); return; }
-  // pre-fill a suggested password
   const parts = name.split(' ');
   const initials = (parts[0][0]||'') + (parts[1]?.[0]||'');
   document.getElementById('pwInput').value = initials + 'w3lc0m3tob@rter';
@@ -405,6 +587,10 @@ document.getElementById('uName').addEventListener('input', function() {
   } else {
     document.getElementById('uEmail').value = '';
   }
+  fillApps(document.getElementById('roleSelect').value);
+});
+document.getElementById('uStart').addEventListener('input', function() {
+  fillApps(document.getElementById('roleSelect').value);
 });
 document.getElementById('roleSelect').addEventListener('change', build);
 document.getElementById('btnReset').addEventListener('click', build);
