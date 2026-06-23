@@ -230,8 +230,6 @@ const AZ={mediaInv:[{n:"8x8 Phone Licenses"},{n:"Comcast IDP"},{n:"Conditional A
 const TELECOM=[{n:"Navigate to 8x8 Admin Console → Services and Permissions"},{n:"Assign profile policy: 8x8 Master User Template"},{n:"Assign license: X Series – X2-VOSVC0216-02-US"},{n:"Enable MS Teams integration: ON"},{n:"Set Site: Headquarters (Icon International)"},{n:"Set Language: English – United States"},{n:"Set Time zone: US/Eastern"},{n:"Contact directory scope: Company (view all contacts)"},{n:"Display in company directory: ON"}];
 const CRITICAL=[{n:"Enable Multi-Factor Authentication (MFA)"},{n:"Enforce MFA after enabling"},{n:"Add user in Office 365 Admin Center — assign all groups per checklist"},{n:"Run PowerShell: PullIIUserInfo.ps1 with -ExecutionPolicy Bypass"},{n:"Add intranet.iconinternational.com to Local Intranet Sites (HTTPS + server verification)"}];
 
-// Third-party apps by role
-// dept mapping: role → department key
 const ROLE_DEPT = {
   president:      'travel',
   mediaInv:       'mediaInvestment',
@@ -259,7 +257,6 @@ function freewheelNote() {
   return { template, dept, name, email, start };
 }
 
-// apps: array of {name, note, icon, iconClass, tag}
 const DEPT_APPS = {
   travel: {
     apps: [],
@@ -488,8 +485,9 @@ async function generateExcel(password) {
 
   set(r, 1, 'Computer Login', f(12, true)); r++;
   set(r, 1, 'Computer Username', f(10)); set(r, 2, username, f(10)); r++;
+  // FIX: removed invalid hyperlink argument from password cell
   set(r, 1, 'Temporary Computer Password', f(10));
-  set(r, 2, password, f(10, false, '0070C0', false, true), password);
+  set(r, 2, password, f(10, false, '0070C0', false, true));
   r++;
 
   ws.getRow(r).height = 10; r++;
@@ -530,7 +528,7 @@ async function generateExcel(password) {
   const url  = URL.createObjectURL(blob);
   const a    = document.createElement('a');
   a.href     = url;
-  a.download = `IT_Info_${fullName.replace(' ','_')}.xlsx`;
+  a.download = `IT_Info_${fullName.replace(/\s+/g,'_')}.xlsx`;
   a.click();
   URL.revokeObjectURL(url);
 }
@@ -539,8 +537,8 @@ async function generateExcel(password) {
 document.getElementById('btnExcel').addEventListener('click', () => {
   const name = document.getElementById('uName').value.trim();
   if (!name) { alert('Enter the hire\'s full name first.'); return; }
-  const parts = name.split(' ');
-  const initials = (parts[0][0]||'') + (parts[1]?.[0]||'');
+  const parts = name.split(/\s+/);
+  const initials = (parts[0]?.[0] || '') + (parts[1]?.[0] || '');
   document.getElementById('pwInput').value = initials + 'w3lc0m3tob@rter';
   document.getElementById('pwModal').classList.add('show');
   document.getElementById('pwInput').focus();
@@ -556,7 +554,11 @@ document.getElementById('pwConfirm').addEventListener('click', async () => {
   document.getElementById('pwModal').classList.remove('show');
   const btn = document.getElementById('btnExcel');
   btn.textContent = 'Generating…'; btn.disabled = true;
-  await generateExcel(pw);
+  try {
+    await generateExcel(pw);
+  } catch (err) {
+    alert('Excel generation failed: ' + err.message);
+  }
   btn.textContent = '⬇ Download IT Info sheet'; btn.disabled = false;
 });
 
