@@ -124,7 +124,7 @@ body { font-family: 'Inter', -apple-system, sans-serif; background: #f5f5f4; col
       <div class="sb-label">Hire details</div>
       <div class="field"><input type="text"  id="uName"  placeholder="Full name"></div>
       <div class="field"><input type="email" id="uEmail" placeholder="Email address"></div>
-      <div class="field"><input type="text"  id="uPhone" placeholder="8x8 phone number"></div>
+      <div class="field"><input type="text"  id="uPhone" placeholder="8x8 phone number" maxlength="14"></div>
       <div class="field"><input type="text"  id="uStart" placeholder="Start date (e.g. June 23, 2025)"></div>
       <div class="field">
         <select id="roleSelect">
@@ -538,7 +538,7 @@ document.getElementById('btnExcel').addEventListener('click', () => {
   const name = document.getElementById('uName').value.trim();
   if (!name) { alert('Enter the hire\'s full name first.'); return; }
   const parts = name.split(/\s+/);
-  const initials = (parts[0]?.[0] || '') + (parts[1]?.[0] || '');
+  const initials = ((parts[0]?.[0] || '') + (parts[1]?.[0] || '')).toUpperCase();
   document.getElementById('pwInput').value = initials + 'w3lc0m3tob@rter';
   document.getElementById('pwModal').classList.add('show');
   document.getElementById('pwInput').focus();
@@ -590,6 +590,14 @@ document.getElementById('uName').addEventListener('input', function() {
     document.getElementById('uEmail').value = '';
   }
   fillApps(document.getElementById('roleSelect').value);
+});
+document.getElementById('uPhone').addEventListener('input', function() {
+  const digits = this.value.replace(/[^0-9]/g, '').slice(0, 10);
+  let out = '';
+  if (digits.length <= 3) { out = digits.length ? '(' + digits : ''; }
+  else if (digits.length <= 6) { out = '(' + digits.slice(0,3) + ') ' + digits.slice(3); }
+  else { out = '(' + digits.slice(0,3) + ') ' + digits.slice(3,6) + '-' + digits.slice(6); }
+  this.value = out;
 });
 document.getElementById('uStart').addEventListener('input', function() {
   fillApps(document.getElementById('roleSelect').value);
